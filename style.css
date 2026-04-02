@@ -3511,16 +3511,46 @@ html.dark-mode .game-display {
 
 .geo-photo-wrap img {
   width: 100%;
-  max-height: 260px;
+  max-height: 420px;
   object-fit: cover;
   border-radius: 16px;
   border: 1px solid var(--card-border);
 }
 
-.geo-map {
+.geo-stage {
+  position: relative;
   margin-top: 12px;
+}
+
+.geo-map-wrap {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 520px;
   height: 360px;
-  border-radius: 16px;
+  z-index: 3;
+}
+
+.geo-map {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--card-border);
+  background: rgba(0,0,0,0.08);
+  transform-origin: bottom right;
+  transition: transform 0.2s ease;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+}
+
+.geo-map-wrap:not(:hover) .geo-map {
+  transform: scale(0.42);
+}
+
+.geo-map-wrap:hover .geo-map {
+  transform: scale(1);
+}
+
+.geo-map-hidden {
+  display: none;
 }

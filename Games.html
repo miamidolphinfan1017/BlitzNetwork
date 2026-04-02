@@ -168,11 +168,14 @@
                 <div id="geo-score" class="muted">Score: 0</div>
             </div>
 
-            <div class="geo-photo-wrap">
-                <img id="geo-photo" alt="Stadium photo">
+            <div class="geo-stage">
+                <div class="geo-photo-wrap">
+                    <img id="geo-photo" alt="Stadium photo">
+                </div>
+                <div id="geo-map-wrap" class="geo-map-wrap">
+                    <div id="geo-map" class="geo-map"></div>
+                </div>
             </div>
-
-            <div id="geo-map" class="geo-map"></div>
 
             <div class="prediction-actions">
                 <button id="geo-submit-btn" class="quiz-btn game-btn" disabled>Submit Guess</button>
@@ -414,8 +417,9 @@
             title: "Stadium GeoGuessr",
             tag: "Geo",
             desc: "Drop a pin on the map based on the stadium photo.",
-            status: "Coming Soon",
-            active: false
+            status: "Play Now",
+            active: true,
+            target: "game-stadium"
         },
         {
             id: "logo",
@@ -1059,6 +1063,7 @@
     ];
 
     const geoMapEl = document.getElementById("geo-map");
+    const geoMapWrap = document.getElementById("geo-map-wrap");
     const geoPhoto = document.getElementById("geo-photo");
     const geoStartBtn = document.getElementById("geo-start-btn");
     const geoSubmitBtn = document.getElementById("geo-submit-btn");
@@ -1082,22 +1087,16 @@
     if (geoPhoto) {
         geoPhoto.style.display = "none";
     }
+    if (geoMapWrap) {
+        geoMapWrap.classList.add("geo-map-hidden");
+    }
 
     function parseCSV(text) {
-        const lines = text.trim().split(/\r?\n/);
-        const rows = [];
-        let buffer = "";
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-            buffer = buffer ? `${buffer} ${line}` : line;
-            const commaCount = (buffer.match(/,/g) || []).length;
-            if (commaCount >= 6) {
-                rows.push(buffer);
-                buffer = "";
-            }
-        }
-        return rows;
+        return text
+            .trim()
+            .split(/\r?\n/)
+            .map(line => line.trim())
+            .filter(Boolean);
     }
 
     async function loadStadiumCoords() {
@@ -1166,6 +1165,12 @@
             geoResultEl.textContent = "Loading stadium data...";
             return;
         }
+        if (geoMapWrap) {
+            geoMapWrap.classList.remove("geo-map-hidden");
+        }
+        if (geoMap) {
+            setTimeout(() => geoMap.invalidateSize(), 200);
+        }
         geoTotalRounds = parseInt(geoRoundsSelect.value, 10);
         geoRounds = shuffle(geoTeamList).slice(0, geoTotalRounds);
         geoCurrentRound = 0;
@@ -1194,10 +1199,20 @@
             return;
         }
         const imgName = team.image;
+        geoPhoto.dataset.triedPng = "";
+        geoPhoto.dataset.triedJpgUpper = "";
         geoPhoto.src = `Stadiums/${imgName}.jpg`;
         geoPhoto.style.display = "block";
         geoPhoto.onerror = () => {
-            geoPhoto.src = `Stadiums/${imgName}.png`;
+            if (!geoPhoto.dataset.triedPng) {
+                geoPhoto.dataset.triedPng = "1";
+                geoPhoto.src = `Stadiums/${imgName}.png`;
+                return;
+            }
+            if (!geoPhoto.dataset.triedJpgUpper) {
+                geoPhoto.dataset.triedJpgUpper = "1";
+                geoPhoto.src = `Stadiums/${imgName}.JPG`;
+            }
         };
         geoResultEl.textContent = "";
         updateGeoUI();
@@ -1747,4 +1762,3 @@
 
 </body>
 </html>
-
