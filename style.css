@@ -1,0 +1,3526 @@
+﻿body {
+  background:
+    linear-gradient(
+      var(--bg-overlay),
+      var(--bg-overlay)
+    ),
+    url("https://cdn.prod.website-files.com/68128b54b74e9cd5b80095c9/681e6066e13b77e50d698dbd_637fc6150119df45a37cce23_cover1.jpeg") center / cover no-repeat fixed;
+    color: var(--text-main);
+}
+
+/* Softer light overlay for the leaderboard to reduce glare */
+.leaderboard-page {
+    --bg-overlay: rgba(255,255,255,0.6);
+    --login-overlay: rgba(255,255,255,0.3);
+}
+
+html.dark-mode .leaderboard-page {
+    --bg-overlay: rgba(0,0,0,0.82);
+    --login-overlay: rgba(0,0,0,0.55);
+}
+
+:root{
+    /* BACKGROUND OVERLAY */
+        --bg-overlay: rgba(255,255,255,0.55);
+    /* DEFAULT TEXT */
+        --text-main: #000;
+    /* THEME ACCENTS */
+        --accent-red: #cc0000;
+    /* PAGE SURFACES */
+        --page-surface: rgba(255,255,255,0.7);
+        --page-surface-text: #111;
+        --muted-text: #444;
+    /* DARK CARD AREAS */
+        --dark-card-bg: rgba(255,255,255,0.8);
+        --dark-card-text: #111;
+    /* LIGHT CARD AREAS */
+        --light-card-bg: rgba(255,255,255,0.88);
+        --light-card-text: #222;
+    /* GENERIC CARDS */
+        --card-bg: rgba(255,255,255,0.88);
+        --card-text: #222;
+        --card-border: rgba(0,0,0,0.12);
+    /* NAV */
+        --nav-bg: #f2f2f2;
+        --nav-text: #111;
+        --side-bg: #f5f5f5;
+        --side-text: #111;
+        --side-border: #ddd;
+    /* INPUTS */
+        --input-bg: #fff;
+        --input-text: #111;
+        --input-border: #ccc;
+    /* GLASS */
+        --glass-bg: rgba(255,255,255,0.65);
+        --glass-text: #111;
+    /* LOGIN OVERLAY */
+        --login-overlay: rgba(255,255,255,0.45);
+}
+
+html.dark-mode{
+    --bg-overlay: rgba(0,0,0,0.80);
+
+    --text-main: #fff;
+
+    --page-surface: rgba(0,0,0,0.55);
+    --page-surface-text: #fff;
+    --muted-text: #bbb;
+
+    --dark-card-bg: rgba(20,20,20,0.85);
+    --dark-card-text: #fff;
+
+    --light-card-bg: rgba(20,20,20,0.85);
+    --light-card-text: #fff;
+
+    --card-bg: rgba(20,20,20,0.85);
+    --card-text: #fff;
+    --card-border: rgba(255,255,255,0.15);
+
+    --nav-bg: #111;
+    --nav-text: #fff;
+    --side-bg: #111;
+    --side-text: #fff;
+    --side-border: #222;
+
+    --input-bg: #222;
+    --input-text: #fff;
+    --input-border: #444;
+
+    --glass-bg: rgba(20,20,20,0.85);
+    --glass-text: #fff;
+
+    --login-overlay: rgba(0,0,0,0.55);
+}
+
+html.dark-mode #team-title{
+color:white;
+}
+
+html.dark-mode 
+.trivia-card,
+.fan-feed,
+.quiz-card,
+.poll-card,
+.legacy-grid,
+.rival-card,
+.stadium-vibe-container{
+background: rgba(255,255,255,0.08);
+}
+
+html.dark-mode
+.category-card,
+.survey-card{
+background:#1e1e1e;
+color:white;
+border-color:#333;
+}
+
+body,
+.login-box,
+.details-card,
+.category-card,
+.survey-card{
+transition: background 0.4s ease, color 0.4s ease;
+}
+
+
+/* LOGIN / QUIZ / LEADERBOARD THEME FIX */
+html.dark-mode .login-box{
+background: rgba(20,20,20,0.85);
+color:white;
+}
+
+html.dark-mode .login-box h1{
+color:white;
+}
+
+html.dark-mode .login-box input{
+background:#222;
+color:white;
+}
+
+
+#themeToggle{
+background:none;
+border:2px solid var(--accent-red);
+color: var(--nav-text);
+font-size:18px;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+margin-right:12px;
+transition:0.3s;
+}
+
+#themeToggle:hover{
+background: var(--accent-red);
+color: #fff;
+}
+
+
+
+/* NAVIGATION BAR */
+.navbar {
+list-style-type:none;
+margin-bottom:0px;
+padding:12px;
+overflow: hidden;
+background-color: var(--nav-bg);
+color: var(--nav-text);
+font-weight: 650;
+font-family: 'Segoe UI', Arial, sans-serif;
+font-size: 30px;
+}
+
+
+
+/* HEADER BAR */
+.main-header {
+    background-color: var(--nav-bg);
+    height: 70px;
+    display: flex;
+    justify-content: space-between; /* This pushes items to the left and right */
+    align-items: center;
+    padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--accent-red);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* MENU BUTTON (HAMBURGER) */
+.menu-btn {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menu-btn span {
+    width: 35px;
+    height: 5px;
+    background-color: var(--nav-text);
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* SIDEBAR MENU */
+.side-nav {
+    height: 100%;
+    width: 0; /* Hidden by default */
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    background-color: var(--side-bg);
+    overflow-x: hidden;
+    transition: 0.5s; /* Slide effect */
+    padding-top: 100px;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+.side-nav a {
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 25px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: var(--side-text);
+    display: block;
+    transition: 0.3s;
+    border-bottom: 1px solid var(--side-border);
+}
+
+.side-nav a:hover {
+    background-color: var(--accent-red); /* Blitz Red hover */
+    padding-left: 35px; /* Slight slide in effect */
+}
+
+.side-nav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 45px;
+    margin-left: 50px;
+    border-bottom: none;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-login-link {
+    color: var(--nav-text);
+    text-decoration: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 8px 18px;
+    border: 1px solid var(--accent-red); /* Red outline button */
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.nav-login-link:hover {
+    background-color: var(--accent-red); /* Fills red on hover */
+    color: white;
+}
+
+/* Styling for the current page link in the sidebar */
+.side-nav a.nav-active {
+    color: var(--side-text);
+    font-weight: bold;
+    border-left: 5px solid var(--accent-red); 
+    background-color: rgba(0,0,0,0.08); 
+    padding-left: 35px;
+}
+
+
+
+
+
+
+
+
+
+
+/* NFL TEAMS.html */
+.nflteams-wrapper {
+    background-color: var(--page-surface);
+    color: var(--page-surface-text);
+    min-height: 8;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(198px, 200px));
+    gap: 20px;
+    padding: 40px;
+    align-content: start;
+    justify-content: center;
+}
+
+.team-card {
+    background: #f2f2f2;
+    color: var(--card-text);
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    transition: 0.3s;
+}
+
+.team-card p {
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.team-card:hover {
+    background-color: var(--team-color);
+    opacity: 0.9; 
+    transform: scale(1.08);
+    border-color: var(--team-color);
+    box-shadow: 0 0 20px var(--team-color);
+    color: #fff;
+}
+
+.team-card:hover p {
+    border-bottom: 2px solid white; /* Or use var(--team-color) if you want the underline to match the team! */
+    opacity: 1 !important;
+}
+
+/* Styling for the logos inside the cards */
+.team-logo {
+    max-width: 125px;
+    max-height: 125px;
+    width: auto;
+    height: auto;
+    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5)); /* Adds a pro "shadow" effect */
+    transition: transform 0.3s ease;
+}
+
+/* Search Bar */
+.search-container {
+    grid-column: 1 / -1; 
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+#teamSearch {
+    width: 60%;
+    max-width: 400px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.3); 
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+#teamSearch:focus {
+    border-color: #cc0000; /* Blitz Red */
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(204, 0, 0, 0.5);
+}
+
+#teamSearch::placeholder {
+    color: white;
+    opacity: 0.5; /* Firefox makes placeholders faint by default, this fixes it */
+    transition: color 0.3s ease;
+}
+
+#teamSearch:focus::placeholder {
+    color: rgba(182, 182, 182, 0.4); /* Goes back to a faint/original grey color */
+    opacity: 1;
+}
+
+/* Browser Specific Support */
+#teamSearch::-webkit-input-placeholder { color: white; }
+#teamSearch:focus::-webkit-input-placeholder { color: rgba(255, 255, 255, 0.4); }
+
+#teamSearch::-moz-placeholder { color: white; opacity: 1; }
+#teamSearch:focus::-moz-placeholder { color: rgba(255, 255, 255, 0.4); }
+
+#teamSearch:-ms-input-placeholder { color: white; }
+#teamSearch:focus:-ms-input-placeholder { color: rgba(255, 255, 255, 0.4); }
+
+
+
+
+
+
+
+/* Team Details Page Styling */
+.team-hero-bg {
+    width: 100%;
+    min-height: 300px; /* Gives it that big "Stadium" feel */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    box-sizing: border-box;
+    /* This creates a smooth fade to black at the bottom */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+}
+
+/* 2. The Logo styling */
+.large-team-logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-out;
+}
+
+/* 3. The Team Name Title */
+#team-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    letter-spacing: -1px;
+}
+
+/* 4. The Content Box (The card that holds info) */
+.details-container {
+    max-width: 1200px;
+    margin: -60px auto 40px; /* Pulls the box up to overlap the hero */
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+    display: block;
+}
+
+.details-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    color: var(--card-text);
+    height: auto; 
+    overflow: hidden; 
+    border: 1px solid var(--card-border);
+}
+
+/* Keep the dark mode card rich without changing your look */
+html.dark-mode .details-card {
+    background: rgba(20,20,20,0.9);
+    border-color: var(--card-border);
+}
+
+/* 5. Section spacing */
+.info-section {
+    margin-bottom: 30px;
+}
+
+.info-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* 6. A nice fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Container to center or align the button */
+.button-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* The New Back Button */
+.back-btn {
+    background-color: transparent;
+    color: var(--card-text);
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px; /* Makes it pill-shaped */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+
+/* Hover Effect: It fills with color and moves slightly */
+.back-btn:hover {
+    border-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.arrow {
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover .arrow {
+    transform: translateX(-5px);
+}
+
+/* Trivia & Fan Feed Styling */
+.trivia-card, .fan-feed {
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.posts-list {
+    max-height: 200px;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.post-item {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 0;
+    font-size: 0.9rem;
+}
+
+.post-box {
+    display: flex;
+    gap: 10px;
+}
+
+#post-input {
+    flex-grow: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Styling for the Quiz Section */
+.quiz-card {
+     background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.quiz-btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: rgba(255,255,255,0.08);
+    color: var(--card-text);
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    min-width: 80px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.quiz-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+.quiz-btn.active {
+    background: var(--team-color);
+    color: white;
+    border-color: var(--team-color);
+    box-shadow: 0 0 12px rgba(0,0,0,0.25);
+}
+
+.quiz-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 10px;
+    justify-items: center;
+}
+
+.quiz-count-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 10px;
+    justify-items: center;
+}
+
+@media (max-width: 800px) {
+    .quiz-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .quiz-count-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+    .quiz-choice-grid { grid-template-columns: 1fr; }
+    .quiz-count-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.quiz-back-btn {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    border: 1px solid var(--card-border);
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    outline: none;
+    color: var(--card-text);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px 10px;
+    line-height: 1;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+    opacity: 1;
+}
+
+
+html:not(.dark-mode) .quiz-back-btn {
+    color: rgba(0,0,0,0.45);
+}
+
+.quiz-back-btn:hover {
+    transform: translateY(-1px);
+    background: var(--team-color);
+    color: #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+#quiz-status {
+    margin-top: 25px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    display: block;
+    font-weight: bold;
+    color: #ccc;
+}
+
+/* Ensure all small buttons in sections look uniform */
+.small-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: transparent;
+    color: var(--card-text);
+    border: 2px solid; /* Color is set by JavaScript */
+    border-radius: 50px; /* Makes it pill-shaped */
+}
+
+.small-btn, .back-btn {
+    transition: all 0.3s ease-in-out;
+    background-color: transparent;
+    color: var(--card-text);
+    border: 2px solid var(--team-color);
+    cursor: pointer;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+/* One hover rule to rule them all */
+.small-btn:hover, .back-btn:hover {
+    background-color: var(--team-color) !important;
+    color: white !important;
+    box-shadow: 0 0 8px var(--team-color); /* Adds a nice glow */
+    border: 2px solid var(--team-color);
+}
+
+/* Hide quiz elements before start */
+#quiz-options {
+    display: none; 
+}
+
+.quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two buttons per row */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.option-btn {
+    padding: 12px;
+    border: 2px solid var(--card-text);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--card-text);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.option-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+/* These will be applied by JS when you click */
+.correct-choice { 
+    background-color: #2ecc71 !important;
+    border-color: #27ae60 !important; 
+}
+
+.wrong-choice { 
+    background-color: #e74c3c !important;
+    border-color: #c0392b !important;
+}
+
+/* Legacy Section Layout */
+.legacy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.trophy-container {
+    display: flex;
+    gap: 10px;
+    font-size: 2rem;
+    flex-wrap: wrap;
+}
+
+.legend-list {
+    list-style: none;
+    padding: 0;
+}
+
+.legend-list li {
+    font-size: 1.0rem;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--team-color);
+    font-weight: bold;
+    transition: transform 0.3s ease-in-out, color 0.3s ease, text-shadow 0.3s ease;
+    display: block;
+    cursor: pointer;
+    transform-origin: left center;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.legend-list li:hover {
+    transform: scale(1.08); 
+    padding-left: 0; 
+    color: #fff;
+    text-shadow: 0 0 12px var(--team-color);
+}
+
+/* Responsive fix for smaller screens */
+@media (max-width: 600px) {
+    .legacy-grid { grid-template-columns: 1fr; }
+}
+
+/* Stadium Card Specifics */
+.stadium-header h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--card-text); }
+.stadium-stats { display: flex; gap: 40px; margin-bottom: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+.stat-label { display: block; font-size: 0.75rem; color: #444; text-transform: uppercase; margin-bottom: 5px; }
+.stat-value { font-size: 1.2rem; font-weight: bold; color: var(--team-color); }
+.map-btn { text-decoration: none; color: var(--card-text); border: 1px solid var(--team-color); padding: 10px 20px; border-radius: 50px; transition: 0.3s; }
+.map-btn:hover { background: var(--team-color); box-shadow: 0 0 15px var(--team-color); }
+
+.next-game-card .stadium-stats {
+    border-top: none;
+    padding-top: 0;
+}
+
+.stadium-vibe-container {
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.season-section .stadium-stats {
+    border-top: none;
+    padding-top: 0;
+}
+
+.rivals-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.rival-card {
+    flex: 1 1 150px;
+    text-align: center;
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.player-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 15px;
+    border-radius: 15px;
+    flex: 1 1 150px;
+    margin-bottom: 3px;
+    margin-top: 5px;
+    position: relative;
+    z-index: 2;
+    background: transparent !important;
+    border: none !important;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeInPlayer 0.3s ease forwards;
+}
+
+.player-card.fade-out {
+    opacity: 0;
+    transform: translateY(5px); /* Slides down slightly as it disappears */
+}
+
+.player-card h3, .player-card p {
+    margin-bottom: 5px;
+}
+
+.player-img-wrapper {
+    width: 100%;           /* Increased size */
+    height: 200px;
+    min-width: 200px;       /* Prevents flexbox from squishing it */
+    min-height: 200px;
+    max-width: 775px;
+    margin: 10px auto;
+    position: relative;
+    border-radius: 10px;     
+    border: 4px solid var(--team-color);
+    background: rgba(255, 255, 255, 0.05);
+    overflow: hidden;       /* This is the "cookie cutter" */
+    display: inline-block;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.player-img-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;           /* Large logo */
+    height: 200%;
+    background-image: var(--team-logo-url);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;         /* Slightly more visible */
+    transform: translate(-50%, -50%) rotate(-10deg);
+    z-index: 1;
+}
+
+/* Section divider between account sections */
+.section-divider {
+    height: 1px;
+    border: none;
+    background: var(--card-border);
+    margin: 18px 0;
+    opacity: 0.95;
+}
+
+html.dark-mode .section-divider {
+    background: rgba(255,255,255,0.12);
+}
+
+.player-img {
+    width: 100%;
+    height: auto;
+    max-height: 110%;      /* Allows it to stand slightly taller */
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    transform: translateY(10px) scale(1.1); /* The "pop" effect */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Adds a "bounce" */
+}
+
+.spotlight-card {
+    position: relative;
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    flex: 1 1 150px;
+    margin-top: 5px;
+    overflow: hidden;
+    justify-content: flex-end;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes fadeInPlayer {
+    from { 
+        opacity: 0; 
+        transform: translateY(-3px); /* Comes from slightly above */
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.next-game-card {
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+#countdown-timer {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.poll-card {
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.poll-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+/* --- Advanced Roster --- */
+.advanced-roster {
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.advanced-roster-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.advanced-roster-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.advanced-team-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--input-bg);
+    color: var(--input-text);
+}
+
+.advanced-api-key {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--input-bg);
+    color: var(--input-text);
+    min-width: 220px;
+}
+
+.advanced-roster-body {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.depth-chart-panel,
+.player-detail-panel {
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.advanced-depth-chart-table {
+    display: grid;
+    gap: 12px;
+}
+
+.depth-group {
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.depth-group-header {
+    background: rgba(0,0,0,0.06);
+    color: var(--card-text);
+    font-weight: bold;
+    padding: 8px 12px;
+}
+
+.depth-group-row {
+    display: grid;
+    grid-template-columns: 120px repeat(4, 1fr);
+    gap: 8px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--card-border);
+    align-items: center;
+}
+
+.depth-header-row {
+    background: rgba(0,0,0,0.04);
+    font-weight: bold;
+}
+
+.depth-pos-label {
+    font-weight: bold;
+    color: #444;
+}
+
+.depth-col-label {
+    color: #444;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.depth-player-link {
+    color: var(--card-text);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.depth-player-link:hover {
+    text-decoration: underline;
+}
+
+.advanced-player-details {
+    display: grid;
+    gap: 12px;
+}
+
+.advanced-player-card {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    background: #f2f2f2;
+}
+
+.advanced-player-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.advanced-player-header .fullscreen-btn {
+    margin-left: auto;
+}
+
+.advanced-player-header img {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid var(--team-color);
+}
+
+.advanced-player-meta {
+    display: grid;
+    gap: 4px;
+}
+
+.advanced-player-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 8px;
+}
+
+.advanced-player-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+}
+
+.advanced-player-backdrop.show {
+    display: block;
+}
+
+.advanced-player-card.is-fullscreen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(520px, 92vw);
+    max-height: 86vh;
+    z-index: 3005;
+    overflow: auto;
+    background: #f2f2f2;
+    color: var(--card-text);
+    border: 2px solid var(--team-color);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+    padding: 28px 26px 24px;
+    border-radius: 18px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    filter: none;
+}
+
+html:not(.dark-mode) .advanced-player-card.is-fullscreen {
+    background: rgba(255,255,255,0.98);
+}
+
+html.dark-mode .advanced-player-card.is-fullscreen {
+    background: #1f1f1f;
+    color: #f5f5f5;
+}
+
+
+html:not(.dark-mode) .advanced-player-card.is-fullscreen .advanced-stat {
+    background: #f1f1f1;
+    border-color: #d6d6d6;
+}
+
+html:not(.dark-mode) .advanced-player-card.is-fullscreen .advanced-stat .stat-label {
+    color: #777;
+}
+
+html:not(.dark-mode) .advanced-player-card.is-fullscreen .advanced-stat .stat-value {
+    color: #222;
+}
+
+html.dark-mode .advanced-player-card.is-fullscreen .advanced-stat {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+html.dark-mode .advanced-player-card.is-fullscreen .advanced-stat .stat-label {
+    color: #aaa;
+}
+
+html.dark-mode .advanced-player-card.is-fullscreen .advanced-stat .stat-value {
+    color: #f2f2f2;
+}
+body.no-scroll {
+    overflow: hidden;
+}
+
+.close-fullscreen-btn {
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    color: #444;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.close-fullscreen-btn:hover {
+    color: var(--card-text);
+    transform: scale(1.05);
+}
+
+html.dark-mode .close-fullscreen-btn {
+    color: #e0e0e0;
+}
+
+html.dark-mode .close-fullscreen-btn:hover {
+    color: #ffffff;
+}
+
+.advanced-stat {
+    padding: 8px 10px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    font-size: 0.9rem;
+}
+
+.muted {
+    color: #444;
+}
+
+@media (max-width: 900px) {
+    .advanced-roster-body {
+        grid-template-columns: 1fr;
+    }
+    .depth-group-row {
+        grid-template-columns: 90px repeat(2, 1fr);
+    }
+}
+
+/* --- Advanced Depth Chart Layout --- */
+.depth-chart-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.depth-column h4 {
+    border-bottom: 2px solid var(--team-color);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.depth-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.depth-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+
+.depth-pos {
+    font-weight: bold;
+    color: var(--team-color);
+    width: 45px;
+}
+
+.depth-name { flex-grow: 1; }
+
+/* --- Bio Modal (Popup) --- */
+.bio-modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.bio-content {
+    background: #f2f2f2;
+    color: var(--card-text);
+    border: 2px solid var(--team-color);
+    padding: 32px 28px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+.close-bio {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #444;
+}
+
+.bio-content h2 {
+    margin: 10px 0 6px;
+}
+
+#bio-pos {
+    margin-bottom: 12px;
+}
+
+#bio-details {
+    display: grid;
+    gap: 12px;
+    text-align: left;
+}
+
+#bio-details p {
+    margin: 0;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+}
+
+#bio-details .stat-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #444;
+}
+
+.bio-header-img {
+    width: 235px;
+    height: 165px;
+    border-radius: 20px;
+    border: 3px solid var(--team-color);
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .depth-chart-container { grid-template-columns: 1fr; }
+}
+
+/* Light mode readability fixes */
+html:not(.dark-mode) .footballforfun,
+html:not(.dark-mode) .homepagesummary,
+html:not(.dark-mode) .NFL-Survey,
+html:not(.dark-mode) .tovisitnflwebsite,
+html:not(.dark-mode) .top2photosheading,
+html:not(.dark-mode) .inmyopinion,
+html:not(.dark-mode) .selector-label {
+    color: var(--page-surface-text);
+    text-shadow: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* NFL WEBSITE.html */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.nflwebsite-wrapper {
+  background-color: var(--page-surface);
+  color: var(--page-surface-text);
+    min-height: 92.9vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+}
+
+.tovisitnflwebsite {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900; 
+    font-style: italic;
+    text-transform: uppercase;
+    color: var(--page-surface-text);
+    text-align: center;
+    margin-top: 120px;
+    letter-spacing: -1px; 
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+}
+
+.nflwebsite-wrapper a {
+    display: block;
+    margin: 50px auto;
+    width: fit-content; 
+    text-decoration: none;
+    animation: logo-pulse 2.8s infinite ease-in-out;
+    transition: transform 0.4s ease;
+}
+
+.nflwebsite-wrapper a:hover {
+    animation-play-state: paused;
+}
+
+.nflwebsite-wrapper a:hover .nfllogo {
+    transform: scale(1.2); /* This will now be smooth and 100% consistent */
+    filter: drop-shadow(0 0 35px rgba(255, 255, 255, 0.9)); 
+    cursor: pointer;
+}
+
+.nfllogo {
+    display: block;
+    width: 250px; 
+    height: auto;
+    transition: transform 0.4s ease, filter 0.3s ease;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+    backface-visibility: hidden;
+}
+
+.nfllogo:hover {
+    animation-play-state: paused;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.8)); 
+    cursor: pointer;
+}
+
+@keyframes logo-pulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255,255,255,0.7)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); }
+}
+
+/* Darker glow in light mode for NFL Website logo */
+html:not(.dark-mode) .nfllogo {
+    filter: drop-shadow(0 0 18px rgba(0, 0, 0, 0.45));
+}
+
+html:not(.dark-mode) .nflwebsite-wrapper a:hover .nfllogo {
+    filter: drop-shadow(0 0 28px rgba(0, 0, 0, 0.6));
+}
+
+html:not(.dark-mode) .nfllogo:hover {
+    filter: drop-shadow(0 0 24px rgba(0, 0, 0, 0.55));
+}
+
+@keyframes logo-pulse-light {
+    0% { transform: scale(1); filter: drop-shadow(0 0 18px rgba(0,0,0,0.45)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 28px rgba(0,0,0,0.6)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 18px rgba(0,0,0,0.45)); }
+}
+
+html:not(.dark-mode) .nflwebsite-wrapper a {
+    animation: logo-pulse-light 2.8s infinite ease-in-out;
+}
+
+
+
+
+
+
+
+
+/* index.html */
+.home-wrapper {
+    background-color: var(--page-surface);
+    color: var(--page-surface-text);
+    min-height: 92.9vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+}
+
+.footballforfun {
+  font-family: "Fugaz One", system-ui;
+  font-weight: 400;
+  font-size: 4.0rem;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: -10px;
+  color: var(--page-surface-text);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.homepagesummary {
+  text-align: center;
+  font-size: 1.5rem;
+  max-width: 950px;
+  line-height: 1.8;
+  margin-bottom: 50px; 
+  color: var(--page-surface-text);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+}
+
+/* The Individual Cards */
+.category-card {
+    background: #f2f2f2;
+    border: 1px solid var(--card-border);
+    border-radius: 15px;
+    padding: 30px;
+    width: 260px;
+    text-decoration: none;
+    color: var(--card-text);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    border-color: #ff0000;
+}
+
+.category-card h3 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.stadiums-wrapper {
+    background-color: var(--page-surface);
+    color: var(--page-surface-text);
+    min-height: 92.9vh;
+    padding: 40px;
+}
+
+.stadiums-hero {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+.stadiums-title {
+    font-family: "Fugaz One", system-ui;
+    font-weight: 400;
+    font-size: 3rem;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.stadiums-subtitle {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: var(--page-surface-text);
+    opacity: 0.9;
+}
+
+.stadium-section,
+.travel-section {
+    margin-top: 30px;
+}
+
+.stadium-section h2,
+.travel-section h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 18px;
+}
+
+.stadium-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.stadium-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stadium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 26px rgba(0,0,0,0.22);
+}
+
+.stadium-card.active {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 0 2px rgba(204,0,0,0.15), 0 16px 30px rgba(0,0,0,0.25);
+}
+
+.stadium-card-header h3 {
+    margin-bottom: 4px;
+}
+
+.stadium-team {
+    font-size: 0.95rem;
+    color: var(--muted-text);
+}
+
+.stadium-meta {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.stadium-vibe {
+    margin-top: 12px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.05);
+    font-weight: 600;
+}
+
+.travel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.travel-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 16px 18px 18px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+}
+
+.travel-card h3 {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.travel-card ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+    line-height: 1.75;
+}
+
+.travel-card li {
+    margin: 6px 0;
+}
+
+.travel-link {
+    color: var(--card-text);
+    text-decoration: none;
+    position: relative;
+}
+
+.travel-link:hover {
+    text-decoration: underline;
+}
+
+.travel-link:hover::after {
+    content: "Open in Google Maps";
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 4px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.map-placeholder {
+    height: 160px;
+    border-radius: 12px;
+    border: 1px dashed var(--card-border);
+    background: transparent;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.map-placeholder iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    position: absolute;
+    inset: 0;
+}
+
+.map-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.map-card {
+    padding: 14px 16px 16px;
+}
+
+.map-modal.open {
+    display: flex;
+}
+
+.map-modal-card {
+    background: var(--card-bg);
+    color: var(--card-text);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 18px;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+.map-modal-frame {
+    margin-top: 10px;
+    height: 60vh;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+}
+
+.map-modal-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    justify-content: center;
+}
+
+.map-modal-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.map-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--card-text);
+    cursor: pointer;
+}
+
+html.dark-mode .stadium-vibe {
+    background: rgba(255,255,255,0.08);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* PHOTOS.html */
+.photos-wrapper {
+    background-color: var(--page-surface);
+    color: var(--page-surface-text);
+    min-height: 90.5vh;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.top2photosheading {
+    text-align: center;
+    font-size: 50px;
+  margin: 40px 0;
+  margin-bottom: -40px;
+}
+
+.inmyopinion {
+    text-align: center;
+    font-size: 35px;
+  margin: 40px 0;
+}
+
+.weeksforphotos {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #cc0000;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--card-border);
+  padding-bottom: 10px;
+}
+
+/* Container that centers the dropdown and adds spacing below the header */
+.week-selector-container {
+    text-align: center;
+    margin-bottom: -15px;
+    margin-top: 60px;
+}
+
+/* Styles the 'Jump to:' text to make it bold and white */
+.selector-label {
+    color: var(--page-surface-text);
+    font-size: 22px;
+    font-weight: bold;
+    margin-right: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Styles the main dropdown box with NFL red and a white border */
+#week-select {
+    background-color: #D50A0A;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #ffffff;
+    border-radius: 25px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+/* Makes the dropdown grow and change color slightly when hovered */
+#week-select:hover {
+    background-color: #b00808;
+    transform: scale(1.03);
+}
+
+/* Ensures the list of weeks inside the menu has a clean white background */
+#week-select option {
+    background-color: white;
+    color: black;
+}
+
+/* Updated for Icon Positioning */
+.img-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 775px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.nflphotos {
+  display: block;
+  width: 100%;
+  height: 500px; 
+  object-fit: cover;
+  object-position: center;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+
+/* This only applies to the photo with the 'tall-photo' class */
+.nflphotos.tall-photo {
+    object-position: top;
+    object-fit: cover;
+}
+
+/* Image Hover Zoom */
+.img-wrapper:hover .nflphotos {
+  transform: scale(1.06);
+}
+
+/* Full Screen Icon Style */
+.fullscreen-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 5;
+    pointer-events: none; /* Let clicks pass through to the image */
+}
+
+.img-wrapper:hover .fullscreen-icon {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .bestphotos-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nflphotoscaption {
+  font-size: 1.10rem;
+  color: var(--card-text);
+  margin-top: 18px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.bestphotos-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  max-width: 1700px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: var(--card-text);
+}
+
+.bestphotos {
+  text-align: center;
+  background-color: var(--card-bg);
+  margin: 45px auto;
+  padding: 25px;
+  width: 95%;
+  max-width: 1200px;
+  border: solid 2px var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.08);
+  gap: 30px;
+}
+
+/* --- NEW LIGHTBOX STYLES --- */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px); /* The Glass Blur */
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lightbox-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    text-align: center;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 5px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+#lightbox-caption {
+    color: white;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.close-lightbox {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 50px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-lightbox:hover {
+    color: #ff4d4d;
+}
+
+/* Styles the "Back to Top" button and sets it to be invisible initially */
+#backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+    border: 2px solid white;
+    outline: none;
+    background-color: #D50A0A;
+    color: white;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    /* These two lines handle the fade-out state */
+    opacity: 0;
+    pointer-events: none;
+    /* Controls the speed of the fade and the hover grow effect */
+    transition: all 0.6s ease;
+}
+
+/* This class will be added by JavaScript when the user scrolls down */
+#backToTop.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Hover effect to make the button grow slightly */
+#backToTop:hover {
+    background-color: #b00808;
+    transform: scale(1.1);
+}
+
+
+
+
+
+
+
+
+
+/* SURVEY.html */
+.surveys-wrapper {
+    background-color: var(--page-surface);
+    color: var(--page-surface-text);
+    min-height: 92.9vh;
+    padding: 40px;
+}
+
+.NFL-Survey {
+  font-family: "Fugaz One", system-ui;
+  font-weight: 300;
+  font-size: 4.0rem;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 100px;
+  color: var(--page-surface-text);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.survey-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    width: 100%;
+}
+
+#survey-box {
+    width: 100%;
+    max-width: 440px;
+    text-align: left;
+    padding: 40px;
+}
+
+.survey-step h3 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.survey-step p {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.survey-option {
+    display: block;
+    margin: 15px 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.survey-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 2px;
+    transition: background 0.3s;
+}
+
+.survey-btn:hover {
+    background-color: #45a049;
+}
+
+.survey-step {
+    display: none; /* Hide all steps by default */
+}
+
+.survey-step.active {
+    display: block; /* Show only the active step */
+}
+
+.survey-nav {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.survey-btn.secondary {
+    background-color: #555;
+}
+
+.survey-btn.secondary:disabled {
+    background-color: #333;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* LOGIN.html */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* BLURRED BACKGROUND */
+.login-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(
+      var(--login-overlay),
+      var(--login-overlay)
+    ),
+    url("https://cdn.prod.website-files.com/68128b54b74e9cd5b80095c9/681e6066e13b77e50d698dbd_637fc6150119df45a37cce23_cover1.jpeg") center / cover no-repeat;
+  filter: blur(14px);
+  transform: scale(1.05);
+  z-index: -1;
+  min-height: 92.9vh;
+}
+
+/* CENTER LOGIN CARD */
+.login-main {
+  height: calc(90.5vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+/* LOGIN BOX */
+.login-box {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 50px; 
+  width: 100%;
+  max-width: 470px;   
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+  text-align: center;
+  color: var(--glass-text);
+}
+
+/* LOGIN TITLE */
+.login-box h1 {
+  margin-bottom: 20px;
+  color: var(--glass-text);
+  font-size: 2.3rem;
+}
+
+/* INPUTS (USERNAME & PASSWORD) */
+.login-box input[type="text"],
+.login-box input[type="password"],
+.login-box input[type="email"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--input-text);
+  font-size: 1.1rem;
+}
+
+/* REMEMBER ME */
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+
+/* LOGIN BUTTON */
+.login-box button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  background: #007c89;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.3rem;}
+
+.login-box button:hover {
+  background: #005f69;
+}
+
+/* REGISTER */
+.register-text {
+  margin-top: 23px;
+  font-size: 1.12rem;
+  color: var(--glass-text);
+}
+
+.register-text a {
+  color: var(--accent-red);
+  text-decoration: none;
+  font-weight: 550;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+/* ACCOUNT.HTML */
+
+/* Admin Command Center Styling */
+.admin-card {
+    background: #f2f2f2;
+    border: 2px solid #e74c3c;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 40px auto;
+    max-width: 500px;
+    text-align: center;
+    backdrop-filter: blur(10px); /* Blurs what's behind it */
+    box-shadow: 0 10px 30px rgba(231, 76, 60, 0.2);
+}
+
+.admin-card h2 {
+    color: #e74c3c;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.admin-subtitle {
+    color: #444;
+    font-size: 0.85rem;
+    margin-bottom: 25px;
+}
+
+.admin-btn-group {
+    display: flex;
+    flex-direction: column; /* Stack them for a cleaner look on mobile */
+    gap: 12px;
+}
+
+.btn-danger {
+    background: transparent;
+    border: 2px solid #e74c3c !important;
+    color: #e74c3c !important;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-danger:hover {
+    background: #e74c3c !important;
+    color: white !important;
+    box-shadow: 0 0 15px #e74c3c;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* LEADERBOARD.HTML */
+#reset-lb-btn {
+  margin-top: 0px;
+  margin-bottom: -8px;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding: 8px;
+  width: 65%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.advanced-player-photo {
+    width: 160px;
+    height: 160px;
+    margin: 10px auto 12px;
+    border-radius: 18px;
+    border: 2px solid var(--team-color);
+    background: #e9e9e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.advanced-player-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.advanced-player-meta {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.advanced-player-meta strong {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+}
+
+.advanced-player-stats {
+    display: grid;
+    gap: 12px;
+}
+
+.advanced-stat {
+    background: #ededed;
+    border: 1px solid #d6d6d6;
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.advanced-stat .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #777;
+    margin-bottom: 2px;
+}
+
+.advanced-stat .stat-value {
+    font-weight: 600;
+    color: #222;
+}
+
+html.dark-mode .advanced-stat {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+html.dark-mode .advanced-stat .stat-label {
+    color: #aaa;
+}
+
+html.dark-mode .advanced-stat .stat-value {
+    color: #f2f2f2;
+}
+
+
+
+
+
+
+
+
+/* Advanced roster dark-mode fixes (ensure inner cards flip) */
+html.dark-mode .advanced-player-card {
+    background: #1e1e1e;
+    color: #f5f5f5;
+    border-color: #333;
+}
+
+html.dark-mode .advanced-player-card .muted {
+    color: #bdbdbd;
+}
+
+html.dark-mode .advanced-player-card .advanced-stat {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+html.dark-mode .advanced-player-card .advanced-stat .stat-label {
+    color: #aaa;
+}
+
+html.dark-mode .advanced-player-card .advanced-stat .stat-value {
+    color: #f2f2f2;
+}
+
+
+/* Fullscreen controls visibility */
+.advanced-player-card .close-fullscreen-btn {
+    display: none;
+}
+
+.advanced-player-card.is-fullscreen .close-fullscreen-btn {
+    display: inline-flex;
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.06);
+}
+
+html.dark-mode .advanced-player-card.is-fullscreen .close-fullscreen-btn {
+    background: rgba(255,255,255,0.08);
+}
+
+.advanced-player-card.is-fullscreen .fullscreen-btn {
+    display: none;
+}
+
+
+/* ACCOUNT: Favorite Team Picker */
+.favorite-team-card {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+}
+
+.favorite-team-card h3 {
+    margin: 0 0 8px;
+    color: #01961a;
+}
+
+.favorite-team-display {
+    font-size: 1.05rem;
+    margin: 6px 0 12px;
+}
+
+.favorite-team-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.favorite-team-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--input-bg);
+    color: var(--input-text);
+    min-width: 220px;
+}
+
+
+.favorite-save-btn:hover {   
+    background: #01961a;    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(1,150,26,0.4);
+}
+
+.favorite-team-controls {
+    justify-content: center;
+}
+
+
+.favorite-go-btn:hover {    
+    background: var(--accent-red);    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(204,0,0,0.4);
+}
+
+.favorite-go-btn:disabled {    
+    opacity: 0.5;    
+    cursor: not-allowed;}
+
+
+/* Light mode section separators: darker lines */
+html:not(.dark-mode) .post-item {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .legend-list li {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .stadium-stats {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .depth-group,
+html:not(.dark-mode) .depth-group-header {
+    border-color: #000;
+}
+
+html:not(.dark-mode) .depth-group-row {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .login-box > div[style*="border-top"] {
+    border-top: 1px solid #000 !important;
+}
+
+.favorite-save-btn:hover {    
+    background: #01961a;    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(1,150,26,0.4);
+}
+
+.favorite-team-controls {
+    justify-content: center;
+}
+
+.favorite-go-btn {    
+    background: transparent;    
+    border: 2px solid var(--accent-red);    
+    color: var(--accent-red);    
+    padding: 8px 16px;    
+    border-radius: 20px;    
+    font-weight: bold;    
+    cursor: pointer;    
+    transition: 0.2s;    
+    display: inline-flex;    
+    align-items: center;    
+    justify-content: center;    
+    text-align: center;
+}
+
+.favorite-go-btn:hover {    
+    background: var(--accent-red);    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(204,0,0,0.4);
+}
+
+.favorite-go-btn:disabled {    
+    opacity: 0.5;    
+    cursor: not-allowed;}
+
+
+/* Light mode section separators: darker lines */
+html:not(.dark-mode) .post-item {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .legend-list li {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .stadium-stats {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .depth-group,
+html:not(.dark-mode) .depth-group-header {
+    border-color: #000;
+}
+
+html:not(.dark-mode) .depth-group-row {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .login-box > div[style*="border-top"] {
+    border-top: 1px solid #000 !important;
+}
+
+.favorite-go-btn:hover {    
+    background: var(--accent-red);    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(204,0,0,0.4);
+}
+
+.favorite-go-btn:disabled {    
+    opacity: 0.5;    
+    cursor: not-allowed;
+}
+
+
+/* Light mode section separators: darker lines */
+html:not(.dark-mode) .post-item {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .legend-list li {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .stadium-stats {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .depth-group,
+html:not(.dark-mode) .depth-group-header {
+    border-color: #000;
+}
+
+html:not(.dark-mode) .depth-group-row {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .login-box > div[style*="border-top"] {
+    border-top: 1px solid #000 !important;
+}
+
+.favorite-save-btn:hover {    
+    background: #01961a;    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(1,150,26,0.4);
+}
+
+
+.favorite-go-btn:hover {    
+    background: var(--accent-red);    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(204,0,0,0.4);
+}
+
+.favorite-go-btn:disabled {    
+    opacity: 0.5;    
+    cursor: not-allowed;
+}
+
+
+/* Light mode section separators: darker lines */
+html:not(.dark-mode) .post-item {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .legend-list li {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .stadium-stats {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .depth-group,
+html:not(.dark-mode) .depth-group-header {
+    border-color: #000;
+}
+
+html:not(.dark-mode) .depth-group-row {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .login-box > div[style*="border-top"] {
+    border-top: 1px solid #000 !important;
+}
+
+.favorite-go-btn:hover {    
+    background: var(--accent-red);    
+    color: #fff;    
+    box-shadow: 0 0 10px rgba(204,0,0,0.4);
+}
+
+.favorite-go-btn:disabled {    
+    opacity: 0.5;    
+    cursor: not-allowed;
+}
+
+
+/* Light mode section separators: darker lines */
+html:not(.dark-mode) .post-item {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .legend-list li {
+    border-bottom-color: #000;
+}
+
+html:not(.dark-mode) .stadium-stats {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .depth-group,
+html:not(.dark-mode) .depth-group-header {
+    border-color: #000;
+}
+
+html:not(.dark-mode) .depth-group-row {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .login-box > div[style*="border-top"] {
+    border-top: 1px solid #000 !important;
+}
+
+
+/* Account separators (light mode only) */
+.account-divider {
+    margin-bottom: 8px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 20px;
+}
+
+html:not(.dark-mode) .account-divider {
+    border-top-color: #000;
+}
+
+html:not(.dark-mode) .favorite-team-card {
+    border-top-color: #000;
+}
+
+/* Dark mode card overrides (Team Details + Admin) */
+html.dark-mode .admin-card {
+    background: rgba(20,20,20,0.9);
+    color: #fff;
+    border-color: #333;
+}
+
+html.dark-mode .admin-subtitle {
+    color: #bbb;
+}
+
+html.dark-mode .admin-card h2 {
+    color: #e74c3c;
+}
+
+html.dark-mode .trivia-card,
+html.dark-mode .fan-feed,
+html.dark-mode .quiz-card,
+html.dark-mode .poll-card,
+html.dark-mode .legacy-grid,
+html.dark-mode .rival-card,
+html.dark-mode .stadium-vibe-container,
+html.dark-mode .spotlight-card,
+html.dark-mode .next-game-card,
+html.dark-mode .depth-chart-panel,
+html.dark-mode .player-detail-panel {
+    background: rgba(20,20,20,0.85);
+    color: #fff;
+    border-color: #333;
+}
+
+html.dark-mode .depth-group,
+html.dark-mode .depth-group-row,
+html.dark-mode .depth-group-header {
+    border-color: #333;
+}
+
+html.dark-mode .advanced-roster {
+    background: rgba(20,20,20,0.85);
+    color: #fff;
+    border-color: #333;
+}
+
+html.dark-mode .advanced-roster .advanced-team-select {
+    background: #222;
+    color: #fff;
+    border-color: #444;
+}
+
+html.dark-mode .team-card {
+    background: rgba(20,20,20,0.85);
+    color: #fff;
+    border-color: #333;
+}
+
+html.dark-mode .team-card:hover {
+    background-color: #1b1b1b;
+    color: #fff;
+    border-color: var(--team-color);
+    transform: scale(1.08);
+    box-shadow: 0 0 40px var(--team-color), 0 0 70px color-mix(in srgb, var(--team-color) 70%, transparent);
+}
+
+/* Light mode team-card hover glow (keep card neutral) */
+html:not(.dark-mode) .team-card:hover {
+    background-color: #f2f2f2;
+    color: var(--card-text);
+    box-shadow: 0 0 40px var(--team-color), 0 0 70px color-mix(in srgb, var(--team-color) 70%, transparent);
+}
+
+html:not(.dark-mode) .team-card:hover p {
+    border-bottom: 2px solid var(--team-color);
+}
+
+
+
+
+html.dark-mode .survey-card {
+    background: #1e1e1e;
+    color: #fff;
+    border-color: #333;
+}
+
+/* Account Profile Layout */
+.profile-editor-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.favorite-team-controls {
+    justify-content: center;
+}
+
+#logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 10px auto 0;
+    padding: 10px 18px;
+}
+
+.register-text {
+    text-align: center;
+}
+
+/* Account Card Layout */
+.account-page .login-main {
+    height: auto;
+    padding: 30px 16px 40px;
+}
+
+.account-page .login-box {
+    max-width: 560px;
+    width: 100%;
+    padding: 32px 28px;
+    margin: 20px auto;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 6px;
+}
+
+.account-more-options {
+    margin-top: 14px;
+}
+
+.account-section-divider {
+    height: 1px;
+    background: var(--card-border);
+    margin: 16px 0;
+}
+
+html:not(.dark-mode) .account-section-divider {
+    background: #000;
+}
+
+.pfp-card {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--card-border);
+}
+
+.pfp-panel {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    background: var(--card-bg);
+}
+
+.pfp-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.pfp-panel-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.pfp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.pfp-tile {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: #eee center/cover no-repeat;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.pfp-tile:hover {
+    transform: scale(1.05);
+}
+
+.pfp-upload {
+    display: grid;
+    gap: 10px;
+}
+
+.pfp-upload-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#pfp-url-input {
+    min-width: 220px;
+    flex: 1 1 220px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--input-text);
+}
+
+.pfp-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pfp-preview-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Team Timeline */
+.timeline-section {
+    position: relative;
+}
+
+.timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.timeline-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.timeline-rail {
+    position: relative;
+    margin-top: 14px;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 46px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+html:not(.dark-mode) .timeline-line {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.timeline-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 12px 34px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.timeline-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.timeline-card {
+    min-width: 260px;
+    scroll-snap-align: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 18px;
+    position: relative;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.timeline-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.22);
+}
+
+.timeline-node {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--team-color);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.08);
+}
+
+.timeline-year {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.timeline-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.timeline-desc {
+    color: var(--muted-text);
+    font-size: 0.95rem;
+}
+
+.type-founded { border-top: 4px solid #2ecc71; }
+.type-championship { border-top: 4px solid #f1c40f; }
+.type-moment { border-top: 4px solid #3498db; }
+.type-coach { border-top: 4px solid #e74c3c; }
+.type-season { border-top: 4px solid #9aa0a6; }
+
+.type-founded .timeline-node { background: #2ecc71; }
+.type-championship .timeline-node { background: #f1c40f; }
+.type-moment .timeline-node { background: #3498db; }
+.type-coach .timeline-node { background: #e74c3c; }
+.type-season .timeline-node { background: #9aa0a6; }
+
+.timeline-progress {
+    height: 4px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+html:not(.dark-mode) .timeline-progress {
+    background: rgba(0,0,0,0.08);
+}
+
+.timeline-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--team-color);
+    transition: width 0.2s ease;
+}
+
+@media (max-width: 700px) {
+    .timeline-card { min-width: 220px; }
+    .timeline-line { top: 44px; }
+}
+
+.pfp-preview-wrapper {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    margin: 8px auto;
+}
+
+.pfp-preview-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: contain;
+    background: #111;
+    border: 2px solid var(--card-border);
+    display: none;
+}
+
+/* overlay system */
+.pfp-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: rgba(0,0,0,0.6);
+    mask: radial-gradient(circle 30px at center, transparent 98%, black 100%);
+    -webkit-mask: radial-gradient(circle 30px at center, transparent 98%, black 100%);
+}
+
+.pfp-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+.pfp-overlay::after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid white;
+    background: transparent;
+}
+
+/* GAMES HUB */
+.games-box {
+  max-width: 1350px;
+}
+
+.games-page .login-main {
+  padding-top: 550px;
+  padding-bottom: 550px;
+}
+
+.games-hero {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.games-hero h1 {
+  font-family: 'Fugaz One', sans-serif;
+  margin-bottom: 6px;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.game-card {
+  background: var(--card-bg);
+  color: var(--card-text);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.22);
+}
+
+.game-card h3 {
+  margin: 0;
+}
+
+.game-badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  background: rgba(0,0,0,0.06);
+  margin-bottom: 7px;
+}
+
+html.dark-mode .game-badge {
+  background: rgba(255,255,255,0.08);
+}
+
+.game-status {
+  font-size: 12px;
+  color: var(--muted-text);
+  margin-top: auto;
+}
+
+.game-btn {
+  width: 100%;
+  margin-top: 8px;
+  background: var(--accent-red) !important;
+  color: #fff !important;
+  border: 2px solid var(--accent-red) !important;
+}
+
+.game-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.game-btn:not([disabled]):hover {
+  background: #a80000 !important;
+  border-color: #a80000 !important;
+}
+
+.game-panel {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  display: none;
+}
+
+.game-panel-open {
+  display: block;
+}
+
+.game-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.prediction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.prediction-row {
+  background: rgba(0,0,0,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+html.dark-mode .prediction-row {
+  background: rgba(255,255,255,0.06);
+}
+
+.prediction-title {
+  font-weight: 600;
+}
+
+.prediction-pick label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.prediction-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prediction-score input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--input-text);
+}
+
+.prediction-score span {
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .prediction-row {
+    grid-template-columns: 1fr;
+  }
+
+  .prediction-score {
+    justify-content: flex-start;
+  }
+}
+
+.prediction-actions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prediction-result {
+  font-weight: 600;
+}
+
+.prediction-leaderboard {
+  margin-top: 20px;
+}
+
+.prediction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prediction-entry {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: rgba(0,0,0,0.03);
+}
+
+html.dark-mode .prediction-entry {
+  background: rgba(255,255,255,0.06);
+}
+
+.polls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.poll-btn {
+  text-align: left;
+}
+
+.game-play {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-display {
+  background: rgba(0,0,0,0.06);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html.dark-mode .game-display {
+  background: rgba(255,255,255,0.08);
+}
+
+.game-display.flash {
+  animation: flashBlink 0.2s steps(1, end);
+}
+
+.game-display img {
+  max-height: 110px;
+  max-width: 70%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.25));
+}
+
+.game-display.logo-hidden img {
+  opacity: 0;
+}
+
+@keyframes flashBlink {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.game-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.fantasy-cap {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.fantasy-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--input-text);
+}
+
+.matchup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.matchup-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--input-text);
+}
+
+.bracket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.geo-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.geo-photo-wrap {
+  margin-top: 12px;
+}
+
+.geo-photo-wrap img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+}
+
+.geo-map {
+  margin-top: 12px;
+  height: 360px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}

@@ -1,0 +1,2402 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<title>NFL Teams</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+
+
+<div id="team-hero" class="team-hero-bg">
+    <div class="hero-content">
+        <div id="logo-container"></div> 
+        <h1 id="team-title">Loading...</h1>
+    </div>
+</div>
+
+<main class="details-container">
+    <div class="details-card" id="team-content">
+        <div class="info-section">
+            <h2>Team Information</h2>
+            <p id="team-desc"></p>
+        </div>
+        
+        <div class="info-section stadium-card">
+            <h2>Home Field</h2>
+            <div class="stadium-vibe-container">
+                <div class="stadium-header">
+                    <h3 id="team-stadium">Stadium Name</h3>
+                    <div class="stadium-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Capacity</span>
+                            <span id="stadium-capacity" class="stat-value">--</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Surface</span>
+                            <span id="stadium-surface" class="stat-value">--</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Stadium Type</span>
+                            <span id="stadium-type" class="stat-value">--</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Current Weather</span>
+                            <span id="stadium-weather" class="stat-value">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stadium-footer">
+                    <a id="stadium-map-link" href="#" target="_blank" class="map-btn">📍 Open in Google Maps</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section season-section">
+                <h2>Season Record</h2>
+            <div id="season-record"></div>
+        </div>
+
+        <div class="info-section next-game-card">
+                    <h2>Next Game</h2>
+                <div id="next-game"></div>
+            <div id="countdown-timer"></div>
+        </div>
+
+        <div class="info-section legacy-grid">
+    <div class="trophy-box">
+        <h2>Championships / Super Bowls</h2>
+        <div id="trophy-case" class="trophy-container">
+        </div>
+    </div>
+
+    <div class="legends-box">
+        <h2>All-Time Legends</h2>
+        <ul id="legend-list" class="legend-list">
+            </ul>
+    </div>
+</div>
+
+    <div class="info-section rivals-card">
+            <h2>Top Rivals</h2>
+        <div id="rivals-container" class="rivals-grid"></div>
+    </div>
+
+    <div class="info-section spotlight-card">
+    <h2>Roster Overview</h2>
+    <div class="spotlight-content">
+        <div id="roster-overview"></div>
+        
+        <button onclick="prevPlayer()" class="small-btn back-btn">&#8592; Previous</button>
+        <button onclick="nextPlayer()" class="small-btn back-btn">Next &#8594;</button>
+
+        <div id="advanced-depth-chart" style="display:none;"></div>
+
+        <div style="margin-top: 20px;">
+            <button class="small-btn" onclick="openAdvancedRoster()">Advanced Roster</button>
+        </div>
+    </div>
+</div>
+
+<div id="advanced-roster-section" class="info-section advanced-roster" style="display:none;">
+    <div class="advanced-roster-header">
+        <h2>Advanced Roster</h2>
+        <div class="advanced-roster-controls">
+            <button class="small-btn" onclick="closeAdvancedRoster()">Back to Team Details</button>
+            
+            
+            <select id="advanced-team-select" class="advanced-team-select"></select>
+            
+            <button class="small-btn" onclick="loadAdvancedRoster()">Load Team</button>
+        </div>
+    </div>
+    <div id="advanced-roster-status" class="muted"></div>
+
+    <div class="advanced-roster-body">
+        <div class="depth-chart-panel">
+            <h3>Depth Chart</h3>
+            <div id="advanced-depth-chart-table" class="advanced-depth-chart-table"></div>
+        </div>
+        <div class="player-detail-panel">
+            <h3>Player Details</h3>
+            <div id="advanced-player-details" class="advanced-player-details">
+                <p class="muted">Select a player to see details.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section poll-card">
+    <h2>Fan Poll</h2>
+    <p>Will this team make the playoffs next season?</p>
+
+    <div class="poll-buttons">
+        <button onclick="votePoll('yes')" class="small-btn">Yes</button>
+        <button onclick="votePoll('no')" class="small-btn">No</button>
+    </div>
+
+    <p id="poll-results"></p>
+</div>
+
+<div class="info-section timeline-section">
+    <div class="timeline-header">
+        <h2>Team Timeline</h2>
+        <div class="timeline-controls">
+            <button id="timeline-prev" class="small-btn">← Back</button>
+            <button id="timeline-next" class="small-btn">Next →</button>
+        </div>
+    </div>
+    <div class="timeline-rail">
+        <div class="timeline-line"></div>
+        <div id="timeline-scroll" class="timeline-scroll"></div>
+    </div>
+    <div class="timeline-progress">
+        <div id="timeline-progress-bar" class="timeline-progress-bar"></div>
+    </div>
+</div>
+
+        <div class="info-section trivia-card">
+    <h2>Team Trivia</h2>
+    <p id="team-trivia">Loading a cool fact...</p>
+    <button onclick="loadNewTrivia()" class="back-btn small-btn">Another Fact</button>
+    </div>
+
+    <div class="info-section fan-feed">
+        <h2>Fan Feed</h2>
+        <div id="posts-container" class="posts-list">
+            </div>
+        <div class="post-box">
+            <input type="text" id="post-input" placeholder="Share your thoughts...">
+            <button onclick="submitPost()" class="back-btn small-btn">Post</button>
+        </div>
+    </div>
+
+    <div class="info-section quiz-card">
+                <h2 id="quiz-header">Team Challenge</h2>
+        <div id="quiz-content">
+                <p id="quiz-question">Ready to prove you're a super fan?</p>
+            <div id="quiz-options" class="quiz-options-grid"></div>
+                <p id="quiz-status"></p> 
+            </div>
+                <button id="start-quiz-btn" onclick="startQuiz()" class="back-btn small-btn">Start Quiz</button>
+    </div>
+
+    <div class="button-container">
+        <button onclick="window.history.back()" class="back-btn">
+            <span class="arrow">←</span> Back
+        </button>
+    </div>
+
+</div>
+</main>
+
+<div id="bio-modal" class="bio-modal" onclick="this.style.display='none'">
+    <div class="bio-content" onclick="event.stopPropagation()">
+        <span class="close-bio" onclick="document.getElementById('bio-modal').style.display='none'">&times;</span>
+        <img id="bio-img" src="" class="bio-header-img">
+        <h2 id="bio-name"></h2>
+        <p id="bio-pos" style="color: var(--team-color); font-weight: bold;"></p>
+        <hr style="opacity: 0.1; margin: 20px 0;">
+        <div id="bio-details"></div>
+    </div>
+</div>
+
+<script src="config.js"></script>
+
+<script>
+// --- 1. GLOBAL SETTINGS & DATA ---
+// These are outside the "DOMContentLoaded" so your HTML buttons can see them.
+
+console.log(weatherAPIKey); // comes from config.js
+const urlParams = new URLSearchParams(window.location.search);
+const teamId = urlParams.get('id') || "bills"; 
+let factIndex = 0;
+
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+// TRIVIA DATA
+const triviaList = {
+        "bills": ["The Bills are the only team to play in four consecutive Super Bowls (1990–1993).", "The team nickname is a play on the name of Wild West showman Buffalo Bill Cody.", "Fans, known as 'Bills Mafia,' famously raise millions for charities through viral grassroots campaigns.", "They are the only NFL team that actually plays their home games in New York State (Jets/Giants play in NJ).", "In 1993, they staged the 'The Comeback,' overcoming a 32-point deficit to beat the Oilers."],
+        "dolphins": ["The 1972 Dolphins are the only team in NFL history to have a perfect undefeated season.", "The team was founded by Danny Thomas and Joe Robbie in 1966.", "Dan Marino was the first QB to pass for over 5,000 yards in a single season (1984).", "The Dolphins' fight song was written in 1972 and is still played after every touchdown.", "Their home stadium has a unique canopy designed to keep 90% of fans in the shade while leaving the field in the sun."],
+        "patriots": ["The team was almost named the 'Bay State Patriots,' but the name was rejected because the initials would be 'B.S.'", "They have made a record 11 Super Bowl appearances.", "The Patriots' 'dynasty' saw them win 6 rings and 9 AFC titles over 20 years.", "In 1971, they moved to Foxborough and officially changed their name from Boston to New England.", "They hold the NFL record for the longest winning streak (21 games from 2003-2004)."],
+        "jets": ["Originally called the 'Titans of New York,' they rebranded to the Jets in 1963 to reflect the space age.", "Joe Namath famously 'guaranteed' a victory in Super Bowl III and actually pulled it off.", "The Jets share MetLife Stadium with the Giants—it is the only stadium shared by two NFL teams.", "They were the first AFL team to defeat an NFL team in a World Championship game.", "The 'New York Sack Exchange' was the nickname of their legendary 1980s defensive line."],
+        "ravens": ["The name was inspired by Edgar Allan Poe's poem 'The Raven'—Poe lived and is buried in Baltimore.", "Justin Tucker holds the NFL record for the longest field goal (66 yards) set in 2021.", "The team was technically a 'new' franchise in 1996 after the original Browns moved from Cleveland.", "Their mascots are three live ravens named Rise, Conquer, and Poe.", "The 2000 Ravens defense is widely considered one of the greatest of all time, allowing only 165 points all season."],
+        "bengals": ["The team's name honors a previous Cincinnati pro team from the 1930s.", "The iconic tiger-striped helmets were introduced in 1981.", "The 'Who Dey' chant was inspired by a local beer commercial in the 1980s.", "They were founded by Paul Brown, who was also the first coach/owner of the Cleveland Browns.", "The Bengals reached three Super Bowls (1981, 1988, 2021), losing the first two by just a few points each."],
+        "browns": ["The Browns are one of the few teams that does not have a logo on their helmets.", "In the leather-helmet era, they painted their helmets orange for night games so the ball was easier to see.", "They are named after their legendary first coach, Paul Brown.", "The 'Dawg Pound' cheering section started in 1984 when Hanford Dixon began barking at teammates.", "They won four NFL championships in their first 10 years of existence."],
+        "steelers": ["The Steelers' logo is only on the right side of their helmets.", "The logo is based on the 'Steelmark' logo belonging to the American Iron and Steel Institute.", "They were the first NFL team to win six Super Bowl championships.", "The 'Terrible Towel' was created in 1975 to help boost radio ratings during the playoffs.", "The team was originally named the 'Pirates' before changing to the Steelers in 1940."],
+        "texans": ["The Texans are the youngest franchise in the NFL, founded in 2002.", "The team's colors are 'Deep Steel Blue,' 'Battle Red,' and 'Liberty White.'", "They are the only team to win their inaugural game against an established cross-state rival (Cowboys).", "The logo is a bull's head shaped like the state of Texas with a lone star for an eye.", "NRG Stadium was the first NFL stadium to have a retractable roof."],
+        "colts": ["The Colts were the first team to have cheerleaders in the NFL.", "They are the only team to win a Super Bowl while representing two different cities (Baltimore and Indy).", "The team famously moved from Baltimore to Indianapolis in the middle of a snowy night in 1984.", "Peyton Manning's #18 is retired by the team; he has a statue outside their stadium.", "Their horseshoe logo is one of the most recognizable in sports and has remained largely unchanged."],
+        "jaguars": ["The stadium features two swimming pools and cabanas in the north end zone.", "They joined the league as an expansion team in 1995 along with the Panthers.", "The team was named the 'Jaguars' following a fan contest that received over 1,700 suggestions.", "The Jaguars are the only NFL team that has never had a game end in a tie.", "Their first-ever draft pick was Hall of Fame offensive tackle Tony Boselli."],
+        "titans": ["They were the first team in pro football history to play their home games in a dome (the Astrodome).", "Originally the Houston Oilers, they moved to Tennessee in 1997 and became the Titans in 1999.", "The 'Music City Miracle' is one of the most famous lateral-play touchdowns in playoff history.", "The sword in their logo represents the sword of Athena, as Nashville is the 'Athens of the South.'", "They came within one yard of tying Super Bowl XXXIV in one of the most dramatic finishes ever."],
+        "broncos": ["The Broncos were the first AFL team to ever beat an NFL team (1967).", "In 1960, they wore 'vertically striped' socks that were so ugly they eventually burned them in a bonfire.", "The 'Orange Crush' defense of the 1970s is one of the most famous units in history.", "John Elway is the only QB to start 5 Super Bowls for the same team.", "Because of the altitude, the air is thinner in Denver, making it easier to kick longer field goals."],
+        "chiefs": ["Arrowhead Stadium holds the Guinness World Record for the loudest crowd noise (142.2 decibels).", "The team was originally the Dallas Texans before moving to Kansas City in 1963.", "Founder Lamar Hunt is the person who actually came up with the name 'Super Bowl.'", "The team's mascot is KC Wolf, inspired by the 'Wolfpack'—a group of rowdy fans from the 60s.", "They are the only team in the Super Bowl era to win a championship after trailing by 10+ points in every playoff game (2019)."],
+        "raiders": ["The Raiders were the first team to play in Super Bowls across three different decades (60s, 70s, 80s).", "The iconic logo was inspired by actor Randolph Scott in the movie 'The Raiders.'", "The team has a famous motto: 'Just Win, Baby,' coined by legendary owner Al Davis.", "They are known as the 'Silver and Black' and have one of the most intimidating fan sections, the 'Black Hole.'", "The Raiders once traded their head coach (Jon Gruden) to the Buccaneers for four draft picks and $8 million."],
+        "chargers": ["The name 'Chargers' was inspired by the team's first owner, who loved the 'Charge!' bugle call at games.", "The lightning bolt on the helmet was chosen because the owner also owned a travel company called 'Carte Blanche.'", "The team originally played in Los Angeles for one year (1960) before moving to San Diego, then back to LA in 2017.", "Sharing SoFi Stadium with the Rams, they play in the most expensive stadium ever built.", "Legendary QB Dan Fouts led the 'Air Coryell' Offence, which revolutionized the passing game in the 70s."],
+        "cowboys": ["The Cowboys have sold out every home game (including playoffs) since 1990.", "They were the first NFL team to have a professional, world-famous cheerleading squad.", "They are the only team to record 20 consecutive winning seasons (1966–1985).", "The Cowboys' blue jerseys are often considered 'cursed' because they lost several big games while wearing them.", "Their star logo represents Texas as the 'Lone Star State' and is one of the most valuable brands in sports."],
+        "giants": ["The Giants are one of the oldest teams in the league, founded in 1925 for just $500.", "They have won Super Bowl championships in four different decades (80s, 90s, 00s, 10s).", "The 'Gatorade Shower' tradition was popularized by the Giants in the mid-1980s.", "They are the only team to beat an 18-0 team in the Super Bowl (2007 Patriots).", "The team's nickname, 'Big Blue,' comes from their primary jersey color used since the beginning."],
+        "eagles": ["The Eagles' logo is the only one in the NFL that faces to the left.", "The logo faces left so that the feathers on the eagle's neck form a hidden 'E' for Eagles.", "The team was named after the 'Blue Eagle' symbol of the New Deal during the Great Depression.", "In 1943, they merged with the Steelers for one year due to WWII; the team was called the 'Steagles.'", "The fans are famous for singing 'Fly, Eagles Fly' after every touchdown scored at home."],
+        "commanders": ["The team had the NFL's first marching band, founded in 1937, which still performs today.", "They were the first team to have their own radio network and the first to have a fully televised season (1950).", "The legendary 1980s offensive line was nicknamed 'The Hogs.'", "They were originally the Boston Braves before moving to Washington D.C. in 1937.", "The franchise has won three Super Bowls, all under the same head coach, Joe Gibbs."],
+        "bears": ["The Bears have the most players (over 30) in the Pro Football Hall of Fame.", "They were originally called the Decatur Staleys and were a company team for a starch manufacturer.", "The 1985 Bears 'Super Bowl Shuffle' song was a Top 40 hit and was nominated for a Grammy.", "The team's 'C' logo was originally white before being changed to the current orange and blue.", "They are known as the 'Monsters of the Midway' for their historically physical and dominant defenses."],
+        "lions": ["The Lions have played a game on every Thanksgiving Day since 1934 (except during WWII).", "They were the first team to go 0-16 in a single NFL season (2008).", "The team was originally located in Ohio and known as the Portsmouth Spartans.", "The Lion mascot, Roary, has a mane that is designed to look like a sunburst.", "The Lions are one of four current teams that have never appeared in a Super Bowl."],
+        "packers": ["The Packers are the only community-owned, non-profit professional sports team in the U.S.", "The team is named after the Indian Packing Company, which provided the original uniforms and equipment.", "The waiting list for season tickets is so long (over 100,000 people) that the estimated wait time is 900 years.", "They have won more total championships (13) than any other team in NFL history.", "The trophy for winning the Super Bowl is named after their legendary coach, Vince Lombardi."],
+        "vikings": ["The Vikings were the first team to lose four Super Bowls.", "The team is famous for the 'Skol' chant, which was inspired by a similar chant used by Iceland’s soccer team.", "The Gjallarhorn is a massive horn blown before every home game to signal the start of the battle.", "The 1960s/70s defensive line was known as the 'Purple People Eaters.'", "Their home stadium, U.S. Bank Stadium, features giant glass doors that are some of the largest in the world."],
+        "falcons": ["The Falcons were the first NFL team in the Deep South, joining the league in 1966.", "The team mascot, Freddie Falcon, was the first-ever official mascot in the NFL.", "The bird logo is shaped like a capital letter 'F.'", "They played in the first-ever NFL game that featured a roof—the Georgia Dome.", "In 2016, they became the first team to lose a Super Bowl after leading by 25 points."],
+        "panthers": ["The team logo is designed to resemble the combined shape of North and South Carolina.", "They played their very first season (1995) at Clemson University while their stadium was being built.", "The team's motto is 'Keep Pounding,' inspired by a speech from former player/coach Sam Mills.", "They are the only NFL team to play in a stadium they actually own outright.", "In 2015, they became the first team in the 16-game era to start a season 14-0."],
+        "saints": ["The team was awarded to New Orleans on November 1st, 1966—which is All Saints' Day.", "The Saints' first-ever play in franchise history was a 94-yard kickoff return for a touchdown.", "The 'Who Dat?' chant originated in minstrel shows and vaudeville before becoming a team tradition.", "After Hurricane Katrina, the Saints' return to the Superdome in 2006 is considered one of the most emotional games in history.", "Kicker Tom Dempsey set a long-standing record with a 63-yard field goal in 1970 while wearing a special flat-toe shoe."],
+        "buccaneers": ["The team once lost 26 games in a row (their entire first two seasons in 1976 and 1977).", "They were the first expansion team to win a Super Bowl after the AFL-NFL merger.", "The pirate ship in their stadium actually fires working cannons after every touchdown.", "Their original 'Creamsicle' uniforms were orange and white and featured a pirate named 'Bucco Bruce.'", "In 2021, they became the first team to play (and win) a Super Bowl in their own home stadium."],
+        "cardinals": ["The Cardinals are the oldest continuously run professional football team in the United States (founded 1898).", "They were originally called the Morgan Athletic Club in Chicago before becoming the Racine Cardinals.", "The team has moved twice: from Chicago to St. Louis in 1960, and then to Arizona in 1988.", "They hold the record for the longest post-season win drought (51 years between 1947 and 1998).", "The 'Cardinal Red' color was chosen because the founder bought used, faded red jerseys from the University of Chicago."],
+        "rams": ["The Rams were the first NFL team to paint a logo (the horns) directly onto their helmets (1948).", "They are the only team to win NFL championships representing three different cities (Cleveland, LA, St. Louis).", "The 1999 team was nicknamed 'The Greatest Show on Turf' for their record-breaking Offence.", "They were the first NFL team to move to the West Coast.", "The team's home, SoFi Stadium, is built 100 feet below ground level to avoid interfering with flight paths from LAX."],
+        "sf49ers": ["The name '49ers' comes from the prospectors who arrived in California during the 1849 Gold Rush.", "They were the first NFL team to win five Super Bowl titles.", "The 'West Coast Offence' was perfected here by coach Bill Walsh and QB Joe Montana.", "The 49ers were the first professional sports team based in San Francisco.", "In 1990, Jerry Rice set a record by catching five touchdown passes in a single game."],
+        "seahawks": ["The fans are known as 'The 12th Man' and once caused a minor earthquake (the 'Beast Quake') during a touchdown run.", "The team's name was chosen through a public contest that received 1,700 different suggestions.", "The Seahawks are the only team to have played in both the AFC and NFC Championship games.", "They have a live hawk named Taima that flies out of the tunnel before every home game.", "The logo is based on a transformation mask from the indigenous Kwakwaka'wakw people of the Pacific Northwest."]
+};
+
+const teamHistory = {
+        "cardinals": { city: "Glendale", type: "Dome", trophies: 0, legends: ["Larry Fitzgerald", "Pat Tillman"], capacity: "63,400", surface: "Bermuda Grass" },
+        "falcons": { city: "Atlanta", type: "Dome", trophies: 0, legends: ["Matt Ryan", "Deion Sanders"], capacity: "71,000", surface: "FieldTurf" },
+        "ravens": { city: "Baltimore", type: "Open", trophies: 2, legends: ["Ray Lewis", "Ed Reed"], capacity: "71,008", surface: "Bermuda Grass" },
+        "bills": { city: "Orchard Park", type: "Open", trophies: 0, legends: ["Jim Kelly", "Bruce Smith"], capacity: "71,608", surface: "A-Turf Titan" },
+        "panthers": { city: "Charlotte", type: "Open", trophies: 0, legends: ["Steve Smith Sr.", "Luke Kuechly"], capacity: "74,867", surface: "FieldTurf" },
+        "bears": { city: "Chicago", type: "Open", trophies: 1, legends: ["Walter Payton", "Dick Butkus"], capacity: "61,500", surface: "Bermuda Grass" },
+        "bengals": { city: "Cincinnati", type: "Open", trophies: 0, legends: ["Ken Anderson", "Anthony Muñoz"], capacity: "65,515", surface: "Synthetic Turf" },
+        "browns": { city: "Cleveland", type: "Open", trophies: 0, legends: ["Jim Brown", "Joe Thomas"], capacity: "67,431", surface: "Kentucky Bluegrass" },
+        "cowboys": { city: "Arlington", type: "Dome", trophies: 5, legends: ["Emmitt Smith", "Roger Staubach"], capacity: "80,000", surface: "Hellas Matrix Turf" },
+        "broncos": { city: "Denver", type: "Open", trophies: 3, legends: ["John Elway", "Peyton Manning"], capacity: "76,125", surface: "Kentucky Bluegrass" },
+        "lions": { city: "Detroit", type: "Dome", trophies: 0, legends: ["Barry Sanders", "Calvin Johnson"], capacity: "65,000", surface: "FieldTurf" },
+        "packers": { city: "Green Bay", type: "Open", trophies: 4, legends: ["Bart Starr", "Brett Favre"], capacity: "81,441", surface: "Hybrid Grass" },
+        "texans": { city: "Houston", type: "Dome", trophies: 0, legends: ["J.J. Watt", "Andre Johnson"], capacity: "72,220", surface: "Matrix Turf" },
+        "colts": { city: "Indianapolis", type: "Dome", trophies: 2, legends: ["Peyton Manning", "Marvin Harrison"], capacity: "67,000", surface: "FieldTurf" },
+        "jaguars": { city: "Jacksonville", type: "Open", trophies: 0, legends: ["Fred Taylor", "Tony Boselli"], capacity: "67,814", surface: "Bermuda Grass" },
+        "chiefs": { city: "Kansas City", type: "Open", trophies: 4, legends: ["Patrick Mahomes", "Travis Kelce"], capacity: "76,416", surface: "Bermuda Grass" },
+        "raiders": { city: "Las Vegas", type: "Dome", trophies: 3, legends: ["Marcus Allen", "Howie Long"], capacity: "65,000", surface: "Bermuda Grass" },
+        "chargers": { city: "Inglewood", type: "Dome", trophies: 0, legends: ["Junior Seau", "LT"], capacity: "70,240", surface: "Matrix Turf" },
+        "rams": { city: "Inglewood", type: "Dome", trophies: 2, legends: ["Marshall Faulk", "Aaron Donald"], capacity: "70,240", surface: "Matrix Turf" },
+        "dolphins": { city: "Miami Gardens", type: "Semi-Open", trophies: 2, legends: ["Dan Marino", "Jason Taylor"], capacity: "65,326", surface: "Bermuda Grass" },
+        "vikings": { city: "Minneapolis", type: "Dome", trophies: 0, legends: ["Randy Moss", "Alan Page"], capacity: "66,655", surface: "Synthetic Turf" },
+        "patriots": { city: "Foxborough", type: "Open", trophies: 6, legends: ["Tom Brady", "Rob Gronkowski"], capacity: "65,878", surface: "FieldTurf" },
+        "saints": { city: "New Orleans", type: "Dome", trophies: 1, legends: ["Drew Brees", "Archie Manning"], capacity: "73,208", surface: "FieldTurf" },
+        "giants": { city: "East Rutherford", type: "Open", trophies: 4, legends: ["Lawrence Taylor", "Eli Manning"], capacity: "82,500", surface: "FieldTurf" },
+        "jets": { city: "East Rutherford", type: "Open", trophies: 1, legends: ["Joe Namath", "Curtis Martin"], capacity: "82,500", surface: "FieldTurf" },
+        "eagles": { city: "Philadelphia", type: "Open", trophies: 1, legends: ["Brian Dawkins", "Reggie White"], capacity: "69,596", surface: "Bermuda Grass" },
+        "steelers": { city: "Pittsburgh", type: "Open", trophies: 6, legends: ["Joe Greene", "Franco Harris"], capacity: "68,400", surface: "Kentucky Bluegrass" },
+        "sf49ers": { city: "Santa Clara", type: "Open", trophies: 5, legends: ["Jerry Rice", "Joe Montana"], capacity: "68,500", surface: "Bermuda Grass" },
+        "seahawks": { city: "Seattle", type: "Open", trophies: 1, legends: ["Steve Largent", "Walter Jones"], capacity: "68,740", surface: "FieldTurf" },
+        "buccaneers": { city: "Tampa", type: "Open", trophies: 2, legends: ["Derrick Brooks", "Warren Sapp"], capacity: "65,890", surface: "Bermuda Grass" },
+        "titans": { city: "Nashville", type: "Open", trophies: 0, legends: ["Earl Campbell", "Eddie George"], capacity: "69,143", surface: "Bermuda Grass" },
+        "commanders": { city: "Landover", type: "Open", trophies: 3, legends: ["Darrell Green", "Art Monk"], capacity: "67,617", surface: "Bermuda Grass" }
+    };
+
+const teamData = {
+        "bills": { 
+            name: "Buffalo Bills",
+            stadium: "Highmark Stadium", 
+            location: "Orchard Park, NY", 
+            color: "#00338D", 
+            desc: "A resilient team with one of the most dedicated fanbases, known as Bills Mafia.",
+            rivals: [ 
+                { name: "Miami Dolphins", id: "dolphins" }, 
+                { name: "New England Patriots", id: "patriots" }, 
+                { name: "Kansas City Chiefs", id: "chiefs" } 
+            ], 
+            players: [ ],
+        },
+        "dolphins": { 
+            name: "Miami Dolphins",
+            stadium: "Hard Rock Stadium", 
+            location: "Miami Gardens, FL", 
+            color: "#008E97", 
+            desc: "The only team to ever pull off a 'Perfect Season' in 1972.", 
+            rivals: [ 
+                { name: "Buffalo Bills", id: "bills" }, 
+                { name: "New England Patriots", id: "patriots" }, 
+                { name: "New York Jets", id: "jets" } 
+            ], 
+            players: [ ], 
+        },
+        "patriots": { 
+            name: "New England Patriots",
+            stadium: "Gillette Stadium", 
+            location: "Foxborough, MA", 
+            color: "#002244", 
+            desc: "A modern-day dynasty that dominated the 2000s and 2010s." 
+        },
+        "jets": { 
+            name: "New York Jets", 
+            stadium: "MetLife Stadium", 
+            location: "East Rutherford, NJ", 
+            color: "#125740", 
+            desc: "Famous for Joe Namath's 'Guarantee' in Super Bowl III." 
+        },
+        "ravens": { 
+            name: "Baltimore Ravens", 
+            stadium: "M&T Bank Stadium", 
+            location: "Baltimore, MD", 
+            color: "#241773", 
+            desc: "A franchise known for legendary defense and physical football." 
+        },
+        "bengals": { 
+            name: "Cincinnati Bengals", 
+            stadium: "Paycor Stadium", 
+            location: "Cincinnati, OH", 
+            color: "#FB4F14", 
+            desc: "The 'Who Dey' nation, known for their iconic tiger-striped helmets." 
+        },
+        "browns": { 
+            name: "Cleveland Browns", 
+            stadium: "Huntington Bank Field", 
+            location: "Cleveland, OH", 
+            color: "#311D00", 
+            desc: "One of the most historic franchises with a loyal following in the Dawg Pound." 
+        },
+        "steelers": { 
+            name: "Pittsburgh Steelers", 
+            stadium: "Acrisure Stadium", 
+            location: "Pittsburgh, PA", 
+            color: "#FFB612", 
+            desc: "Tied for the most Super Bowl wins in NFL history (6)." 
+        },
+        "texans": { 
+            name: "Houston Texans", 
+            stadium: "NRG Stadium", 
+            location: "Houston, TX", 
+            color: "#03202F", 
+            desc: "The NFL's youngest franchise, established in 2002." 
+        },
+        "colts": { 
+            name: "Indianapolis Colts", 
+            stadium: "Lucas Oil Stadium", 
+            location: "Indianapolis, IN", 
+            color: "#002C5F", 
+            desc: "A team with a storied history of elite quarterback play." 
+        },
+        "jaguars": { 
+            name: "Jacksonville Jaguars", 
+            stadium: "EverBank Stadium", 
+            location: "Jacksonville, FL", 
+            color: "#006778", 
+            desc: "Florida's teal-and-black squad playing in the sunny AFC South." 
+        },
+        "titans": { 
+            name: "Tennessee Titans", 
+            stadium: "Nissan Stadium", 
+            location: "Nashville, TN", 
+            color: "#4B92DB", 
+            desc: "Formerly the Houston Oilers, they moved to Nashville in 1997." 
+        },
+        "broncos": { 
+            name: "Denver Broncos", 
+            stadium: "Empower Field at Mile High", 
+            location: "Denver, CO", 
+            color: "#FB4F14", 
+            desc: "Famous for their 'Orange Crush' defense and Mile High home-field advantage." 
+        },
+        "chiefs": { 
+            name: "Kansas City Chiefs", 
+            stadium: "GEHA Field at Arrowhead Stadium", 
+            location: "Kansas City, MO", 
+            color: "#E31837", 
+            desc: "A current NFL powerhouse known for a high-flying Offence." 
+            
+        },
+        "raiders": { 
+            name: "Las Vegas Raiders", 
+            stadium: "Allegiant Stadium", 
+            location: "Las Vegas, NV", 
+            color: "#A5ACAF", 
+            desc: "The Silver and Black, now playing in the 'Death Star' in Las Vegas." 
+        },
+        "chargers": { 
+            name: "Los Angeles Chargers", 
+            stadium: "SoFi Stadium", 
+            location: "Inglewood, CA", 
+            color: "#0080C6", 
+            desc: "Known for their iconic lightning bolt uniforms and explosive play." 
+        },
+        "cowboys": { 
+            name: "Dallas Cowboys", 
+            stadium: "AT&T Stadium", 
+            location: "Arlington, TX", 
+            color: "#003594", 
+            desc: "Known worldwide as 'America's Team,' playing in one of the world's best stadiums." 
+        },
+        "giants": { 
+            name: "New York Giants", 
+            stadium: "MetLife Stadium", 
+            location: "East Rutherford, NJ", 
+            color: "#0B2265", 
+            desc: "A cornerstone NFL franchise with a history of classic championship wins." 
+        },
+        "eagles": { 
+            name: "Philadelphia Eagles", 
+            stadium: "Lincoln Financial Field", 
+            location: "Philadelphia, PA", 
+            color: "#004C54", 
+            desc: "Famed for their 'Fly Eagles Fly' fight song and passionate fans." 
+        },
+        "commanders": { 
+            name: "Washington Commanders", 
+            stadium: "Northwest Stadium", 
+            location: "Landover, MD", 
+            color: "#5A1414", 
+            desc: "A historic D.C. franchise entering a brand new era." 
+        },
+        "bears": { 
+            name: "Chicago Bears", 
+            stadium: "Soldier Field", 
+            location: "Chicago, IL", 
+            color: "#0B162A", 
+            desc: "One of the oldest teams in the league, known as the Monsters of the Midway." 
+        },
+        "lions": { 
+            name: "Detroit Lions", 
+            stadium: "Ford Field", 
+            location: "Detroit, MI", 
+            color: "#0076B6", 
+            desc: "The pride of Detroit, known for their traditional Thanksgiving Day games.",  
+        },
+        "packers": { 
+            name: "Green Bay Packers", 
+            stadium: "Lambeau Field", 
+            location: "Green Bay, WI", 
+            color: "#203731", 
+            desc: "The only community-owned team, playing in the historic 'Frozen Tundra'." 
+        },
+        "vikings": { 
+            name: "Minnesota Vikings", 
+            stadium: "U.S. Bank Stadium", 
+            location: "Minneapolis, MN", 
+            color: "#4F2683", 
+            desc: "Known for the 'Skol' chant and their famous purple uniforms." 
+        },
+        "falcons": { 
+            name: "Atlanta Falcons", 
+            stadium: "Mercedes-Benz Stadium", 
+            location: "Atlanta, GA", 
+            color: "#A71930", 
+            desc: "Representing the ATL in one of the most futuristic stadiums in the world." 
+        },
+        "panthers": { 
+            name: "Carolina Panthers", 
+            stadium: "Bank of America Stadium", 
+            location: "Charlotte, NC", 
+            color: "#0085CA", 
+            desc: "The pride of the Carolinas, established in 1995." 
+        },
+        "saints": { 
+            name: "New Orleans Saints", 
+            stadium: "Caesars Superdome", 
+            location: "New Orleans, LA", 
+            color: "#D3BC8D", 
+            desc: "A team that represents the heart and soul of New Orleans." 
+        },
+        "buccaneers": { 
+            name: "Tampa Bay Buccaneers", 
+            stadium: "Raymond James Stadium", 
+            location: "Tampa, FL", 
+            color: "#D50A0A", 
+            desc: "The first post-merger expansion team to win a Super Bowl." 
+        },
+        "cardinals": { 
+            name: "Arizona Cardinals", 
+            stadium: "State Farm Stadium", 
+            location: "Glendale, AZ", 
+            color: "#97233F", 
+            desc: "The oldest continuously run professional football team in the USA." 
+        },
+        "rams": { 
+            name: "Los Angeles Rams", 
+            stadium: "SoFi Stadium", 
+            location: "Inglewood, CA", 
+            color: "#003594", 
+            desc: "The 2021 Champions, playing in the heart of Los Angeles." 
+        },
+        "sf49ers": { 
+            name: "San Francisco 49ers", 
+            stadium: "Levi's Stadium", 
+            location: "Santa Clara, CA", 
+            color: "#AA0000", 
+            desc: "A legendary team that dominated the 1980s with five Super Bowl titles." 
+        },
+        "seahawks": { 
+            name: "Seattle Seahawks", 
+            stadium: "Lumen Field", 
+            location: "Seattle, WA", 
+            color: "#002244", 
+            desc: "Home of the '12th Man,' the loudest fans in the NFL." 
+        }
+};
+// status: regular | postseason | offseason
+
+    const espnIds = {
+        "bills": 2, "dolphins": 15, "patriots": 19, "jets": 20,
+        "ravens": 33, "bengals": 4, "browns": 5, "steelers": 23,
+        "texans": 34, "colts": 11, "jaguars": 30, "titans": 10,
+        "broncos": 7, "chiefs": 12, "raiders": 13, "chargers": 24,
+        "cowboys": 6, "giants": 19, "eagles": 21, "commanders": 28,
+        "bears": 3, "lions": 8, "packers": 9, "vikings": 16,
+        "falcons": 1, "panthers": 29, "saints": 18, "buccaneers": 27,
+        "cardinals": 22, "rams": 14, "sf49ers": 25, "seahawks": 26
+    };
+
+    const logoIdMap = {
+        "sf49ers": "sf", "patriots": "ne", "buccaneers": "tb", 
+        "seahawks": "sea", "commanders": "wsh", "cardinals": "ari", 
+        "falcons": "atl", "ravens": "bal", "bills": "buf", 
+        "panthers": "car", "bears": "chi", "bengals": "cin", 
+        "browns": "cle", "cowboys": "dal", "broncos": "den", 
+        "lions": "det", "packers": "gb", "texans": "hou", 
+        "colts": "ind", "jaguars": "jax", "chiefs": "kc", 
+        "raiders": "lv", "chargers": "lac", "rams": "lar", 
+        "dolphins": "mia", "vikings": "min", "saints": "no", 
+        "giants": "nyg", "jets": "nyj", "eagles": "phi", 
+        "steelers": "pit", "titans": "ten"
+    };
+
+    function getSeasonStatus() {
+    const today = new Date();
+    const month = today.getMonth() + 1; // 1-12
+
+    if (month >= 9 && month <= 12) {
+        return "regular";
+    }
+
+    if (month === 1 || month === 2) {
+        return "postseason";
+    }
+
+    return "offseason";
+}
+
+
+    async function fetchTeamRecord(teamAbbr) {
+    try {
+        const response = await fetch(
+            `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${teamAbbr}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Network error");
+        }
+
+        const data = await response.json();
+        console.log("TEAM DATA:", data);
+        return data;
+
+    } catch (error) {
+        console.error("Team fetch failed:", error);
+        return null;
+    }
+}
+
+    async function fetchTeamSchedule(teamAbbr) {
+        try {
+            const response = await fetch(
+                `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${teamAbbr}/schedule`
+            );
+
+            if (!response.ok) throw new Error("Schedule fetch failed");
+
+            const data = await response.json();
+            console.log("SCHEDULE DATA:", data);
+            return data;
+
+        } catch (error) {
+            console.error("Schedule error:", error);
+            return null;
+        }
+    }
+
+    function startCountdown(gameDate) {
+        const countdownEl = document.getElementById("countdown-timer");
+        if (!countdownEl) return;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = new Date(gameDate).getTime() - now;
+
+            if (distance <= 0) {
+                countdownEl.innerHTML = "<p><strong>Game Time!</strong></p>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((distance / (1000 * 60)) % 60);
+
+            countdownEl.innerHTML =
+                `<p><strong>Starts In:</strong> ${days}d ${hours}h ${minutes}m</p>`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+    }
+
+let currentPlayerIndex = 0;
+
+// Helper to get current team ID from URL
+function getTeamId() {
+    return new URLSearchParams(window.location.search).get("id");
+}
+
+function nextPlayer() {
+    const team = teamData[getTeamId()] || teamData[teamId];
+    if (!team || !team.players || team.players.length === 0) return;
+
+    const card = document.querySelector('.player-card');
+    if (card) card.classList.add('fade-out');
+
+    setTimeout(() => {
+        currentPlayerIndex = (currentPlayerIndex + 1) % team.players.length;
+        displayPlayer(team);
+    }, 50);
+}
+
+function prevPlayer() {
+    const teamId = getTeamId();
+    const team = teamData[teamId];
+    if (!team || !team.players || team.players.length === 0) return;
+
+    const card = document.querySelector('.player-card');
+    if (card) card.classList.add('fade-out');
+
+    setTimeout(() => {
+        currentPlayerIndex = (currentPlayerIndex - 1 + team.players.length) % team.players.length;
+        displayPlayer(team);
+    }, 50);
+}
+
+function displayPlayer(team) {
+    const spotlightCard = document.querySelector(".spotlight-card");
+    const spotlightContent = document.getElementById("roster-overview");
+    const teamId = getTeamId(); // Added this line to fix the logo bug
+    
+    if (!team.players || team.players.length === 0) return;
+    const player = team.players[currentPlayerIndex];
+
+    // Use your logoIdMap from Part 1
+    const logoId = logoIdMap[teamId] || teamId;
+    const logoUrl = `https://a.espncdn.com/i/teamlogos/nfl/500/${logoId}.png`;
+
+    if (spotlightCard) {
+        spotlightCard.style.setProperty('--team-logo-url', `url('${logoUrl}')`);
+    }
+
+    spotlightContent.innerHTML = `
+        <div class="player-card">
+            <span class="stat-label">${player.sideofball}</span>
+            <div class="player-img-wrapper" style="--team-logo-url: url('${logoUrl}')">
+                <img src="${player.image || "https://a.espncdn.com/combiner/i?img=/i/headshots/nophoto.png"}" alt="${player.name}" class="player-img">
+            </div>
+            <h3 style="font-size: 2rem; margin: 10px 0; color: var(--card-text);">${player.name}</h3>
+            <p class="stat-value" style="color: var(--team-color);">${player.position}</p>
+        </div>
+    `;
+    
+    // Smoothly remove fade-out if it was added
+    setTimeout(() => {
+        const newCard = document.querySelector('.player-card');
+        if (newCard) newCard.classList.remove('fade-out');
+    }, 20);
+}
+
+async function syncRosterWithESPN(teamKey) {
+    const team = teamData[teamKey];
+    // Look at your espnIds map instead of team.espnId
+    const espnId = espnIds[teamKey]; 
+
+    if (!team || !espnId) {
+        console.error("Missing data for:", teamKey);
+        return;
+    }
+
+    const positionOrder = POSITION_ORDER;
+    try {
+        const response = await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${espnId}/roster`);
+        const data = await response.json();
+
+        let allPlayers = [];
+        data.athletes.forEach(group => {
+            const side = group.position; 
+            group.items.forEach(p => {
+                allPlayers.push({
+                    name: p.fullName,
+                    position: p.position.abbreviation,
+                    image: p.headshot ? p.headshot.href : 'https://a.espncdn.com/combiner/i?img=/i/headshots/nophoto.png',
+                    sideofball: getUnit(p.position.abbreviation),
+                    depth: p.rank || 99,
+                    college: p.college ? p.college.name : "N/A",
+                    exp: p.experience ? (p.experience.years > 0 ? p.experience.years + " Yrs" : "Rookie") : "Pro",
+                    height: p.height || p.displayHeight || "N/A",
+                    weight: p.weight || p.displayWeight || "N/A"
+                });
+            });
+        });
+
+        const sideOrder = { "Offense": 1, "Defense": 2, "Special Teams": 3 };
+        allPlayers.sort((a, b) => {
+            const sideA = sideOrder[a.sideofball] || 99;
+            const sideB = sideOrder[b.sideofball] || 99;
+            if (sideA !== sideB) return sideA - sideB;
+            const posA = positionOrder[a.position] || 99;
+            const posB = positionOrder[b.position] || 99;
+            if (posA !== posB) return posA - posB;
+            return a.depth - b.depth;
+        });
+
+        team.players = allPlayers;
+        console.log(`Success! ${team.name} roster synced.`);
+        
+    } catch (err) {
+        console.error("ESPN sync failed:", err);
+    }
+}
+
+// --- ADVANCED DEPTH CHART & BIO LOGIC ---
+function toggleDepthChart() {
+    const chart = document.getElementById('advanced-depth-chart');
+    const spotlight = document.getElementById('roster-overview');
+    const prevBtn = document.querySelector('[onclick="prevPlayer()"]');
+    const nextBtn = document.querySelector('[onclick="nextPlayer()"]');
+    const toggleBtn = document.querySelector('[onclick="toggleDepthChart()"]');
+    
+    if (chart.style.display === 'none') {
+        const team = teamData[getTeamId()];
+        const offense = team.players.filter(p => p.sideofball === 'Offense');
+        const defense = team.players.filter(p => p.sideofball === 'Defense');
+
+        // This object will track how many players we've seen per position
+        const posCounts = {};
+
+        const generateRows = (players) => {
+            return players.map(p => {
+                // Increment the count for this specific position (e.g., QB)
+                posCounts[p.position] = (posCounts[p.position] || 0) + 1;
+                const rank = posCounts[p.position];
+
+                return `
+                    <div class="depth-item" onclick="showBioModal('${p.name.replace(/'/g, "\\'")}')">
+                        <span class="depth-pos">${p.position}${rank}</span>
+                        <span class="depth-name">${p.name}</span>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        let html = `
+            <div class="depth-chart-container">
+                <div class="depth-column">
+                    <h4>OFFENSE</h4>
+                    ${generateRows(offense)}
+                </div>
+                <div class="depth-column">
+                    <h4>DEFENSE</h4>
+                    ${generateRows(defense)}
+                </div>
+            </div>`;
+        
+        chart.innerHTML = html;
+        chart.style.display = 'block';
+        spotlight.style.display = 'none';
+        
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        toggleBtn.innerText = "Show Spotlight View";
+    } else {
+        chart.style.display = 'none';
+        spotlight.style.display = 'block';
+        if (prevBtn) prevBtn.style.display = 'inline-block';
+        if (nextBtn) nextBtn.style.display = 'inline-block';
+        toggleBtn.innerText = "View Full Depth Chart";
+    }
+}
+
+function showBioModal(playerName) {
+    const team = teamData[getTeamId()];
+    const player = team.players.find(p => p.name === playerName);
+    
+    if (player) {
+        document.getElementById('bio-name').innerText = player.name;
+        document.getElementById('bio-img').src = player.image;
+        document.getElementById('bio-pos').innerText = `${player.position} | ${player.sideofball}`;
+        document.getElementById('bio-details').innerHTML = `
+            <p><span class="stat-label">College</span><br><strong>${player.college}</strong></p>
+            <p><span class="stat-label">Experience</span><br><strong>${player.exp}</strong></p>
+        `;
+        document.getElementById('bio-modal').style.display = 'flex';
+    }
+}
+
+function votePoll(choice) {
+    const teamId = new URLSearchParams(window.location.search).get("id");
+    const pollKey = `poll_${teamId}`;
+
+    let pollData = JSON.parse(localStorage.getItem(pollKey)) || {
+        yes: 0,
+        no: 0
+    };
+
+    pollData[choice]++;
+    localStorage.setItem(pollKey, JSON.stringify(pollData));
+}
+
+    displayPollResults();
+
+function displayPollResults() {
+    const teamId = new URLSearchParams(window.location.search).get("id");
+    const pollKey = `poll_${teamId}`;
+    const resultsEl = document.getElementById("poll-results");
+
+    const pollData = JSON.parse(localStorage.getItem(pollKey));
+    if (!pollData) return;
+
+    const total = pollData.yes + pollData.no;
+
+    if (total === 0) {
+        resultsEl.innerHTML = "";
+        return;
+    }
+
+    const yesPercent = Math.round((pollData.yes / total) * 100);
+    const noPercent = Math.round((pollData.no / total) * 100);
+
+    resultsEl.innerHTML = `
+        Yes: ${pollData.yes} (${yesPercent}%) |
+        No: ${pollData.no} (${noPercent}%)
+    `;
+}
+
+// --- TEAM TIMELINE DATA ---
+const teamFoundedYear = {
+    cardinals: 1898, bears: 1920, packers: 1919, giants: 1925, lions: 1930, commanders: 1932, eagles: 1933,
+    steelers: 1933, rams: 1936, browns: 1946, sf49ers: 1946, colts: 1953, cowboys: 1960, vikings: 1961,
+    raiders: 1960, chiefs: 1960, chargers: 1960, broncos: 1960, patriots: 1960, titans: 1960, jets: 1960,
+    bills: 1960, dolphins: 1966, bengals: 1968, saints: 1967, seahawks: 1976, buccaneers: 1976,
+    jaguars: 1995, panthers: 1995, ravens: 1996, texans: 2002
+};
+
+const teamOrderByDivision = [
+    // AFC East
+    "bills", "dolphins", "patriots", "jets",
+    // AFC North
+    "ravens", "bengals", "browns", "steelers",
+    // AFC South
+    "texans", "colts", "jaguars", "titans",
+    // AFC West
+    "broncos", "chiefs", "raiders", "chargers",
+    // NFC East
+    "cowboys", "giants", "eagles", "commanders",
+    // NFC North
+    "bears", "lions", "packers", "vikings",
+    // NFC South
+    "falcons", "panthers", "saints", "buccaneers",
+    // NFC West
+    "cardinals", "rams", "sf49ers", "seahawks"
+];
+
+// Hybrid template: add real items later
+const teamTimelineExtras = {
+    cardinals: [
+        { year: 1898, type: "founded", title: "Franchise Founded", description: "Oldest professional football team." },
+        { year: 2008, type: "playoff", title: "First Super Bowl Run", description: "Record 9–7, reached Super Bowl XLIII." },
+        { year: 2008, type: "championship", title: "Super Bowl XLIII Loss", description: "Lost to Steelers 27–23." },
+        { year: 2015, type: "playoff", title: "13–3 Season", description: "Reached NFC Championship." },
+        { year: 2026, type: "moment", title: "Rebuild Continues", description: "Cardinals focus on long-term development." }
+    ],
+    falcons: [
+        { year: 1966, type: "founded", title: "Franchise Founded", description: "Expansion franchise established." },
+        { year: 1998, type: "playoff", title: "First Super Bowl Run", description: "Record 14–2, reached Super Bowl XXXIII." },
+        { year: 1998, type: "championship", title: "Super Bowl XXXIII Loss", description: "Lost to Denver Broncos 34–19." },
+        { year: 2016, type: "playoff", title: "Historic Offense", description: "Record 11–5, reached Super Bowl LI." },
+        { year: 2016, type: "championship", title: "Super Bowl LI Loss", description: "Lost to Patriots 34–28 after 28–3 lead." },
+        { year: 2026, type: "moment", title: "Rebuilding Team", description: "Falcons continue developing young talent." }
+    ],
+    ravens: [
+        { year: 1996, type: "founded", title: "Franchise Founded", description: "Ravens established after Browns relocation." },
+        { year: 2000, type: "playoff", title: "Historic Defense", description: "Record 12–4, reached Super Bowl XXXV." },
+        { year: 2000, type: "championship", title: "Super Bowl XXXV Win", description: "Defeated New York Giants 34–7." },
+        { year: 2012, type: "playoff", title: "Ray Lewis Final Run", description: "Record 10–6, reached Super Bowl XLVII." },
+        { year: 2012, type: "championship", title: "Super Bowl XLVII Win", description: "Defeated San Francisco 49ers 34–31." },
+        { year: 2019, type: "record", title: "Lamar MVP Season", description: "Record 14–2, league MVP season for Lamar Jackson." },
+        { year: 2023, type: "playoff", title: "AFC Championship Run", description: "Record 13–4, reached AFC Championship." },
+        { year: 2026, type: "moment", title: "Elite Contender", description: "Ravens remain one of the AFC’s most balanced teams." }
+    ],
+    bills: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Original AFL franchise established in Buffalo." },
+        { year: 1964, type: "championship", title: "AFL Championship", description: "Won AFL title, defeating San Diego Chargers." },
+        { year: 1965, type: "championship", title: "Back-to-Back Titles", description: "Won second straight AFL Championship." },
+        { year: 1988, type: "playoff", title: "Rise of Kelly Era", description: "Record 12–4, reached AFC Championship." },
+        { year: 1990, type: "playoff", title: "First Super Bowl Run", description: "Record 13–3, reached Super Bowl XXV." },
+        { year: 1990, type: "championship", title: "Super Bowl XXV Loss", description: "Lost to New York Giants 20–19." },
+        { year: 1991, type: "playoff", title: "Back-to-Back Super Bowl", description: "Record 13–3, reached Super Bowl XXVI." },
+        { year: 1991, type: "championship", title: "Super Bowl XXVI Loss", description: "Lost to Washington 37–24." },
+        { year: 1992, type: "moment", title: "The Comeback", description: "Overcame 35–3 deficit vs Oilers, largest comeback in NFL history." },
+        { year: 1992, type: "playoff", title: "Third Straight SB", description: "Record 11–5, reached Super Bowl XXVII." },
+        { year: 1992, type: "championship", title: "Super Bowl XXVII Loss", description: "Lost to Dallas Cowboys 52–17." },
+        { year: 1993, type: "playoff", title: "Fourth Straight SB", description: "Record 12–4, reached Super Bowl XXVIII." },
+        { year: 1993, type: "championship", title: "Super Bowl XXVIII Loss", description: "Lost to Dallas Cowboys 30–13." },
+        { year: 2020, type: "playoff", title: "Return to Contention", description: "Record 13–3, reached AFC Championship." },
+        { year: 2021, type: "moment", title: "Perfect Offensive Game", description: "Scored TD on every drive vs Patriots in playoffs." },
+        { year: 2024, type: "playoff", title: "Deep Playoff Run", description: "Record 11–6, reached Divisional Round." },
+        { year: 2026, type: "moment", title: "Josh Allen Era Continues", description: "Bills remain AFC contenders led by elite quarterback play." }
+    ],
+    panthers: [
+        { year: 1995, type: "founded", title: "Franchise Founded", description: "Expansion franchise begins play." },
+        { year: 2003, type: "playoff", title: "Cardiac Cats Run", description: "Record 11–5, reached Super Bowl XXXVIII." },
+        { year: 2003, type: "championship", title: "Super Bowl XXXVIII Loss", description: "Lost to Patriots 32–29." },
+        { year: 2015, type: "playoff", title: "MVP Season", description: "Record 15–1, reached Super Bowl 50." },
+        { year: 2015, type: "championship", title: "Super Bowl 50 Loss", description: "Lost to Broncos 24–10." },
+        { year: 2026, type: "moment", title: "Young Core Development", description: "Panthers focus on rebuilding roster." }
+    ],
+    bears: [
+        { year: 1920, type: "founded", title: "Franchise Founded", description: "Charter NFL franchise." },
+        { year: 1985, type: "playoff", title: "Historic Defense", description: "Record 15–1, reached Super Bowl XX." },
+        { year: 1985, type: "championship", title: "Super Bowl XX Win", description: "Defeated Patriots 46–10." },
+        { year: 2006, type: "playoff", title: "Return to Super Bowl", description: "Record 13–3, reached Super Bowl XLI." },
+        { year: 2006, type: "championship", title: "Super Bowl XLI Loss", description: "Lost to Colts 29–17." },
+        { year: 2026, type: "moment", title: "Young QB Era", description: "Bears build around developing quarterback talent." }
+    ],
+    bengals: [
+        { year: 1968, type: "founded", title: "Franchise Founded", description: "Expansion team joins AFL." },
+        { year: 1981, type: "playoff", title: "First Super Bowl Run", description: "Record 12–4, reached Super Bowl XVI." },
+        { year: 1981, type: "championship", title: "Super Bowl XVI Loss", description: "Lost to San Francisco 49ers 26–21." },
+        { year: 1988, type: "playoff", title: "Second SB Appearance", description: "Record 12–4, reached Super Bowl XXIII." },
+        { year: 1988, type: "championship", title: "Super Bowl XXIII Loss", description: "Lost to 49ers 20–16." },
+        { year: 2021, type: "playoff", title: "Burrow Breakthrough", description: "Record 10–7, reached Super Bowl LVI." },
+        { year: 2021, type: "championship", title: "Super Bowl LVI Loss", description: "Lost to Los Angeles Rams 23–20." },
+        { year: 2022, type: "playoff", title: "Back-to-Back Deep Run", description: "Record 12–4, reached AFC Championship." },
+        { year: 2026, type: "moment", title: "Offensive Powerhouse", description: "Bengals remain dangerous with elite passing attack." }
+    ],
+    browns: [
+        { year: 1946, type: "founded", title: "Franchise Founded", description: "Historic franchise with early dominance." },
+        { year: 1964, type: "championship", title: "NFL Championship", description: "Won pre-Super Bowl NFL title." },
+        { year: 1999, type: "moment", title: "Expansion Return", description: "Browns rejoin NFL after relocation hiatus." },
+        { year: 2020, type: "playoff", title: "Playoff Breakthrough", description: "Record 11–5, reached Divisional Round." },
+        { year: 2026, type: "moment", title: "Searching for Consistency", description: "Team continues pursuit of sustained success." }
+    ],
+    cowboys: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Cowboys join NFL as expansion team." },
+        { year: 1971, type: "championship", title: "Super Bowl VI Win", description: "Defeated Miami Dolphins 24–3." },
+        { year: 1977, type: "championship", title: "Super Bowl XII Win", description: "Defeated Denver Broncos 27–10." },
+        { year: 1992, type: "championship", title: "Super Bowl XXVII Win", description: "Defeated Buffalo Bills 52–17." },
+        { year: 1993, type: "championship", title: "Super Bowl XXVIII Win", description: "Defeated Bills 30–13." },
+        { year: 1995, type: "championship", title: "Super Bowl XXX Win", description: "Defeated Pittsburgh Steelers 27–17." },
+        { year: 2026, type: "moment", title: "Long Drought Continues", description: "Cowboys seek return to Super Bowl." }
+    ],
+    broncos: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Original AFL team." },
+        { year: 1997, type: "playoff", title: "First Title Run", description: "Record 12–4, reached Super Bowl XXXII." },
+        { year: 1997, type: "championship", title: "Super Bowl XXXII Win", description: "Defeated Green Bay Packers 31–24." },
+        { year: 1998, type: "playoff", title: "Back-to-Back Titles", description: "Record 14–2, reached Super Bowl XXXIII." },
+        { year: 1998, type: "championship", title: "Super Bowl XXXIII Win", description: "Defeated Atlanta Falcons 34–19." },
+        { year: 2015, type: "playoff", title: "Defense-Led Run", description: "Record 12–4, reached Super Bowl 50." },
+        { year: 2015, type: "championship", title: "Super Bowl 50 Win", description: "Defeated Carolina Panthers 24–10." },
+        { year: 2026, type: "moment", title: "Searching for Identity", description: "Broncos rebuild toward playoff contention." }
+    ],
+    lions: [
+        { year: 1930, type: "founded", title: "Franchise Founded", description: "Originally Portsmouth Spartans." },
+        { year: 1957, type: "championship", title: "NFL Championship", description: "Last league title before Super Bowl era." },
+        { year: 2023, type: "playoff", title: "Breakthrough Season", description: "Record 12–5, reached NFC Championship." },
+        { year: 2026, type: "moment", title: "Resurgent Franchise", description: "Lions emerge as serious NFC contender." }
+    ],
+    packers: [
+        { year: 1919, type: "founded", title: "Franchise Founded", description: "Oldest continuously operating NFL team." },
+        { year: 1966, type: "championship", title: "Super Bowl I Win", description: "Defeated Kansas City Chiefs 35–10." },
+        { year: 1967, type: "championship", title: "Super Bowl II Win", description: "Defeated Oakland Raiders 33–14." },
+        { year: 1996, type: "playoff", title: "Favre Championship", description: "Record 13–3, reached Super Bowl XXXI." },
+        { year: 1996, type: "championship", title: "Super Bowl XXXI Win", description: "Defeated Patriots 35–21." },
+        { year: 2010, type: "playoff", title: "Rodgers First Title", description: "Record 10–6, reached Super Bowl XLV." },
+        { year: 2010, type: "championship", title: "Super Bowl XLV Win", description: "Defeated Steelers 31–25." },
+        { year: 2026, type: "moment", title: "Post-Rodgers Era", description: "Packers transition to new generation." }
+    ],
+    texans: [
+        { year: 2002, type: "founded", title: "Franchise Founded", description: "NFL expansion team established in Houston." },
+        { year: 2011, type: "playoff", title: "First Playoff Win", description: "Record 10–6, reached Divisional Round." },
+        { year: 2019, type: "moment", title: "24–0 Collapse", description: "Blew 24–0 lead vs Chiefs in playoffs." },
+        { year: 2023, type: "moment", title: "CJ Stroud Emerges", description: "Franchise QB shows elite rookie potential." },
+        { year: 2026, type: "moment", title: "Rising Contender", description: "Young core positions Texans for future success." }
+    ],
+    colts: [
+        { year: 1953, type: "founded", title: "Franchise Founded", description: "Colts established in Baltimore." },
+        { year: 1970, type: "championship", title: "Super Bowl V Win", description: "Defeated Dallas Cowboys 16–13." },
+        { year: 2006, type: "playoff", title: "Manning Championship Run", description: "Record 12–4, reached Super Bowl XLI." },
+        { year: 2006, type: "championship", title: "Super Bowl XLI Win", description: "Defeated Chicago Bears 29–17." },
+        { year: 2009, type: "playoff", title: "Return to Super Bowl", description: "Record 14–2, reached Super Bowl XLIV." },
+        { year: 2009, type: "championship", title: "Super Bowl XLIV Loss", description: "Lost to New Orleans Saints 31–17." },
+        { year: 2026, type: "moment", title: "New Era", description: "Colts continue rebuilding around young quarterback talent." }
+    ],
+    jaguars: [
+        { year: 1995, type: "founded", title: "Franchise Founded", description: "Expansion team begins play." },
+        { year: 1996, type: "playoff", title: "Cinderella Run", description: "Record 9–7, reached AFC Championship." },
+        { year: 1999, type: "playoff", title: "Franchise Peak", description: "Record 14–2, reached AFC Championship." },
+        { year: 2017, type: "playoff", title: "Sacksonville Run", description: "Record 10–6, reached AFC Championship." },
+        { year: 2022, type: "moment", title: "27-Point Comeback", description: "Historic playoff comeback vs Chargers." },
+        { year: 2026, type: "moment", title: "Ascending Team", description: "Jaguars continue growth with young roster." }
+    ],
+    chiefs: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Founded as Dallas Texans, later Kansas City Chiefs." },
+        { year: 1969, type: "championship", title: "Super Bowl IV Win", description: "Defeated Minnesota Vikings 23–7." },
+        { year: 2019, type: "playoff", title: "Mahomes Era Begins", description: "Record 12–4, reached Super Bowl LIV." },
+        { year: 2019, type: "championship", title: "Super Bowl LIV Win", description: "Defeated San Francisco 49ers 31–20." },
+        { year: 2020, type: "playoff", title: "Back-to-Back SB", description: "Record 14–2, reached Super Bowl LV." },
+        { year: 2020, type: "championship", title: "Super Bowl LV Loss", description: "Lost to Tampa Bay Buccaneers 31–9." },
+        { year: 2022, type: "playoff", title: "Return to Top", description: "Record 14–3, reached Super Bowl LVII." },
+        { year: 2022, type: "championship", title: "Super Bowl LVII Win", description: "Defeated Philadelphia Eagles 38–35." },
+        { year: 2026, type: "moment", title: "AFC Powerhouse", description: "Chiefs remain dominant under Patrick Mahomes." }
+    ],
+    raiders: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Founded as Oakland Raiders." },
+        { year: 1976, type: "championship", title: "Super Bowl XI Win", description: "Defeated Minnesota Vikings 32–14." },
+        { year: 1980, type: "championship", title: "Super Bowl XV Win", description: "Defeated Philadelphia Eagles 27–10." },
+        { year: 1983, type: "championship", title: "Super Bowl XVIII Win", description: "Defeated Washington 38–9." },
+        { year: 2002, type: "playoff", title: "Last Super Bowl Run", description: "Record 11–5, reached Super Bowl XXXVII." },
+        { year: 2002, type: "championship", title: "Super Bowl XXXVII Loss", description: "Lost to Tampa Bay Buccaneers 48–21." },
+        { year: 2020, type: "moment", title: "Move to Las Vegas", description: "Franchise relocates to Las Vegas." },
+        { year: 2026, type: "moment", title: "Seeking Stability", description: "Raiders aim to return to consistent contention." }
+    ],
+    chargers: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Founded as Los Angeles Chargers, later San Diego." },
+        { year: 1963, type: "championship", title: "AFL Championship", description: "Won AFL title." },
+        { year: 1994, type: "playoff", title: "Super Bowl Run", description: "Record 11–5, reached Super Bowl XXIX." },
+        { year: 1994, type: "championship", title: "Super Bowl XXIX Loss", description: "Lost to San Francisco 49ers 49–26." },
+        { year: 2006, type: "record", title: "14–2 Season", description: "Best regular season record in franchise history." },
+        { year: 2022, type: "moment", title: "27-Point Collapse", description: "Blew huge playoff lead vs Jaguars." },
+        { year: 2026, type: "moment", title: "High-Powered Offense", description: "Chargers remain dangerous with elite QB play." }
+    ],
+    rams: [
+        { year: 1936, type: "founded", title: "Franchise Founded", description: "One of NFL’s oldest teams." },
+        { year: 1999, type: "playoff", title: "Greatest Show on Turf", description: "Record 13–3, reached Super Bowl XXXIV." },
+        { year: 1999, type: "championship", title: "Super Bowl XXXIV Win", description: "Defeated Tennessee Titans 23–16." },
+        { year: 2001, type: "championship", title: "Super Bowl XXXVI Loss", description: "Lost to Patriots 20–17." },
+        { year: 2018, type: "championship", title: "Super Bowl LIII Loss", description: "Lost to Patriots 13–3." },
+        { year: 2021, type: "playoff", title: "Stafford Championship Run", description: "Record 12–5, reached Super Bowl LVI." },
+        { year: 2021, type: "championship", title: "Super Bowl LVI Win", description: "Defeated Bengals 23–20." },
+        { year: 2026, type: "moment", title: "Competitive Roster", description: "Rams remain competitive in NFC West." }
+    ],
+    dolphins: [
+        { year: 1966, type: "founded", title: "Franchise Founded", description: "Expansion team joins AFL." },
+        { year: 1972, type: "record", title: "Perfect Season", description: "Finished 17–0, only perfect season in NFL history." },
+        { year: 1972, type: "championship", title: "Super Bowl VII Win", description: "Defeated Washington 14–7." },
+        { year: 1973, type: "championship", title: "Back-to-Back Titles", description: "Won Super Bowl VIII vs Vikings." },
+        { year: 1984, type: "playoff", title: "Marino Super Bowl Run", description: "Record 14–2, reached Super Bowl XIX." },
+        { year: 1984, type: "championship", title: "Super Bowl XIX Loss", description: "Lost to San Francisco 49ers 38–16." },
+        { year: 2000, type: "playoff", title: "Last Win of Era", description: "Record 11–5, reached Divisional Round." },
+        { year: 2022, type: "playoff", title: "Return to Playoffs", description: "Record 9–8, reached Wild Card Round." },
+        { year: 2023, type: "moment", title: "Explosive Offense", description: "One of highest-scoring offenses in franchise history." },
+        { year: 2026, type: "moment", title: "Modern Contender", description: "Fast-paced offense keeps Miami competitive in AFC." }
+    ],
+    vikings: [
+        { year: 1961, type: "founded", title: "Franchise Founded", description: "Expansion team established." },
+        { year: 1969, type: "playoff", title: "First Super Bowl Run", description: "Record 12–2, reached Super Bowl IV." },
+        { year: 1969, type: "championship", title: "Super Bowl IV Loss", description: "Lost to Chiefs 23–7." },
+        { year: 1970, type: "championship", title: "Super Bowl VIII Loss", description: "Lost to Dolphins 24–7." },
+        { year: 1974, type: "championship", title: "Super Bowl IX Loss", description: "Lost to Steelers 16–6." },
+        { year: 1976, type: "championship", title: "Super Bowl XI Loss", description: "Lost to Raiders 32–14." },
+        { year: 1998, type: "record", title: "15–1 Season", description: "One of most dominant offenses ever." },
+        { year: 2026, type: "moment", title: "Still Seeking First Title", description: "Vikings chase elusive Super Bowl win." }
+    ],
+    patriots: [
+        { year: 1959, type: "founded", title: "Franchise Founded", description: "Founded as the Boston Patriots, original AFL member." },
+        { year: 1963, type: "playoff", title: "First Playoff Appearance", description: "Record 7–6–1, reached AFL Eastern Division playoff." },
+        { year: 1971, type: "moment", title: "Rebrand to New England", description: "Team renamed New England Patriots after moving to Foxborough." },
+        { year: 1976, type: "playoff", title: "Breakthrough Season", description: "Record 11–3, reached Divisional Round." },
+        { year: 1985, type: "playoff", title: "First Super Bowl Run", description: "Record 11–5, reached Super Bowl XX." },
+        { year: 1985, type: "championship", title: "Super Bowl XX Loss", description: "Lost to Chicago Bears 46–10." },
+        { year: 1996, type: "playoff", title: "AFC Champions", description: "Record 11–5, reached Super Bowl XXXI." },
+        { year: 1996, type: "championship", title: "Super Bowl XXXI Loss", description: "Lost to Green Bay Packers 35–21." },
+        { year: 2001, type: "playoff", title: "Dynasty Begins", description: "Record 11–5, reached Super Bowl XXXVI." },
+        { year: 2001, type: "championship", title: "Super Bowl XXXVI Win", description: "Defeated St. Louis Rams 20–17." },
+        { year: 2003, type: "playoff", title: "Dominant Season", description: "Record 14–2, reached Super Bowl XXXVIII." },
+        { year: 2003, type: "championship", title: "Super Bowl XXXVIII Win", description: "Defeated Carolina Panthers 32–29." },
+        { year: 2004, type: "playoff", title: "Back-to-Back Titles", description: "Record 14–2, reached Super Bowl XXXIX." },
+        { year: 2004, type: "championship", title: "Super Bowl XXXIX Win", description: "Defeated Philadelphia Eagles 24–21." },
+        { year: 2007, type: "record", title: "Perfect Regular Season", description: "Finished 16–0, historic NFL record." },
+        { year: 2007, type: "playoff", title: "Historic Run", description: "Record 16–0, reached Super Bowl XLII." },
+        { year: 2007, type: "championship", title: "Super Bowl XLII Loss", description: "Lost to New York Giants 17–14." },
+        { year: 2014, type: "playoff", title: "Return to Glory", description: "Record 12–4, reached Super Bowl XLIX." },
+        { year: 2014, type: "championship", title: "Super Bowl XLIX Win", description: "Defeated Seattle Seahawks 28–24." },
+        { year: 2016, type: "playoff", title: "Historic Comeback Season", description: "Record 14–2, reached Super Bowl LI." },
+        { year: 2016, type: "championship", title: "Super Bowl LI Win", description: "Defeated Atlanta Falcons 34–28 (28–3 comeback)." },
+        { year: 2018, type: "playoff", title: "Final Brady Title", description: "Record 11–5, reached Super Bowl LIII." },
+        { year: 2018, type: "championship", title: "Super Bowl LIII Win", description: "Defeated Los Angeles Rams 13–3." },
+        { year: 2025, type: "playoff", title: "Super Bowl LX Run", description: "Record 14–3, reached Super Bowl LX." },
+        { year: 2025, type: "championship", title: "Super Bowl LX Loss", description: "Lost to Seattle Seahawks 29–13." },
+        { year: 2026, type: "moment", title: "Post-Super Bowl Era", description: "Team builds around young core following Super Bowl appearance." }
+    ],
+    saints: [
+        { year: 1967, type: "founded", title: "Franchise Founded", description: "Expansion team joins NFL." },
+        { year: 2009, type: "playoff", title: "Brees Championship Run", description: "Record 13–3, reached Super Bowl XLIV." },
+        { year: 2009, type: "championship", title: "Super Bowl XLIV Win", description: "Defeated Indianapolis Colts 31–17." },
+        { year: 2018, type: "moment", title: "No-Call Controversy", description: "Missed PI call denies Super Bowl trip." },
+        { year: 2026, type: "moment", title: "Transition Period", description: "Saints rebuild after Brees era." }
+    ],
+    giants: [
+        { year: 1925, type: "founded", title: "Franchise Founded", description: "One of NFL’s oldest teams." },
+        { year: 1986, type: "championship", title: "Super Bowl XXI Win", description: "Defeated Denver Broncos 39–20." },
+        { year: 1990, type: "championship", title: "Super Bowl XXV Win", description: "Defeated Buffalo Bills 20–19." },
+        { year: 2007, type: "playoff", title: "Historic Upset Run", description: "Record 10–6, reached Super Bowl XLII." },
+        { year: 2007, type: "championship", title: "Super Bowl XLII Win", description: "Defeated Patriots 17–14." },
+        { year: 2011, type: "playoff", title: "Second Eli Title", description: "Record 9–7, reached Super Bowl XLVI." },
+        { year: 2011, type: "championship", title: "Super Bowl XLVI Win", description: "Defeated Patriots 21–17." },
+        { year: 2026, type: "moment", title: "Rebuild Phase", description: "Giants continue building toward contention." }
+    ],
+    jets: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Established as the Titans of New York." },
+        { year: 1968, type: "playoff", title: "Historic Run", description: "Record 11–3, reached Super Bowl III." },
+        { year: 1968, type: "championship", title: "Super Bowl III Win", description: "Defeated Baltimore Colts 16–7, Joe Namath guarantee." },
+        { year: 1982, type: "playoff", title: "Mud Bowl Run", description: "Reached AFC Championship." },
+        { year: 1998, type: "playoff", title: "Parcells Era Peak", description: "Record 12–4, reached AFC Championship." },
+        { year: 2009, type: "playoff", title: "Rookie QB Run", description: "Record 9–7, reached AFC Championship." },
+        { year: 2010, type: "playoff", title: "Back-to-Back AFC Title Games", description: "Record 11–5, reached AFC Championship." },
+        { year: 2023, type: "moment", title: "Rodgers Arrival", description: "Aaron Rodgers joins franchise, raising expectations." },
+        { year: 2026, type: "moment", title: "Searching for Breakthrough", description: "Jets continue pursuit of first Super Bowl return since 1968." }
+    ],
+    eagles: [
+        { year: 1933, type: "founded", title: "Franchise Founded", description: "Eagles established in Philadelphia." },
+        { year: 1980, type: "playoff", title: "First Super Bowl Run", description: "Record 12–4, reached Super Bowl XV." },
+        { year: 1980, type: "championship", title: "Super Bowl XV Loss", description: "Lost to Oakland Raiders 27–10." },
+        { year: 2004, type: "playoff", title: "McNabb Era Peak", description: "Record 13–3, reached Super Bowl XXXIX." },
+        { year: 2004, type: "championship", title: "Super Bowl XXXIX Loss", description: "Lost to Patriots 24–21." },
+        { year: 2017, type: "playoff", title: "Underdog Run", description: "Record 13–3, reached Super Bowl LII." },
+        { year: 2017, type: "championship", title: "Super Bowl LII Win", description: "Defeated Patriots 41–33." },
+        { year: 2022, type: "playoff", title: "Return to Super Bowl", description: "Record 14–3, reached Super Bowl LVII." },
+        { year: 2022, type: "championship", title: "Super Bowl LVII Loss", description: "Lost to Chiefs 38–35." },
+        { year: 2026, type: "moment", title: "Contender Status", description: "Eagles remain one of NFC’s top teams." }
+    ],
+    steelers: [
+        { year: 1933, type: "founded", title: "Franchise Founded", description: "One of the NFL’s oldest franchises." },
+        { year: 1974, type: "playoff", title: "Steel Curtain Era", description: "Record 10–3–1, reached Super Bowl IX." },
+        { year: 1974, type: "championship", title: "Super Bowl IX Win", description: "Defeated Minnesota Vikings 16–6." },
+        { year: 1975, type: "championship", title: "Super Bowl X Win", description: "Defeated Dallas Cowboys 21–17." },
+        { year: 1978, type: "championship", title: "Super Bowl XIII Win", description: "Defeated Dallas Cowboys 35–31." },
+        { year: 1979, type: "championship", title: "Super Bowl XIV Win", description: "Defeated Los Angeles Rams 31–19." },
+        { year: 2005, type: "playoff", title: "Wildcard to Champion", description: "Record 11–5, reached Super Bowl XL." },
+        { year: 2005, type: "championship", title: "Super Bowl XL Win", description: "Defeated Seattle Seahawks 21–10." },
+        { year: 2008, type: "playoff", title: "Defensive Dominance", description: "Record 12–4, reached Super Bowl XLIII." },
+        { year: 2008, type: "championship", title: "Super Bowl XLIII Win", description: "Defeated Arizona Cardinals 27–23." },
+        { year: 2010, type: "playoff", title: "Return to Super Bowl", description: "Record 12–4, reached Super Bowl XLV." },
+        { year: 2010, type: "championship", title: "Super Bowl XLV Loss", description: "Lost to Green Bay Packers 31–25." },
+        { year: 2026, type: "moment", title: "Consistent Competitor", description: "Steelers maintain playoff contention under stable leadership." }
+    ],
+    sf49ers: [
+        { year: 1946, type: "founded", title: "Franchise Founded", description: "Historic franchise with multiple dynasties." },
+        { year: 1981, type: "championship", title: "Super Bowl XVI Win", description: "Defeated Bengals 26–21." },
+        { year: 1984, type: "championship", title: "Super Bowl XIX Win", description: "Defeated Dolphins 38–16." },
+        { year: 1988, type: "championship", title: "Super Bowl XXIII Win", description: "Defeated Bengals 20–16." },
+        { year: 1989, type: "championship", title: "Super Bowl XXIV Win", description: "Defeated Broncos 55–10." },
+        { year: 1994, type: "championship", title: "Super Bowl XXIX Win", description: "Defeated Chargers 49–26." },
+        { year: 2012, type: "championship", title: "Super Bowl XLVII Loss", description: "Lost to Ravens 34–31." },
+        { year: 2019, type: "championship", title: "Super Bowl LIV Loss", description: "Lost to Chiefs 31–20." },
+        { year: 2026, type: "moment", title: "Elite NFC Team", description: "49ers remain consistent Super Bowl contenders." }
+    ],
+    seahawks: [
+        { year: 1976, type: "founded", title: "Franchise Founded", description: "Expansion team joins NFL." },
+        { year: 2013, type: "playoff", title: "Legion of Boom", description: "Record 13–3, reached Super Bowl XLVIII." },
+        { year: 2013, type: "championship", title: "Super Bowl XLVIII Win", description: "Defeated Denver Broncos 43–8." },
+        { year: 2014, type: "playoff", title: "Back-to-Back SB", description: "Record 12–4, reached Super Bowl XLIX." },
+        { year: 2014, type: "championship", title: "Super Bowl XLIX Loss", description: "Lost to Patriots 28–24." },
+        { year: 2025, type: "playoff", title: "Super Bowl LX Run", description: "Record 15–2, reached Super Bowl LX." },
+        { year: 2025, type: "championship", title: "Super Bowl LX Win", description: "Defeated New England Patriots 29–13." },
+        { year: 2026, type: "moment", title: "Back on Top", description: "Seahawks return to elite NFC status." }
+    ],
+    buccaneers: [
+        { year: 1976, type: "founded", title: "Franchise Founded", description: "Expansion franchise begins play." },
+        { year: 2002, type: "playoff", title: "Dominant Defense", description: "Record 12–4, reached Super Bowl XXXVII." },
+        { year: 2002, type: "championship", title: "Super Bowl XXXVII Win", description: "Defeated Raiders 48–21." },
+        { year: 2020, type: "playoff", title: "Brady Championship", description: "Record 11–5, reached Super Bowl LV." },
+        { year: 2020, type: "championship", title: "Super Bowl LV Win", description: "Defeated Chiefs 31–9." },
+        { year: 2026, type: "moment", title: "Post-Brady Era", description: "Team seeks new identity after championship run." }
+    ],
+    titans: [
+        { year: 1960, type: "founded", title: "Franchise Founded", description: "Established as Houston Oilers." },
+        { year: 1999, type: "playoff", title: "Music City Miracle Run", description: "Record 13–3, reached Super Bowl XXXIV." },
+        { year: 1999, type: "championship", title: "Super Bowl XXXIV Loss", description: "Lost to St. Louis Rams 23–16 (one-yard short)." },
+        { year: 2000, type: "playoff", title: "Top Seed Season", description: "Record 13–3, reached Divisional Round." },
+        { year: 2019, type: "playoff", title: "Cinderella Run", description: "Record 9–7, reached AFC Championship." },
+        { year: 2026, type: "moment", title: "Rebuilding Phase", description: "Team transitions to new offensive identity." }
+    ],
+    commanders: [
+        { year: 1932, type: "founded", title: "Franchise Founded", description: "Established as Boston Braves." },
+        { year: 1982, type: "championship", title: "Super Bowl XVII Win", description: "Defeated Miami Dolphins 27–17." },
+        { year: 1987, type: "championship", title: "Super Bowl XXII Win", description: "Defeated Denver Broncos 42–10." },
+        { year: 1991, type: "championship", title: "Super Bowl XXVI Win", description: "Defeated Buffalo Bills 37–24." },
+        { year: 2026, type: "moment", title: "New Ownership Era", description: "Franchise enters new direction with fresh leadership." }
+    ]
+};
+
+function buildTimelineData(teamId) {
+    const base = [];
+    const history = teamHistory[teamId] || {};
+    const founded = teamFoundedYear[teamId] || 1960;
+    const currentYear = new Date().getFullYear();
+    const startYear = Math.max(founded, currentYear - 29);
+
+    base.push({
+        year: founded,
+        type: "founded",
+        title: "Team Founded",
+        description: "Franchise established (add origin details or relocation notes)."
+    });
+
+    base.push({
+        year: founded + 1,
+        type: "coach",
+        title: "Coaching Era",
+        description: "Add legendary coach era(s) and transition years."
+    });
+
+    base.push({
+        year: founded + 2,
+        type: "record",
+        title: "Franchise Records",
+        description: "Add best record, scoring records, or award seasons."
+    });
+
+    if (typeof history.trophies === "number") {
+        base.push({
+            year: currentYear,
+            type: "championship",
+            title: `Super Bowl Wins: ${history.trophies}`,
+            description: "Replace with exact championship years + opponents."
+        });
+    }
+
+    base.push({
+        year: currentYear - 1,
+        type: "moment",
+        title: "Legendary Moment",
+        description: "Add iconic play/game or franchise-defining moment."
+    });
+
+    // Playoff season placeholders (replace with real years/records/outcomes)
+    base.push({
+        year: currentYear - 2,
+        type: "playoff",
+        title: "Playoff Run",
+        description: "Record: -- | Result: -- | Seed: --"
+    });
+
+    const extras = (teamTimelineExtras[teamId] || []).slice();
+    extras.forEach(item => base.push(item));
+
+    for (let y = startYear; y <= currentYear; y++) {
+        base.push({
+            year: y,
+            type: "season",
+            title: "Season Record",
+            description: "Record: -- | Key moment: -- | Awards: --"
+        });
+    }
+
+    return base.sort((a, b) => a.year - b.year);
+}
+
+function renderTimeline(teamId) {
+    const container = document.getElementById("timeline-scroll");
+    if (!container) return;
+    const data = buildTimelineData(teamId);
+    container.innerHTML = "";
+
+    data.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = `timeline-card type-${item.type}`;
+        card.innerHTML = `
+            <div class="timeline-node"></div>
+            <div class="timeline-year">${item.year}</div>
+            <div class="timeline-title">${item.title}</div>
+            <div class="timeline-desc">${item.description}</div>
+        `;
+        container.appendChild(card);
+    });
+
+    const cards = Array.from(container.querySelectorAll(".timeline-card"));
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("is-visible");
+        });
+    }, { root: container, threshold: 0.6 });
+    cards.forEach(card => observer.observe(card));
+
+    const progressBar = document.getElementById("timeline-progress-bar");
+    const updateProgress = () => {
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const pct = maxScroll > 0 ? (container.scrollLeft / maxScroll) * 100 : 0;
+        if (progressBar) progressBar.style.width = `${pct}%`;
+    };
+    container.addEventListener("scroll", updateProgress);
+    updateProgress();
+
+    const prevBtn = document.getElementById("timeline-prev");
+    const nextBtn = document.getElementById("timeline-next");
+    const step = 320;
+    if (prevBtn) prevBtn.onclick = () => container.scrollBy({ left: -step, behavior: "smooth" });
+    if (nextBtn) nextBtn.onclick = () => container.scrollBy({ left: step, behavior: "smooth" });
+}
+
+// --- 2. THE DOM CONTENT LOADED SCRIPT ---
+// This handles the UI elements that need to wait for the page to exist.
+
+document.addEventListener("DOMContentLoaded", async function() {
+    // Update login/account buttons when logged in
+    const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    const navBtn = document.getElementById("nav-login-btn");
+    const sideLink = document.getElementById("side-login-link");
+
+    if (user) {
+        if (navBtn) {
+            navBtn.innerText = "ACCOUNT";
+            navBtn.href = "Account.html";
+        }
+        if (sideLink) {
+            sideLink.innerText = "Account";
+            sideLink.href = "Account.html";
+        }
+    }
+
+    // Sidebar Highlight
+    const currentFile = window.location.pathname.split("/").pop() || "index.html";
+    document.querySelectorAll('.side-nav a').forEach(link => {
+        if (link.getAttribute('href') === currentFile) {
+            link.classList.add('nav-active');
+        }
+    });
+
+    displayPollResults();
+    loadPosts();
+
+    if (!teamData[teamId]) return;
+    const team = teamData[teamId];
+    const history = teamHistory[teamId];
+    const teamAbbr = logoIdMap[teamId];
+    renderTimeline(teamId);
+
+    // Fetch live roster and show spotlight player
+    await syncRosterWithESPN(teamId);
+    if (team.players && team.players.length > 0) {
+        currentPlayerIndex = 0;
+        displayPlayer(team);
+    }
+
+    // Logo & Hero Background
+    const logoId = logoIdMap[teamId] || teamId; 
+    const logoUrl = `https://a.espncdn.com/i/teamlogos/nfl/500/${logoId}.png`;
+    const logoContainer = document.getElementById('logo-container');
+    if (logoContainer) logoContainer.innerHTML = `<img src="${logoUrl}" class="large-team-logo">`;
+    const hero = document.getElementById('team-hero');
+    if (hero) hero.style.backgroundColor = team.color;
+    document.documentElement.style.setProperty('--team-color', team.color);
+
+    // Main Identity Text
+    const stadiumEl = document.getElementById('team-stadium');
+    const titleEl = document.getElementById('team-title');
+    const descEl = document.getElementById('team-desc');
+    const contentEl = document.getElementById('team-content');
+    if (stadiumEl) stadiumEl.innerText = `${team.stadium} - ${team.location}`;
+    if (titleEl) {
+        titleEl.innerText = team.name;
+        titleEl.style.color = "white";
+    }
+    if (descEl) descEl.innerText = team.desc;
+    if (contentEl) contentEl.style.borderTop = `8px solid ${team.color}`;
+
+    // Season record
+    const seasonContainer = document.getElementById("season-record");
+    if (seasonContainer) {
+        fetchTeamRecord(teamAbbr).then(data => {
+            if (!data || !data.team || !data.team.record) {
+                seasonContainer.innerHTML = `
+                    <div class="stadium-vibe-container">
+                        <div class="stadium-stats">
+                            <div>
+                                <span class="stat-label">Status</span>
+                                <span class="stat-value">Record unavailable</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const recordSummary = data.team.record.items[0].summary;
+
+            seasonContainer.innerHTML = `
+                <div class="stadium-vibe-container">
+                    <div class="stadium-stats">
+                        <div>
+                            <span class="stat-label">Record</span>
+                            <span class="stat-value">${recordSummary}</span>
+                        </div>
+                        <div>
+                            <span class="stat-label">Source</span>
+                            <span class="stat-value">Live ESPN Data</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Rivals
+    const rivalsContainer = document.getElementById("rivals-container");
+    if (rivalsContainer && team.rivals && team.rivals.length > 0) {
+        rivalsContainer.innerHTML = "";
+        team.rivals.forEach(rival => {
+            const rivalCard = document.createElement("div");
+            rivalCard.classList.add("rival-card");
+            rivalCard.innerHTML = `
+                <h3>${rival.name}</h3>
+                <button class="back-btn small-btn"
+                    onclick="window.location.href='Team-Details.html?id=${rival.id}'">
+                    View Rival
+                </button>
+            `;
+            rivalsContainer.appendChild(rivalCard);
+        });
+    }
+
+    // Next game
+    const nextGameContainer = document.getElementById("next-game");
+    if (nextGameContainer) {
+        fetchTeamSchedule(teamAbbr).then(data => {
+            if (!data || !data.events || data.events.length === 0) {
+                nextGameContainer.innerHTML = "<p>No upcoming games found.</p>";
+                return;
+            }
+
+            const nextEvent = data.events.find(event =>
+                event.competitions[0].status.type.completed === false
+            );
+
+            if (!nextEvent) {
+                nextGameContainer.innerHTML = `
+                    <div class="stadium-vibe-container">
+                        <div class="stadium-stats">
+                            <div>
+                                <span class="stat-label">Status</span>
+                                <span class="stat-value">Offseason</span>
+                            </div>
+                            <div>
+                                <span class="stat-label">Next Action</span>
+                                <span class="stat-value">Waiting for 2026 Schedule</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const competition = nextEvent.competitions[0];
+            const opponent = competition.competitors.find(c =>
+                c.team.abbreviation !== teamAbbr
+            );
+
+            const gameDate = nextEvent.date;
+            const formattedDate = new Date(gameDate).toLocaleString();
+
+            nextGameContainer.innerHTML = `
+                <div class="stadium-vibe-container">
+                    <div class="stadium-stats">
+                        <div>
+                            <span class="stat-label">Opponent</span>
+                            <span class="stat-value">${opponent.team.displayName}</span>
+                        </div>
+                        <div>
+                            <span class="stat-label">Date</span>
+                            <span class="stat-value">${formattedDate}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            startCountdown(gameDate);
+        });
+    }
+
+    // Stadium & History Data
+    if (history) {
+        const capEl = document.getElementById('stadium-capacity');
+        const surfEl = document.getElementById('stadium-surface');
+        const typeEl = document.getElementById('stadium-type');
+        if (capEl) capEl.innerText = history.capacity;
+        if (surfEl) surfEl.innerText = history.surface;
+        if (typeEl) typeEl.innerText = history.type;
+
+        const mapBtn = document.getElementById('stadium-map-link');
+        if (mapBtn) {
+            mapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(team.stadium)}`;
+        }
+
+        // TROPHIES
+        const trophyCase = document.getElementById('trophy-case');
+        if (trophyCase) {
+            trophyCase.innerHTML = '';
+            if (history.trophies > 0) {
+                for (let i = 0; i < history.trophies; i++) {
+                    const t = document.createElement('span');
+                    t.innerHTML = '🏆';
+                    t.style.marginRight = "5px";
+                    t.title = `${history.trophies} Super Bowl Wins`;
+                    trophyCase.appendChild(t);
+                }
+            } else {
+                trophyCase.innerHTML = '<span style="opacity: 0.5; font-size: 0.9rem;">Chasing the first ring...</span>';
+            }
+        }
+
+        // LEGENDS
+        const legendList = document.getElementById('legend-list');
+        if (legendList) {
+            legendList.innerHTML = '';
+            history.legends.forEach(player => {
+                const li = document.createElement('li');
+                li.innerText = player;
+                legendList.appendChild(li);
+            });
+        }
+
+        // WEATHER
+        async function fetchWeather() {
+            try {
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${history.city}&units=imperial&appid=${weatherAPIKey}`);
+                const data = await response.json();
+                if(data.cod === 200) {
+                    const temp = Math.round(data.main.temp);
+                    let weatherString = `${temp}°F ${data.weather[0].main}`;
+                    if (history.type === "Dome") weatherString += " (Dome)";
+                    const weatherEl = document.getElementById('stadium-weather');
+                    if(weatherEl) weatherEl.innerText = weatherString;
+                }
+            } catch (err) { console.error("Weather failed:", err); }
+        }
+        fetchWeather();
+    }
+
+    // Auto-open advanced roster if requested
+    const advParam = new URLSearchParams(window.location.search).get("advanced");
+    if (advParam === "1") {
+        setTimeout(() => openAdvancedRoster(), 0);
+    }
+
+    // LOAD INITIAL TRIVIA
+    loadNewTrivia();
+});
+function loadNewTrivia() {
+    const facts = triviaList[teamId] || ["This team has a legendary history in the NFL!"];
+    const triviaElement = document.getElementById('team-trivia');
+    const triviaBtn = document.querySelector('.trivia-card .small-btn');
+
+    if (triviaElement && factIndex < facts.length) {
+        triviaElement.innerText = facts[factIndex];
+        factIndex++;
+        if (factIndex === facts.length && triviaBtn) {
+            triviaBtn.innerText = "That's all the facts!";
+            triviaBtn.disabled = true;
+            triviaBtn.style.opacity = "0.5";
+        }
+    }
+}
+
+const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'><circle cx='40' cy='40' r='40' fill='%23cfcfcf'/><circle cx='40' cy='30' r='14' fill='%23ffffff'/><path d='M16 70c4-14 18-22 24-22s20 8 24 22' fill='%23ffffff'/></svg>";
+
+function submitPost() {
+    const rawUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    const input = document.getElementById('post-input');
+    if (!input || !input.value.trim()) return;
+
+    let displayName = "Guest";
+    let avatar = "";
+    if (rawUser) {
+        const profile = JSON.parse(localStorage.getItem(`profile_${rawUser}`) || '{}');
+        displayName = profile.displayName || rawUser;
+        avatar = profile.avatar || "";
+    }
+    if (!avatar) avatar = DEFAULT_AVATAR;
+    const postContainer = document.getElementById('posts-container');
+    const storageKey = `posts_${teamId}`;
+    const existingPosts = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    const postText = input.value.trim();
+    const postObj = { name: displayName, avatar: avatar, text: postText, time: Date.now() };
+    existingPosts.unshift(postObj); // newest first
+    localStorage.setItem(storageKey, JSON.stringify(existingPosts));
+
+    if (postContainer) {
+        const newPost = document.createElement('div');
+        newPost.className = 'post-item';
+        const avatarHtml = avatar ? `<img src="${avatar}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.15);">` : "";        
+        newPost.innerHTML = `${avatarHtml}<strong>${displayName}:</strong> ${postText}`;
+        postContainer.prepend(newPost);
+    }
+    input.value = "";
+}
+
+// Load posts on page load
+function loadPosts() {
+    const postContainer = document.getElementById('posts-container');
+    const storageKey = `posts_${teamId}`;
+    const savedPosts = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    if (postContainer) {
+        postContainer.innerHTML = '';
+        savedPosts.forEach(post => {
+            const div = document.createElement('div');
+            div.className = 'post-item';
+            const avatarHtml = (post.avatar || DEFAULT_AVATAR) ? `<img src="${post.avatar || DEFAULT_AVATAR}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.15);">` : "";
+            div.innerHTML = `${avatarHtml}<strong>${post.name}:</strong> ${post.text}`;
+            postContainer.appendChild(div);
+        });
+    }
+}
+
+// --- ADVANCED ROSTER (ESPN ROSTER ONLY) ---
+const POSITION_ORDER = {
+    QB: 1,
+    RB: 2,
+    FB: 3,
+    WR: 4,
+    TE: 5,
+    LT: 6,
+    LG: 7,
+    C: 8,
+    RG: 9,
+    RT: 10,
+    OT: 11,
+    OG: 12,
+    OL: 13,
+    T: 14,
+    G: 15,
+    DE: 20,
+    DT: 21,
+    NT: 22,
+    OLB: 23,
+    ILB: 24,
+    MLB: 25,
+    CB: 26,
+    S: 27,
+    FS: 28,
+    SS: 29,
+    K: 40,
+    PK: 41,
+    P: 42,
+    LS: 43,
+    KR: 44,
+    PR: 45
+};
+
+function getUnit(position) {
+    const pos = (position || "").toUpperCase();
+    const offense = ["QB","RB","FB","WR","TE","LT","LG","C","RG","RT","OT","OG","OL","T","G"];
+    const defense = ["DE","DT","NT","LB","OLB","ILB","MLB","CB","S","SS","FS"];
+    const special = ["K","PK","P","LS","KR","PR"];
+
+    if (offense.includes(pos)) return "Offense";
+    if (defense.includes(pos)) return "Defense";
+    if (special.includes(pos)) return "Special Teams";
+    return "Offense";
+}
+
+const advancedRosterState = {
+    players: [],
+    playersById: {}
+};
+
+function setStatus(msg) {
+    const el = document.getElementById("advanced-roster-status");
+    if (el) el.textContent = msg || "";
+}
+
+function showAdvancedPlayer(playerId) {
+    const player = advancedRosterState.playersById[playerId];
+    const panel = document.getElementById("advanced-player-details");
+    if (!panel || !player) return;
+
+    panel.innerHTML = `
+        <div class="advanced-player-card" id="advanced-player-card">
+            <button class="close-fullscreen-btn" onclick="toggleAdvancedPlayerFullscreen(false)" aria-label="Close">&times;</button>
+            <div class="advanced-player-photo">
+                <img src="${player.image || "https://a.espncdn.com/combiner/i?img=/i/headshots/nophoto.png"}" alt="${player.name}">
+            </div>
+            <div class="advanced-player-meta">
+                <strong>${player.name}</strong>
+                <span class="muted">${player.position} � ${player.sideofball}</span>
+            </div>
+            <div class="advanced-player-stats">
+                <div class="advanced-stat">
+                    <div class="stat-label">College</div>
+                    <div class="stat-value">${player.college || "N/A"}</div>
+                </div>
+                <div class="advanced-stat">
+                    <div class="stat-label">Experience</div>
+                    <div class="stat-value">${player.exp || "N/A"}</div>
+                </div>
+                <div class="advanced-stat">
+                    <div class="stat-label">Height</div>
+                    <div class="stat-value">${player.height || "N/A"}</div>
+                </div>
+                <div class="advanced-stat">
+                    <div class="stat-label">Weight</div>
+                    <div class="stat-value">${player.weight || "N/A"}</div>
+                </div>
+            </div>
+            <button class="small-btn fullscreen-btn" onclick="toggleAdvancedPlayerFullscreen()">Fullscreen</button>
+        </div>
+    `;
+}
+
+function populateAdvancedTeamSelect() {
+    const select = document.getElementById("advanced-team-select");
+    if (!select) return;
+
+    select.innerHTML = "";
+    const ordered = teamOrderByDivision.filter(key => teamData[key]);
+    const keys = ordered.length ? ordered : Object.keys(teamData);
+    keys.forEach(key => {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = teamData[key].name;
+        select.appendChild(opt);
+    });
+
+    if (teamData[teamId]) select.value = teamId;
+}
+
+async function loadAdvancedRoster() {
+    const select = document.getElementById("advanced-team-select");
+    if (!select) return;
+
+    const teamKey = select.value || teamId;
+    if (!teamData[teamKey]) return;
+
+    // Navigate to selected team page for full context + colors
+    if (teamKey !== teamId) {
+        window.location.href = `Team-Details.html?id=${teamKey}&advanced=1`;
+        return;
+    }
+
+    setStatus("Loading roster...");
+    await syncRosterWithESPN(teamKey);
+
+    const players = (teamData[teamKey].players || []).map((p, idx) => ({
+        ...p,
+        _advId: idx + 1
+    }));
+
+    if (players.length === 0) {
+        setStatus("No roster data found.");
+        return;
+    }
+
+    // Compute depth rank per position
+    const byPos = {};
+    players.forEach(p => {
+        const pos = p.position || "-";
+        if (!byPos[pos]) byPos[pos] = [];
+        byPos[pos].push(p);
+    });
+    Object.values(byPos).forEach(arr => {
+        arr.sort((a, b) => (a.depth || 99) - (b.depth || 99)).forEach((p, i) => {
+            p.depthRank = i + 1;
+        });
+    });
+
+    advancedRosterState.players = players;
+    advancedRosterState.playersById = {};
+    players.forEach(p => { advancedRosterState.playersById[p._advId] = p; });
+
+    buildDepthChart(players);
+    showAdvancedPlayer(players[0]._advId);
+    setStatus(`Loaded ${players.length} players.`);
+}
+
+function buildDepthChart(players) {
+    const grouped = { "Offense": {}, "Defense": {}, "Special Teams": {} };
+    players.forEach(p => {
+        const unit = getUnit(p.position);
+        if (!grouped[unit][p.position]) grouped[unit][p.position] = [];
+        grouped[unit][p.position].push(p);
+    });
+
+    const container = document.getElementById("advanced-depth-chart-table");
+    if (!container) return;
+    container.innerHTML = "";
+
+    Object.keys(grouped).forEach(unit => {
+        const group = document.createElement("div");
+        group.className = "depth-group";
+
+        const header = document.createElement("div");
+        header.className = "depth-group-header";
+        header.textContent = unit;
+        group.appendChild(header);
+
+        const colHeader = document.createElement("div");
+        colHeader.className = "depth-group-row depth-header-row";
+        colHeader.innerHTML = `
+            <div class="depth-pos-label">POS</div>
+            <div class="depth-col-label">1st</div>
+            <div class="depth-col-label">2nd</div>
+            <div class="depth-col-label">3rd</div>
+            <div class="depth-col-label">4th</div>
+        `;
+        group.appendChild(colHeader);
+
+        const positions = Object.keys(grouped[unit]).sort((a, b) => (POSITION_ORDER[a] || 99) - (POSITION_ORDER[b] || 99));
+        positions.forEach(pos => {
+            const row = document.createElement("div");
+            row.className = "depth-group-row";
+
+            const posLabel = document.createElement("div");
+            posLabel.className = "depth-pos-label";
+            posLabel.textContent = pos;
+            row.appendChild(posLabel);
+
+            const ordered = grouped[unit][pos].slice().sort((a, b) => (a.depth || 99) - (b.depth || 99));
+            for (let i = 0; i < 4; i++) {
+                const cell = document.createElement("div");
+                const player = ordered[i];
+                if (player) {
+                    const link = document.createElement("span");
+                    link.className = "depth-player-link";
+                    link.textContent = player.name;
+                    link.onclick = () => showAdvancedPlayer(player._advId);
+                    cell.appendChild(link);
+                } else {
+                    cell.textContent = "-";
+                }
+                row.appendChild(cell);
+            }
+
+            group.appendChild(row);
+        });
+
+        container.appendChild(group);
+    });
+}
+
+function openAdvancedRoster() {
+    const advanced = document.getElementById("advanced-roster-section");
+    if (!advanced) return;
+    const sections = document.querySelectorAll(".details-card > .info-section, .details-card > .button-container");
+    sections.forEach(el => {
+        if (el.id !== "advanced-roster-section") el.style.display = "none";
+    });
+    advanced.style.display = "block";
+
+    populateAdvancedTeamSelect();
+    loadAdvancedRoster();
+}
+
+function closeAdvancedRoster() {
+    const advanced = document.getElementById("advanced-roster-section");
+    if (!advanced) return;
+    const sections = document.querySelectorAll(".details-card > .info-section, .details-card > .button-container");
+    sections.forEach(el => { el.style.display = ""; });
+    advanced.style.display = "none";
+}
+
+function toggleAdvancedPlayerFullscreen(forceOpen) {
+    const card = document.getElementById("advanced-player-card");
+    let backdrop = document.getElementById("advanced-player-backdrop");
+    if (!card) return;
+
+    if (!backdrop) {
+        backdrop = document.createElement("div");
+        backdrop.id = "advanced-player-backdrop";
+        backdrop.className = "advanced-player-backdrop";
+        backdrop.onclick = () => toggleAdvancedPlayerFullscreen(false);
+        document.body.appendChild(backdrop);
+    }
+
+    const isOpen = card.classList.contains("is-fullscreen");
+    const shouldOpen = forceOpen === true ? true : (forceOpen === false ? false : !isOpen);
+
+    if (shouldOpen) {
+        if (!card._originalParent) card._originalParent = card.parentElement;
+        if (card.parentElement !== document.body) {
+            document.body.appendChild(card);
+        }
+        card.classList.add("is-fullscreen");
+        backdrop.classList.add("show");
+        document.body.classList.add("no-scroll");
+    } else {
+        card.classList.remove("is-fullscreen");
+        backdrop.classList.remove("show");
+        document.body.classList.remove("no-scroll");
+        if (card._originalParent && card.parentElement === document.body) {
+            card._originalParent.appendChild(card);
+        }
+    }
+}
+// DOMContentLoaded handler above handles posts and sidebar highlight
+
+// --- 1. THE QUIZ DATABASE ---
+// PASTE ALL YOUR TEAM QUESTIONS HERE
+const allTeamQuizzes = {
+    "cardinals": [
+        { q: "What year were the Cardinals founded?", a: "1898", options: ["1898", "1920", "1960", "1988"] },
+        { q: "Who is the Cardinals' all-time leader in receiving yards?", a: "Larry Fitzgerald", options: ["Anquan Boldin", "Larry Fitzgerald", "Roy Green", "Jackie Smith"] },
+        { q: "Where do the Cardinals play their home games?", a: "State Farm Stadium", options: ["Sun Devil Stadium", "State Farm Stadium", "Arizona Dome", "Cardinals Field"] },
+        { q: "Which QB led the Cardinals to Super Bowl XLIII?", a: "Kurt Warner", options: ["Carson Palmer", "Kurt Warner", "Jake Plummer", "Kyler Murray"] },
+        { q: "What city did the Cardinals play in before Arizona?", a: "St. Louis", options: ["Chicago", "St. Louis", "Phoenix", "San Diego"] }
+    ],
+    "falcons": [
+        { q: "What is the name of the Falcons' stadium?", a: "Mercedes-Benz Stadium", options: ["Georgia Dome", "Mercedes-Benz Stadium", "Falcons Field", "Atlanta Center"] },
+        { q: "Who is the Falcons' all-time leading passer?", a: "Matt Ryan", options: ["Michael Vick", "Steve Bartkowski", "Matt Ryan", "Chris Miller"] },
+        { q: "In what year did the Falcons reach their first Super Bowl?", a: "1998", options: ["1991", "1998", "2012", "2016"] },
+        { q: "Which RB is known for the 'Dirty Bird' celebration?", a: "Jamal Anderson", options: ["Warrick Dunn", "Devonta Freeman", "Jamal Anderson", "Gerald Riggs"] },
+        { q: "Who was the first ever draft pick for the Falcons in 1966?", a: "Tommy Nobis", options: ["Tommy Nobis", "Claude Humphrey", "Steve Bartkowski", "Deion Sanders"] }
+    ],
+    "ravens": [
+        { q: "What city did the Ravens move from in 1996?", a: "Cleveland", options: ["Indianapolis", "Cleveland", "Houston", "St. Louis"] },
+        { q: "Who was the first player ever drafted by the Ravens?", a: "Jonathan Ogden", options: ["Ray Lewis", "Jonathan Ogden", "Peter Boulware", "Ed Reed"] },
+        { q: "How many Super Bowls have the Ravens won?", a: "2", options: ["1", "2", "3", "4"] },
+        { q: "Who holds the NFL record for most rushing yards in a season by a QB?", a: "Lamar Jackson", options: ["Michael Vick", "Lamar Jackson", "Cam Newton", "Josh Allen"] },
+        { q: "Which defender is the only Raven with a statue outside the stadium?", a: "Ray Lewis", options: ["Ed Reed", "Ray Lewis", "Terrell Suggs", "Haloti Ngata"] }
+    ],
+    "bills": [
+        { q: "How many consecutive Super Bowls did the Bills appear in?", a: "4", options: ["2", "3", "4", "5"] },
+        { q: "Who is the Bills' all-time leader in sacks?", a: "Bruce Smith", options: ["Bruce Smith", "Aaron Schobel", "Kyle Williams", "Von Miller"] },
+        { q: "What is the name of the Bills' current stadium?", a: "Highmark Stadium", options: ["Rich Stadium", "Ralph Wilson Stadium", "Highmark Stadium", "New Era Field"] },
+        { q: "Which QB led the Bills during the 'K-Gun' era?", a: "Jim Kelly", options: ["Jim Kelly", "Doug Flutie", "Josh Allen", "Joe Ferguson"] },
+        { q: "What famous play involved a 32-point comeback against the Oilers?", a: "The Comeback", options: ["The Comeback", "The Music City Miracle", "The Wide Right", "The Drive"] }
+    ],
+    "panthers": [
+        { q: "In what year did the Panthers begin play?", a: "1995", options: ["1993", "1995", "1996", "2002"] },
+        { q: "Who is the only Panther to win NFL MVP?", a: "Cam Newton", options: ["Steve Smith Sr.", "Luke Kuechly", "Cam Newton", "Christian McCaffrey"] },
+        { q: "What is the name of the Panthers' stadium?", a: "Bank of America Stadium", options: ["Ericsson Stadium", "Bank of America Stadium", "Carolina Dome", "Charlotte Field"] },
+        { q: "Which defensive player has the most career tackles for the Panthers?", a: "Luke Kuechly", options: ["Thomas Davis", "Luke Kuechly", "Jon Beason", "Sam Mills"] },
+        { q: "Who was the first head coach of the Panthers?", a: "Dom Capers", options: ["John Fox", "Ron Rivera", "Dom Capers", "George Seifert"] }
+    ],
+    "bears": [
+        { q: "Which Bears legend is known as 'Sweetness'?", a: "Walter Payton", options: ["Gale Sayers", "Walter Payton", "Dick Butkus", "Mike Ditka"] },
+        { q: "What is the name of the Bears' historic stadium?", a: "Soldier Field", options: ["Soldier Field", "Wrigley Field", "Bears Stadium", "Windy City Field"] },
+        { q: "Who coached the 1985 Bears to a Super Bowl win?", a: "Mike Ditka", options: ["Lovie Smith", "Mike Ditka", "Buddy Ryan", "George Halas"] },
+        { q: "Which team is the Bears' oldest and biggest rival?", a: "Green Bay Packers", options: ["Detroit Lions", "Minnesota Vikings", "Green Bay Packers", "St. Louis Cardinals"] },
+        { q: "Who founded the Bears (originally the Decatur Staleys)?", a: "George Halas", options: ["George Halas", "Vince Lombardi", "Curly Lambeau", "Art Rooney"] }
+    ],
+    "bengals": [
+        { q: "Who is the Bengals' all-time leading passer?", a: "Ken Anderson", options: ["Boomer Esiason", "Andy Dalton", "Ken Anderson", "Joe Burrow"] },
+        { q: "What is the nickname for the Bengals' stadium?", a: "The Jungle", options: ["The Tiger Den", "The Jungle", "Orange Heaven", "Ohio Field"] },
+        { q: "Which QB led the Bengals to Super Bowl LVI?", a: "Joe Burrow", options: ["Andy Dalton", "Carson Palmer", "Joe Burrow", "Boomer Esiason"] },
+        { q: "Who was the first head coach and founder of the Bengals?", a: "Paul Brown", options: ["Paul Brown", "Sam Wyche", "Forrest Gregg", "Dick LeBeau"] },
+        { q: "Which WR is known for the 'Ickey Shuffle' teammate connection?", a: "Ickey Woods", options: ["Chad Johnson", "A.J. Green", "Ickey Woods", "Cris Collinsworth"] }
+    ],
+    "browns": [
+        { q: "What is the name of the Browns' stadium?", a: "Huntington Bank Field", options: ["Cleveland Stadium", "FirstEnergy Stadium", "Huntington Bank Field", "The Dawg Pound"] },
+        { q: "Which Browns RB is considered one of the greatest ever?", a: "Jim Brown", options: ["Jim Brown", "Nick Chubb", "Leroy Kelly", "Marion Motley"] },
+        { q: "What is the 'Dawg Pound'?", a: "The fan section", options: ["The locker room", "The fan section", "The practice field", "The mascot's house"] },
+        { q: "In what year did the Browns return to the NFL as an expansion team?", a: "1999", options: ["1996", "1999", "2002", "1995"] },
+        { q: "Who is the legendary coach the team is named after?", a: "Paul Brown", options: ["Paul Brown", "Blanton Collier", "Marty Schottenheimer", "Bill Belichick"] }
+    ],
+    "cowboys": [
+        { q: "What is the Cowboys' famous nickname?", a: "America's Team", options: ["The Lone Stars", "America's Team", "The Big D", "Texas Titans"] },
+        { q: "Who is the NFL's all-time leading rusher (played for Cowboys)?", a: "Emmitt Smith", options: ["Tony Dorsett", "Ezekiel Elliott", "Emmitt Smith", "DeMarco Murray"] },
+        { q: "How many Super Bowls have the Cowboys won?", a: "5", options: ["3", "4", "5", "6"] },
+        { q: "Who was the Cowboys' first head coach?", a: "Tom Landry", options: ["Jimmy Johnson", "Tom Landry", "Barry Switzer", "Jason Garrett"] },
+        { q: "What is the name of the Cowboys' current stadium?", a: "AT&T Stadium", options: ["Texas Stadium", "AT&T Stadium", "Cowboys Field", "Cotton Bowl"] }
+    ],
+    "denver": [
+        { q: "Which QB won back-to-back Super Bowls for Denver in the 90s?", a: "John Elway", options: ["Peyton Manning", "John Elway", "Brian Griese", "Jake Plummer"] },
+        { q: "What is the nickname for Denver's stadium due to its altitude?", a: "Mile High", options: ["Mile High", "The Peak", "Rocky Mountain", "Oxygen Bowl"] },
+        { q: "Who holds the Broncos record for most career rushing yards?", a: "Terrell Davis", options: ["Clinton Portis", "Terrell Davis", "Floyd Little", "Otis Armstrong"] },
+        { q: "What color are the Broncos' primary home jerseys?", a: "Orange", options: ["Blue", "Orange", "White", "Navy"] },
+        { q: "How many Super Bowls have the Broncos won?", a: "3", options: ["1", "2", "3", "4"] }
+    ],
+    "lions": [
+        { q: "Which Lions RB famously retired early in his prime?", a: "Barry Sanders", options: ["Billy Sims", "Barry Sanders", "Mel Farr", "Jahmyr Gibbs"] },
+        { q: "On which holiday do the Lions play every year?", a: "Thanksgiving", options: ["Christmas", "New Year's", "Thanksgiving", "Labor Day"] },
+        { q: "What is the name of the Lions' indoor stadium?", a: "Ford Field", options: ["Silverdome", "Ford Field", "Lion Den", "Motor City Dome"] },
+        { q: "Who is the Lions' all-time leader in receiving yards?", a: "Calvin Johnson", options: ["Herman Moore", "Calvin Johnson", "Golden Tate", "Amon-Ra St. Brown"] },
+        { q: "What was the Lions' record in the 2008 season?", a: "0-16", options: ["1-15", "0-16", "2-14", "4-12"] }
+    ],
+    "packers": [
+        { q: "What is the name of the Packers' historic stadium?", a: "Lambeau Field", options: ["Lambeau Field", "Packer Park", "Lombardi Field", "Green Bay Stadium"] },
+        { q: "Who is the Super Bowl trophy named after?", a: "Vince Lombardi", options: ["George Halas", "Vince Lombardi", "Curly Lambeau", "Bart Starr"] },
+        { q: "Which QB has the most career starts for the Packers?", a: "Brett Favre", options: ["Aaron Rodgers", "Brett Favre", "Bart Starr", "Jordan Love"] },
+        { q: "What unique ownership structure do the Packers have?", a: "Publicly owned", options: ["Private owner", "Publicly owned", "City owned", "Player owned"] },
+        { q: "What is the nickname for Packers fans?", a: "Cheeseheads", options: ["The Pack", "Cheeseheads", "Green Jackets", "The Frozen Tundra"] }
+    ],
+    "texans": [
+        { q: "In what year did the Texans join the NFL?", a: "2002", options: ["1999", "2002", "2004", "1997"] },
+        { q: "Who was the first ever draft pick for the Texans?", a: "David Carr", options: ["David Carr", "Andre Johnson", "J.J. Watt", "Mario Williams"] },
+        { q: "Who is the Texans' all-time leader in sacks?", a: "J.J. Watt", options: ["Mario Williams", "J.J. Watt", "Whitney Mercilus", "Jadeveon Clowney"] },
+        { q: "What is the name of the Texans' stadium?", a: "NRG Stadium", options: ["Reliant Stadium", "NRG Stadium", "Houston Dome", "Texans Field"] },
+        { q: "Which WR is the Texans' all-time leader in receiving yards?", a: "Andre Johnson", options: ["DeAndre Hopkins", "Andre Johnson", "Will Fuller", "Brandin Cooks"] }
+    ],
+    "colts": [
+        { q: "Which city did the Colts move from in 1984?", a: "Baltimore", options: ["Cleveland", "Baltimore", "St. Louis", "Houston"] },
+        { q: "Who is the Colts' all-time leader in passing yards?", a: "Peyton Manning", options: ["Andrew Luck", "Johnny Unitas", "Peyton Manning", "Matt Ryan"] },
+        { q: "What is the name of the Colts' current stadium?", a: "Lucas Oil Stadium", options: ["RCA Dome", "Lucas Oil Stadium", "Colts Dome", "Hoosier Field"] },
+        { q: "How many Super Bowls did Peyton Manning win with the Colts?", a: "1", options: ["1", "2", "3", "0"] },
+        { q: "Which RB is the Colts' all-time leading rusher?", a: "Edgerrin James", options: ["Marshall Faulk", "Edgerrin James", "Eric Dickerson", "Jonathan Taylor"] }
+    ],
+    "jaguars": [
+        { q: "In what year did the Jaguars begin play?", a: "1995", options: ["1993", "1995", "1996", "1999"] },
+        { q: "What is the name of the Jaguars' stadium?", a: "EverBank Stadium", options: ["Alltell Stadium", "EverBank Stadium", "TIAA Bank Field", "Jacksonville Field"] },
+        { q: "Who is the Jaguars' all-time leader in rushing yards?", a: "Fred Taylor", options: ["Maurice Jones-Drew", "Fred Taylor", "Travis Etienne", "Leonard Fournette"] },
+        { q: "Which QB led the Jaguars to the AFC Championship in 2017?", a: "Blake Bortles", options: ["Mark Brunell", "Blake Bortles", "Trevor Lawrence", "Chad Henne"] },
+        { q: "What unique feature does the Jaguars' stadium have?", a: "Swimming pools", options: ["Ferris wheel", "Swimming pools", "Dog park", "Roller coaster"] }
+    ],
+    "chiefs": [
+        { q: "What was the Chiefs' original name in Dallas?", a: "Dallas Texans", options: ["Dallas Chiefs", "Dallas Texans", "Dallas Cowboys", "Dallas Stars"] },
+        { q: "Who is the Chiefs' legendary head coach (current)?", a: "Andy Reid", options: ["Hank Stram", "Marty Schottenheimer", "Andy Reid", "Dick Vermeil"] },
+        { q: "What is the name of the Chiefs' stadium?", a: "Arrowhead Stadium", options: ["Arrowhead Stadium", "Chiefs Field", "GEHA Field", "KC Stadium"] },
+        { q: "Which QB won Super Bowl IV for the Chiefs?", a: "Len Dawson", options: ["Patrick Mahomes", "Len Dawson", "Trent Green", "Alex Smith"] },
+        { q: "How many Super Bowls did the Chiefs win between 2020 and 2024?", a: "3", options: ["1", "2", "3", "4"] }
+    ],
+    "raiders": [
+        { q: "What city did the Raiders move to in 2020?", a: "Las Vegas", options: ["Los Angeles", "Oakland", "Las Vegas", "San Diego"] },
+        { q: "What is the nickname of the Raiders' fan section?", a: "The Black Hole", options: ["The Raider Nation", "The Black Hole", "The Pirate Ship", "The Silver Shield"] },
+        { q: "Who was the legendary owner known for 'Just Win, Baby'?", a: "Al Davis", options: ["John Madden", "Al Davis", "Mark Davis", "Tom Flores"] },
+        { q: "Which Raider legend is the NFL's all-time leader in interceptions?", a: "Paul Krause", options: ["Charles Woodson", "Lester Hayes", "Paul Krause", "Willie Brown"] },
+        { q: "What is the nickname for the Raiders' stadium in Las Vegas?", a: "The Death Star", options: ["The Death Star", "The Oasis", "Raider Dome", "Allegiant Field"] }
+    ],
+    "chargers": [
+        { q: "What city did the Chargers play in from 1961 to 2016?", a: "San Diego", options: ["Los Angeles", "San Diego", "Oakland", "San Francisco"] },
+        { q: "Who is the Chargers' all-time leader in touchdowns?", a: "LaDainian Tomlinson", options: ["Antonio Gates", "LaDainian Tomlinson", "Lance Alworth", "Keenan Allen"] },
+        { q: "What is the name of the stadium the Chargers share with the Rams?", a: "SoFi Stadium", options: ["Qualcomm Stadium", "SoFi Stadium", "Rose Bowl", "LA Coliseum"] },
+        { q: "Which QB holds the Chargers record for most career passing yards?", a: "Philip Rivers", options: ["Dan Fouts", "Philip Rivers", "Justin Herbert", "Drew Brees"] },
+        { q: "What is the lightning bolt logo on the helmet called?", a: "The Bolt", options: ["The Flash", "The Spark", "The Bolt", "The Strike"] }
+    ],
+    "rams": [
+        { q: "What city did the Rams move to in 1995 and stay until 2015?", a: "St. Louis", options: ["Cleveland", "St. Louis", "Anaheim", "San Diego"] },
+        { q: "What was the nickname of the Rams' high-powered 1999 Offence?", a: "Greatest Show on Turf", options: ["Air Raid", "Greatest Show on Turf", "The Ram Jam", "Legion of Boom"] },
+        { q: "Who was the QB of the 'Greatest Show on Turf'?", a: "Kurt Warner", options: ["Marc Bulger", "Kurt Warner", "Matthew Stafford", "Jim Everett"] },
+        { q: "How many Super Bowls have the Rams won in Los Angeles?", a: "1", options: ["1", "2", "0", "3"] },
+        { q: "Who is the Rams' all-time leader in rushing yards?", a: "Steven Jackson", options: ["Eric Dickerson", "Marshall Faulk", "Steven Jackson", "Todd Gurley"] }
+    ],
+    "dolphins": [
+        { q: "In what year did the Dolphins achieve the only perfect season?", a: "1972", options: ["1970", "1972", "1984", "1990"] },
+        { q: "Who was the head coach of the 1972 perfect Dolphins?", a: "Don Shula", options: ["Don Shula", "Jimmy Johnson", "Dan Marino", "Bill Arnsparger"] },
+        { q: "Who is the Dolphins' all-time leader in passing yards?", a: "Dan Marino", options: ["Bob Griese", "Dan Marino", "Ryan Tannehill", "Tua Tagovailoa"] },
+        { q: "What is the name of the Dolphins' current stadium?", a: "Hard Rock Stadium", options: ["Orange Bowl", "Hard Rock Stadium", "Sun Life Stadium", "Pro Player Stadium"] },
+        { q: "How many Super Bowls did Dan Marino win?", a: "0", options: ["0", "1", "2", "3"] }
+    ],
+    "vikings": [
+        { q: "What is the name of the Vikings' indoor stadium?", a: "U.S. Bank Stadium", options: ["Metrodome", "U.S. Bank Stadium", "Vikings Field", "Minneapolis Dome"] },
+        { q: "What was the nickname of the Vikings' dominant 1970s defense?", a: "Purple People Eaters", options: ["Steel Curtain", "Purple People Eaters", "Doomsday Defense", "The No-Name Defense"] },
+        { q: "How many Super Bowl appearances do the Vikings have (without a win)?", a: "4", options: ["2", "3", "4", "5"] },
+        { q: "Which WR holds the Vikings record for most yards in a season?", a: "Justin Jefferson", options: ["Randy Moss", "Cris Carter", "Justin Jefferson", "Adam Thielen"] },
+        { q: "What is the 'Skol' chant?", a: "A fan celebration", options: ["A play call", "A fan celebration", "A coaching drill", "A team mascot"] }
+    ],
+    "patriots": [
+        { q: "How many Super Bowls did Tom Brady win with the Patriots?", a: "6", options: ["4", "5", "6", "7"] },
+        { q: "What was the team's original name in 1960?", a: "Boston Patriots", options: ["New England Patriots", "Boston Patriots", "Bay State Patriots", "Massachusetts Patriots"] },
+        { q: "Who was the head coach for all 6 Patriots Super Bowl wins?", a: "Bill Belichick", options: ["Bill Parcells", "Bill Belichick", "Pete Carroll", "Raymond Berry"] },
+        { q: "What is the name of the Patriots' stadium?", a: "Gillette Stadium", options: ["Foxboro Stadium", "Gillette Stadium", "Patriots Park", "Boston Field"] },
+        { q: "In 2007, the Patriots became the first team to go ___ in the regular season.", a: "16-0", options: ["14-2", "15-1", "16-0", "17-0"] }
+    ],
+    "saints": [
+        { q: "What year did the Saints win their first Super Bowl?", a: "2009", options: ["2000", "2006", "2009", "2012"] },
+        { q: "Who is the Saints' all-time leader in passing yards?", a: "Drew Brees", options: ["Archie Manning", "Drew Brees", "Aaron Brooks", "Taysom Hill"] },
+        { q: "What is the name of the Saints' indoor stadium?", a: "Caesars Superdome", options: ["Caesars Superdome", "Louisiana Dome", "Saints Center", "New Orleans Field"] },
+        { q: "What is the team's anthem/chant?", a: "Who Dat?", options: ["Geaux Saints", "Who Dat?", "Rise Up", "Skol"] },
+        { q: "Which city did the Saints play a 'home' game in after Hurricane Katrina?", a: "San Antonio", options: ["Houston", "San Antonio", "Dallas", "Baton Rouge"] }
+    ],
+    "giants": [
+        { q: "Which QB led the Giants to two Super Bowl wins over the Patriots?", a: "Eli Manning", options: ["Phil Simms", "Eli Manning", "Daniel Jones", "Y.A. Tittle"] },
+        { q: "What is the name of the stadium the Giants share with the Jets?", a: "MetLife Stadium", options: ["Giants Stadium", "MetLife Stadium", "New Jersey Center", "Gotham Field"] },
+        { q: "Who is the only defensive player to win NFL MVP (played for Giants)?", a: "Lawrence Taylor", options: ["Michael Strahan", "Lawrence Taylor", "Harry Carson", "Sam Huff"] },
+        { q: "Which coach led the Giants to their first Super Bowl win in 1986?", a: "Bill Parcells", options: ["Tom Coughlin", "Bill Parcells", "Jim Fassel", "Bill Belichick"] },
+        { q: "What is the nickname for the Giants' defensive line in the 50s?", a: "The Big Blue Wrecking Crew", options: ["The Big Blue Wrecking Crew", "Steel Curtain", "Fearsome Four", "The G-Men"] }
+    ],
+    "jets": [
+        { q: "Who famously guaranteed a win in Super Bowl III?", a: "Joe Namath", options: ["Joe Namath", "Ken O'Brien", "Mark Sanchez", "Aaron Rodgers"] },
+        { q: "What was the Jets' original name?", a: "New York Titans", options: ["New York Jets", "New York Titans", "New York Flyers", "New York Stars"] },
+        { q: "What is the nickname for the Jets' dominant 1980s defensive line?", a: "New York Sack Exchange", options: ["Steel Curtain", "New York Sack Exchange", "Purple People Eaters", "The Wall"] },
+        { q: "Which stadium do the Jets share with the Giants?", a: "MetLife Stadium", options: ["Shea Stadium", "MetLife Stadium", "Jets Park", "Empire Field"] },
+        { q: "In 2009 and 2010, the Jets reached back-to-back ___.", a: "AFC Championships", options: ["Super Bowls", "AFC Championships", "Divisional Rounds", "Wild Cards"] }
+    ],
+    "eagles": [
+        { q: "Who was the QB for the Eagles' first Super Bowl win?", a: "Nick Foles", options: ["Donovan McNabb", "Nick Foles", "Carson Wentz", "Jalen Hurts"] },
+        { q: "What is the name of the 'Special' play from Super Bowl LII?", a: "Philly Special", options: ["Eagle Wing", "Philly Special", "The Catch", "The Miracle"] },
+        { q: "What is the name of the Eagles' stadium?", a: "Lincoln Financial Field", options: ["Veterans Stadium", "Lincoln Financial Field", "Eagle Field", "Liberty Center"] },
+        { q: "Who is the Eagles' all-time leader in rushing yards?", a: "LeSean McCoy", options: ["Brian Westbrook", "LeSean McCoy", "Wilbert Montgomery", "Duce Staley"] },
+        { q: "What year did the Eagles adopt their current 'Midnight Green' logo?", a: "1996", options: ["1990", "1996", "2003", "2010"] }
+    ],
+    "steelers": [
+        { q: "What was the nickname of the Steelers' 1970s defense?", a: "Steel Curtain", options: ["Iron Wall", "Steel Curtain", "Doomsday Defense", "The Wall"] },
+        { q: "How many Super Bowls have the Steelers won?", a: "6", options: ["4", "5", "6", "7"] },
+        { q: "What is the name of the fan-favorite yellow towel?", a: "Terrible Towel", options: ["Steel Towel", "Terrible Towel", "Magic Towel", "Iron Towel"] },
+        { q: "Who is the only QB to win 4 Super Bowls for the Steelers?", a: "Terry Bradshaw", options: ["Ben Roethlisberger", "Terry Bradshaw", "Neil O'Donnell", "Bobby Layne"] },
+        { q: "Which family has owned the Steelers since their founding in 1933?", a: "The Rooneys", options: ["The Rooneys", "The Maras", "The Hunts", "The Joneses"] }
+    ],
+    "sf49ers": [
+        { q: "How many Super Bowls did Jerry Rice win with the 49ers?", a: "3", options: ["2", "3", "4", "5"] },
+        { q: "What is the name of the 49ers' current stadium?", a: "Levi's Stadium", options: ["Candlestick Park", "Levi's Stadium", "San Fran Dome", "Golden Gate Field"] },
+        { q: "Which QB took over for Joe Montana and won Super Bowl XXIX?", a: "Steve Young", options: ["Steve Young", "Jeff Garcia", "Alex Smith", "Colin Kaepernick"] },
+        { q: "What famous 1981 play led to the 49ers' first Super Bowl?", a: "The Catch", options: ["The Catch", "The Drive", "The Fumble", "The Tackle"] },
+        { q: "What year were the 49ers founded?", a: "1946", options: ["1946", "1950", "1960", "1920"] }
+    ],
+    "seahawks": [
+        { q: "What is the nickname for Seahawks fans?", a: "The 12s", options: ["The Blue Crew", "The 12s", "The Sea-Hawks", "The Legion"] },
+        { q: "What was the nickname of the Seahawks' defense in the 2010s?", a: "Legion of Boom", options: ["Steel Curtain", "Legion of Boom", "No Fly Zone", "The Wall"] },
+        { q: "Who was the QB for the Seahawks' Super Bowl XLVIII win?", a: "Russell Wilson", options: ["Matt Hasselbeck", "Russell Wilson", "Geno Smith", "Jim Zorn"] },
+        { q: "What is the name of the Seahawks' stadium?", a: "Lumen Field", options: ["Kingdome", "CenturyLink Field", "Lumen Field", "Seattle Center"] },
+        { q: "Which RB is known as 'Beast Mode'?", a: "Marshawn Lynch", options: ["Shaun Alexander", "Marshawn Lynch", "Chris Carson", "Kenneth Walker"] }
+    ],
+    "buccaneers": [
+        { q: "How many Super Bowls have the Buccaneers won?", a: "2", options: ["1", "2", "3", "0"] },
+        { q: "Who was the QB for the Bucs' second Super Bowl win?", a: "Tom Brady", options: ["Brad Johnson", "Tom Brady", "Jameis Winston", "Baker Mayfield"] },
+        { q: "What is the name of the Bucs' stadium?", a: "Raymond James Stadium", options: ["Tampa Stadium", "Raymond James Stadium", "Pirate Field", "Buccaneer Cove"] },
+        { q: "What unique feature is inside the Bucs' stadium?", a: "A pirate ship", options: ["A swimming pool", "A pirate ship", "A roller coaster", "A lighthouse"] },
+        { q: "Which defensive legend has the most sacks in Bucs history?", a: "Lee Roy Selmon", options: ["Warren Sapp", "Lee Roy Selmon", "Simeon Rice", "Lavonte David"] }
+    ],
+    "titans": [
+        { q: "What city did the Titans play in before moving to Nashville?", a: "Houston", options: ["Dallas", "Houston", "Memphis", "St. Louis"] },
+        { q: "What was the team's original name?", a: "Houston Oilers", options: ["Houston Oilers", "Tennessee Oilers", "Nashville Titans", "Texas Oilers"] },
+        { q: "What famous play involved a kickoff return to beat the Bills?", a: "Music City Miracle", options: ["The Catch", "Music City Miracle", "The Comeback", "The Lateral"] },
+        { q: "Which RB is known as 'King Henry'?", a: "Derrick Henry", options: ["Eddie George", "Chris Johnson", "Derrick Henry", "Ty Spears"] },
+        { q: "What is the name of the Titans' stadium?", a: "Nissan Stadium", options: ["Adelphia Coliseum", "Nissan Stadium", "Titans Field", "LP Field"] }
+    ],
+    "commanders": [
+        { q: "What was the team's original name before 'Commanders'?", a: "Redskins", options: ["Redskins", "Senators", "Warriors", "Generals"] },
+        { q: "How many Super Bowls did the team win in the 1980s/90s?", a: "3", options: ["1", "2", "3", "4"] },
+        { q: "Who was the first Black QB to win a Super Bowl (with Washington)?", a: "Doug Williams", options: ["Joe Theismann", "Doug Williams", "Mark Rypien", "RGIII"] },
+        { q: "What is the name of the Commanders' stadium?", a: "Northwest Stadium", options: ["FedEx Field", "Northwest Stadium", "RFK Stadium", "Commanders Field"] },
+        { q: "Who was the legendary head coach during the team's 3 Super Bowl wins?", a: "Joe Gibbs", options: ["George Allen", "Joe Gibbs", "Mike Shanahan", "Ron Rivera"] }
+    ]
+};
+
+// --- 2. QUIZ STATE VARIABLES ---
+let currentQuestionIndex = 0;
+let quizScore = 0;
+
+// --- 3. THE QUIZ FUNCTIONS ---
+function startQuiz() {
+    // Reset state
+    currentQuestionIndex = 0;
+    quizScore = 0;
+    
+    // Hide the start button while playing
+    document.getElementById('quiz-question').style.display = 'block';
+    document.getElementById('quiz-options').style.display = 'grid';
+
+    const startBtn = document.getElementById('start-quiz-btn');
+    if (startBtn) startBtn.style.display = 'none';
+
+    // Update the UI to show we are starting
+    document.getElementById('quiz-status').innerHTML = "Good luck!";
+    
+    showQuestion();
+}
+
+function showQuestion() {
+    // Get questions for current team, or fallback to bills if id is missing
+    const questions = allTeamQuizzes[teamId] || allTeamQuizzes["bills"];
+    const quizContent = document.getElementById('quiz-options');
+    const questionText = document.getElementById('quiz-question');
+    const statusText = document.getElementById('quiz-status');
+
+    // If there are more questions to show
+    if (currentQuestionIndex < questions.length) {
+        const item = questions[currentQuestionIndex];
+        
+        // Update Question Text
+        questionText.innerText = item.q;
+        
+        // Clear previous options and generate new buttons
+        quizContent.innerHTML = ''; 
+
+        item.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.className = 'option-btn';
+            
+            // Use team color for the border (since teamData is in your global script)
+            if (teamData[teamId]) {
+                btn.style.borderColor = teamData[teamId].color;
+            }
+
+            btn.onclick = () => checkAnswer(opt, item.a, btn);
+            quizContent.appendChild(btn);
+        });
+
+        statusText.innerHTML = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+    } else {
+        // End of Quiz - Show Results
+        finishQuiz(questions.length);
+    }
+}
+
+function checkAnswer(selected, correct, btn) {
+    const questions = allTeamQuizzes[teamId] || allTeamQuizzes["bills"];
+    
+    // Disable all buttons so they can't click twice
+    const allButtons = document.querySelectorAll('.option-btn');
+    allButtons.forEach(b => b.disabled = true);
+
+    if (selected === correct) {
+        quizScore++;
+        btn.classList.add('correct-choice'); // Make sure this is in your CSS
+    } else {
+        btn.classList.add('wrong-choice'); // Make sure this is in your CSS
+    }
+
+    // Wait 1 second, then move to next question
+    setTimeout(() => {
+        currentQuestionIndex++;
+        showQuestion();
+    }, 1000);
+}
+
+function finishQuiz(total) {
+    const questionText = document.getElementById('quiz-question');
+    const quizContent = document.getElementById('quiz-options');
+    const statusText = document.getElementById('quiz-status');
+
+    // 1. Update text to show final results
+    questionText.innerHTML = `<strong>Quiz Complete!</strong>`;
+    statusText.innerHTML = `Final Score: ${quizScore} out of ${total}`;
+    
+    // 2. Clear out the 4 multiple choice buttons
+    quizContent.innerHTML = '';
+    
+    // 3. Switch layout from Grid to Flex to center the single button
+    quizContent.style.display = "flex";
+    quizContent.style.flexDirection = "column";
+    quizContent.style.alignItems = "center";
+    quizContent.style.justifyContent = "center";
+    quizContent.style.width = "100%";
+    quizContent.style.marginTop = "20px";
+
+    // 4. Create the "Try Again" button
+    const restartBtn = document.createElement('button');
+    restartBtn.innerText = "TRY AGAIN";
+    
+    // Applying these classes triggers the CSS hover logic automatically
+    restartBtn.className = "back-btn small-btn"; 
+    
+    // 5. Reset the layout and start over when clicked
+    restartBtn.onclick = () => {
+        // Switch back to Grid for the questions
+        quizContent.style.display = "grid"; 
+        startQuiz();
+    };
+    
+    quizContent.appendChild(restartBtn);
+}
+</script>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

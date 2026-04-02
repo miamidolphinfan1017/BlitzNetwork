@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>NFL Surveys</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+    
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html" class="nav-active">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<div class="login-bg"></div>
+
+<main class="login-main">
+    <div class="login-box" id="survey-box">
+        <form id="multi-step-survey">
+
+                <div class="survey-step active" data-step="1">
+                    <h3>How closely do you follow the NFL?</h3>
+                    <label class="survey-option"><input type="radio" name="q1" value="Every game"> Every game</label>
+                    <label class="survey-option"><input type="radio" name="q1" value="Most games"> Most games</label>
+                    <label class="survey-option"><input type="radio" name="q1" value="Occasionally"> Occasionally</label>
+                    <label class="survey-option"><input type="radio" name="q1" value="Only playoffs"> Only playoffs</label>
+                    <label class="survey-option"><input type="radio" name="q1" value="Not much"> Not much</label>
+                </div>
+
+                <div class="survey-step" data-step="2">
+                    <h3>Who is your favorite NFL team?</h3>
+                    <label class="survey-option">
+                        <input type="text" name="q2" placeholder="Type your favorite team" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--input-text);">
+                    </label>
+                </div>
+
+                <div class="survey-step" data-step="3">
+                    <h3>Which conference do you think is stronger right now?</h3>
+                    <label class="survey-option"><input type="radio" name="q3" value="AFC"> AFC</label>
+                    <label class="survey-option"><input type="radio" name="q3" value="NFC"> NFC</label>
+                    <label class="survey-option"><input type="radio" name="q3" value="About equal"> About equal</label>
+                </div>
+
+                <div class="survey-step" data-step="4">
+                    <h3>Who do you think will win the next Super Bowl?</h3>
+                    <label class="survey-option"><input type="radio" name="q4" value="Chiefs"> Chiefs</label>
+                    <label class="survey-option"><input type="radio" name="q4" value="49ers"> 49ers</label>
+                    <label class="survey-option"><input type="radio" name="q4" value="Eagles"> Eagles</label>
+                    <label class="survey-option"><input type="radio" name="q4" value="Bills"> Bills</label>
+                    <label class="survey-option"><input type="radio" name="q4" value="Ravens"> Ravens</label>
+                    <label class="survey-option"><input type="radio" name="q4" value="Cowboys"> Cowboys</label>
+                    <label class="survey-option"><input type="radio" name="q4" value="Other"> Other</label>
+                </div>
+
+                <div class="survey-step" data-step="5">
+                    <h3>Which team is most likely to be a surprise breakout team next season?</h3>
+                    <label class="survey-option"><input type="radio" name="q5" value="Texans"> Texans</label>
+                    <label class="survey-option"><input type="radio" name="q5" value="Lions"> Lions</label>
+                    <label class="survey-option"><input type="radio" name="q5" value="Jaguars"> Jaguars</label>
+                    <label class="survey-option"><input type="radio" name="q5" value="Jets"> Jets</label>
+                    <label class="survey-option"><input type="radio" name="q5" value="Packers"> Packers</label>
+                    <label class="survey-option"><input type="radio" name="q5" value="Other"> Other</label>
+                </div>
+
+                <div class="survey-step" data-step="6">
+                    <h3>Who is the best quarterback in the NFL right now?</h3>
+                    <label class="survey-option"><input type="radio" name="q6" value="Patrick Mahomes"> Patrick Mahomes</label>
+                    <label class="survey-option"><input type="radio" name="q6" value="Josh Allen"> Josh Allen</label>
+                    <label class="survey-option"><input type="radio" name="q6" value="Joe Burrow"> Joe Burrow</label>
+                    <label class="survey-option"><input type="radio" name="q6" value="Lamar Jackson"> Lamar Jackson</label>
+                    <label class="survey-option"><input type="radio" name="q6" value="Jalen Hurts"> Jalen Hurts</label>
+                    <label class="survey-option"><input type="radio" name="q6" value="Other"> Other</label>
+                </div>
+
+                <div class="survey-step" data-step="7">
+                    <h3>Which young QB are you most excited to watch next season?</h3>
+                    <label class="survey-option"><input type="radio" name="q7" value="C.J. Stroud"> C.J. Stroud</label>
+                    <label class="survey-option"><input type="radio" name="q7" value="Anthony Richardson"> Anthony Richardson</label>
+                    <label class="survey-option"><input type="radio" name="q7" value="Jordan Love"> Jordan Love</label>
+                    <label class="survey-option"><input type="radio" name="q7" value="Brock Purdy"> Brock Purdy</label>
+                    <label class="survey-option"><input type="radio" name="q7" value="Caleb Williams"> Caleb Williams</label>
+                    <label class="survey-option"><input type="radio" name="q7" value="Other"> Other</label>
+                </div>
+
+                <div class="survey-step" data-step="8">
+                    <h3>Which team has the best chance to win their division?</h3>
+                    <label class="survey-option"><input type="radio" name="q8" value="Chiefs"> Chiefs</label>
+                    <label class="survey-option"><input type="radio" name="q8" value="Eagles"> Eagles</label>
+                    <label class="survey-option"><input type="radio" name="q8" value="49ers"> 49ers</label>
+                    <label class="survey-option"><input type="radio" name="q8" value="Bills"> Bills</label>
+                    <label class="survey-option"><input type="radio" name="q8" value="Cowboys"> Cowboys</label>
+                    <label class="survey-option"><input type="radio" name="q8" value="Other"> Other</label>
+                </div>
+
+                <div class="survey-step" data-step="9">
+                    <h3>What is the most important factor for a team’s success?</h3>
+                    <label class="survey-option"><input type="radio" name="q9" value="Quarterback play"> Quarterback play</label>
+                    <label class="survey-option"><input type="radio" name="q9" value="Defense"> Defense</label>
+                    <label class="survey-option"><input type="radio" name="q9" value="Coaching"> Coaching</label>
+                    <label class="survey-option"><input type="radio" name="q9" value="Offensive weapons"> Offensive weapons</label>
+                    <label class="survey-option"><input type="radio" name="q9" value="Team chemistry"> Team chemistry</label>
+                </div>
+
+                <div class="survey-step" data-step="10">
+                    <h3>Which NFL event do you enjoy the most?</h3>
+                    <label class="survey-option"><input type="radio" name="q10" value="Regular season"> Regular season</label>
+                    <label class="survey-option"><input type="radio" name="q10" value="Playoffs"> Playoffs</label>
+                    <label class="survey-option"><input type="radio" name="q10" value="Super Bowl"> Super Bowl</label>
+                    <label class="survey-option"><input type="radio" name="q10" value="NFL Draft"> NFL Draft</label>
+                    <label class="survey-option"><input type="radio" name="q10" value="Free Agency"> Free Agency</label>
+                </div>
+
+                <div class="survey-step" data-step="11">
+                    <h3>Do you think your favorite team will make the playoffs next season?</h3>
+                    <label class="survey-option"><input type="radio" name="q11" value="Yes"> Yes</label>
+                    <label class="survey-option"><input type="radio" name="q11" value="No"> No</label>
+                    <label class="survey-option"><input type="radio" name="q11" value="Not sure"> Not sure</label>
+                </div>
+
+                <div class="survey-step" data-step="12">
+                    <h3>Which division is the toughest in the NFL?</h3>
+                    <label class="survey-option"><input type="radio" name="q12" value="AFC North"> AFC North</label>
+                    <label class="survey-option"><input type="radio" name="q12" value="AFC East"> AFC East</label>
+                    <label class="survey-option"><input type="radio" name="q12" value="NFC East"> NFC East</label>
+                    <label class="survey-option"><input type="radio" name="q12" value="NFC West"> NFC West</label>
+                    <label class="survey-option"><input type="radio" name="q12" value="Other"> Other</label>
+                </div>
+
+                <div class="survey-step" data-step="13">
+                    <h3>What type of play excites you the most?</h3>
+                    <label class="survey-option"><input type="radio" name="q13" value="Deep touchdown pass"> Deep touchdown pass</label>
+                    <label class="survey-option"><input type="radio" name="q13" value="Big hit on defense"> Big hit on defense</label>
+                    <label class="survey-option"><input type="radio" name="q13" value="Long rushing TD"> Long rushing TD</label>
+                    <label class="survey-option"><input type="radio" name="q13" value="Interception"> Interception</label>
+                    <label class="survey-option"><input type="radio" name="q13" value="Special teams play"> Special teams play</label>
+                </div>
+
+                <div class="survey-step" data-step="14">
+                    <h3>Do you prefer offense-heavy or defense-heavy football?</h3>
+                    <label class="survey-option"><input type="radio" name="q14" value="Offense"> Offense</label>
+                    <label class="survey-option"><input type="radio" name="q14" value="Defense"> Defense</label>
+                    <label class="survey-option"><input type="radio" name="q14" value="Balanced"> Balanced</label>
+                </div>
+
+                <div class="survey-step" data-step="15">
+                    <h3>How confident are you in the direction of the NFL overall?</h3>
+                    <label class="survey-option"><input type="radio" name="q15" value="Very confident"> Very confident</label>
+                    <label class="survey-option"><input type="radio" name="q15" value="Somewhat confident"> Somewhat confident</label>
+                    <label class="survey-option"><input type="radio" name="q15" value="Neutral"> Neutral</label>
+                    <label class="survey-option"><input type="radio" name="q15" value="Somewhat concerned"> Somewhat concerned</label>
+                    <label class="survey-option"><input type="radio" name="q15" value="Very concerned"> Very concerned</label>
+                </div>
+
+                <div class="survey-nav">
+                    <button type="button" id="prevBtn" class="survey-btn secondary" disabled>Previous</button>
+                    <button type="button" id="nextBtn" class="survey-btn">Next</button>
+                    <button type="submit" id="submitBtn" class="survey-btn" style="display: none;">Submit All Votes</button>
+                </div>
+            </form>
+            <div id="survey-result" style="margin-top: 15px; color: #4CAF50; text-align: center;"></div>
+        </form>
+    </div>
+</main>
+
+
+    <script src="survey-script.js"></script>
+
+</div>
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check memory for the user
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        // If logged in, update the buttons
+        if (user) {
+            if (navBtn) { 
+                navBtn.innerText = "ACCOUNT"; 
+                navBtn.href = "Account.html"; 
+            }
+            if (sideLink) { 
+                sideLink.innerText = "Account"; 
+                sideLink.href = "Account.html"; 
+            }
+        }
+        
+        // --- 2. AUTO-HIGHLIGHT SIDEBAR LINK ---
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+    });
+
+
+
+
+
+    // Check both memory types
+    const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    const navButton = document.getElementById('nav-login-btn');
+	const steps = document.querySelectorAll(".survey-step");
+	const nextBtn = document.getElementById("nextBtn");
+	const prevBtn = document.getElementById("prevBtn");
+const submitBtn = document.getElementById("submitBtn");
+const surveyForm = document.getElementById("multi-step-survey");
+const resultDiv = document.getElementById('survey-result');
+if (surveyForm) {
+    surveyForm.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+        }
+    });
+}
+
+    // --- AUTO-HIGHLIGHT ACTIVE NAV LINK ---
+    // 1. Get the name of the current file (e.g., "Quizzes.html")
+    const currentFile = window.location.pathname.split("/").pop();
+
+    // 2. Find all links in the navbar
+    const navLinks = document.querySelectorAll('.navbarlist a');
+
+    // 3. Loop through them and add the 'nav-active' class to the one that matches
+    navLinks.forEach(link => {
+        // We use decodeURIComponent in case your filenames have spaces (like "NFL Teams.html")
+        const linkFile = link.getAttribute('href');
+        
+        if (linkFile === currentFile) {
+            link.classList.add('nav-active');
+        }
+    });
+
+    if (navButton) {
+        if (user) {
+            // If someone IS logged in
+            navButton.innerText = "Profile";
+            navButton.href = "Account.html"; 
+        } else {
+            // If NO ONE is logged in
+            navButton.innerText = "Login";
+            navButton.href = "Login.html";
+        }
+    }
+
+// Button hover tooltips
+if (nextBtn) nextBtn.title = "Next (Enter)";
+if (prevBtn) prevBtn.title = "Previous (Backspace)";
+
+// Keyboard navigation: Enter = Next, Backspace = Previous
+document.addEventListener("keydown", (e) => {
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+    const type = (e.target && e.target.type) ? e.target.type.toLowerCase() : "";
+    if (tag === "textarea") return;
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (nextBtn && nextBtn.style.display !== "none") nextBtn.click();
+        else if (submitBtn && submitBtn.style.display !== "none") submitBtn.click();
+    } else if (e.key === "Backspace") {
+        // Avoid breaking text edits
+        if (tag === "input" && (type === "text" || type === "search" || type === "email" || type === "password")) return;
+        e.preventDefault();
+        if (prevBtn && !prevBtn.disabled) prevBtn.click();
+    }
+});
+
+let currentStep = 0;
+
+// 2. The function to show/hide questions
+function updateSteps() {
+    steps.forEach((step, index) => {
+        step.classList.toggle("active", index === currentStep);
+    });
+
+    // Disable 'Previous' if on the first question
+    prevBtn.disabled = currentStep === 0;
+    
+    // Show 'Submit' only on the last question, otherwise show 'Next'
+    if (currentStep === steps.length - 1) {
+        nextBtn.style.display = "none";
+        submitBtn.style.display = "block";
+    } else {
+        nextBtn.style.display = "block";
+        submitBtn.style.display = "none";
+    }
+}
+
+// 3. Button Listeners
+nextBtn.addEventListener("click", () => {
+    // CHECK: If the user is on the first question and NOT logged in
+    if (currentStep === 0 && !user) {
+        alert("Please login to continue the survey!");
+        localStorage.setItem('redirectAfterLogin', 'Surveys.html');
+        window.location.href = "Login.html"; // Redirects them to login immediately
+        return; // Stops the script so they don't move to Question 2
+    }
+
+    // If they ARE logged in, or already past the first check, let them continue
+    if (currentStep < steps.length - 1) {
+        currentStep++;
+        updateSteps();
+    }
+});
+
+prevBtn.addEventListener("click", () => {
+    if (currentStep > 0) {
+        currentStep--;
+        updateSteps();
+    }
+});
+
+// 4. Final Submission
+surveyForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Re-using your login check logic
+    if (!user) {
+        alert("Please login to submit your survey!");
+        localStorage.setItem('redirectAfterLogin', 'Surveys.html');
+        window.location.href = "Login.html";
+        return;
+    }
+    
+    // Collect all data from the radio buttons
+    const formData = new FormData(surveyForm);
+    const results = Object.fromEntries(formData.entries());
+    
+    // Save the whole object to localStorage under the user's name
+    localStorage.setItem(`${user}_survey_results`, JSON.stringify(results));
+    
+    // Success Message
+    document.getElementById("survey-result").innerText = "Survey Submitted! Well done, " + user + "!";
+    surveyForm.style.display = "none"; // Hides the boxes after finish
+});
+
+// Initialize the first step
+updateSteps();
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
