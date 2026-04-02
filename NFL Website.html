@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<title>NFL Website</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+
+    <div class="header-right"> 
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html" class="nav-active">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<div class="nflwebsite-wrapper">
+    <div class="portal-content">
+        <h1 class="tovisitnflwebsite">Visit Official NFL.com</h1>
+        
+        <a href="http://www.nfl.com" target="_blank" class="main-nfl-link">
+            <img src="nfl logo.jfif" class="nfllogo" alt="NFL Shield">
+        </a>
+    </div>
+</div>
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check memory for the user
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        // If logged in, update the buttons
+        if (user) {
+            if (navBtn) { 
+                navBtn.innerText = "ACCOUNT"; 
+                navBtn.href = "Account.html"; 
+            }
+            if (sideLink) { 
+                sideLink.innerText = "Account"; 
+                sideLink.href = "Account.html"; 
+            }
+        }
+        
+        // --- 2. AUTO-HIGHLIGHT SIDEBAR LINK ---
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+    });
+
+
+
+    
+    // Check both memory types
+    const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    const navButton = document.getElementById('nav-login-btn');
+
+    // --- AUTO-HIGHLIGHT ACTIVE NAV LINK ---
+    // 1. Get the name of the current file (e.g., "Quizzes.html")
+    const currentFile = decodeURIComponent(window.location.pathname.split("/").pop());
+
+    // 2. Find all links in the navbar
+    const navLinks = document.querySelectorAll('.navbarlist a');
+
+    // 3. Loop through them and add the 'nav-active' class to the one that matches
+    navLinks.forEach(link => {
+        // We use decodeURIComponent in case your filenames have spaces (like "NFL Teams.html")
+        const linkFile = decodeURIComponent(link.getAttribute('href'));
+
+        if (linkFile === currentFile) {
+            link.classList.add('nav-active');
+        }
+    });
+
+    if (navButton) {
+        if (user) {
+            // If someone IS logged in
+            navButton.innerText = "Profile";
+            navButton.href = "Account.html"; 
+        } else {
+            // If NO ONE is logged in
+            navButton.innerText = "Login";
+            navButton.href = "Login.html";
+        }
+    }
+</script>
+
+</body>
+</html>
+
+<!--*alt - 0153 for trademark symbol*-->
+
+
+
+
+
+

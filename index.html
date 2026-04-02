@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Blitz Network</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="American Football Information and Facts">
+  <meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+  <meta name="author" content="Riley Cooperman">
+  <meta name="viewport" content="width=device-width, initial scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="Index.html" class="nav-active">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+
+<div class="home-wrapper">
+    
+    <header>
+        <h1 class="footballforfun">Blitz Network</h1>
+    </header>
+
+    <p class="homepagesummary">
+        This website will have a lot of things to do relating to the NFL.<br>
+        These things include the link to the NFL website, photos, surveys, quizzes, and more!
+    </p>
+
+    <div class="category-container" id="category-container">
+
+        <a href="NFL Teams.html" class="category-card">
+            <h3>🏈 Teams</h3>
+            <p>Explore and learn about every team in the league.</p>
+        </a>
+
+        <a href="Photos.html" class="category-card">
+            <h3>📸 Photos</h3>
+            <p>View the best moments from throughout the season.</p>
+        </a>
+        
+        <a href="Quizzes.html" class="category-card">
+            <h3>🧠 Quizzes</h3>
+            <p>Test your NFL IQ and try to get the best score.</p>
+        </a>
+
+        <a href="Surveys.html" class="category-card">
+        <h3>📊 Surveys</h3>
+        <p>Vote for your favorite players and teams.</p>
+        </a>
+
+        <a href="Login.html" class="category-card" id="dynamic-box-link">
+        <h3 id="dynamic-box-title">👤 Login</h3>
+        <p id="dynamic-box-desc">Sign in to track your scores and profile!</p>
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Get the user from memory
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+        const boxLink = document.getElementById('dynamic-box-link');
+        const boxTitle = document.getElementById('dynamic-box-title');
+        const boxDesc = document.getElementById('dynamic-box-desc');
+        const welcomeHeader = document.querySelector('.footballforfun');
+        const summaryText = document.querySelector('.homepagesummary');
+
+        // 3. Update the Page if a user is logged in
+        if (user) {
+            // Update Navbar & Sidebar
+            if (navBtn) { navBtn.innerText = "ACCOUNT"; navBtn.href = "Account.html"; }
+            if (sideLink) { sideLink.innerText = "Account"; sideLink.href = "Account.html"; }
+
+            // Change "Football For Fun" to "Welcome Riley!"
+            if (welcomeHeader) {
+                welcomeHeader.innerText = `Welcome ${user}!`;
+            }
+
+            // Update the summary text to be more personal
+            if (summaryText) {
+                summaryText.innerHTML = 
+                    `Glad to see you! You've got quizzes to beat, photos to see, and knowledge to be learned.<br>Where do you want to start?`;
+            }
+
+            // Change the Login Card into the Account Card
+            if (boxLink) {
+                boxLink.href = "Account.html";
+                boxTitle.innerText = "👤 My Account";
+                boxDesc.innerText = "View your personal best scores and profile settings.";
+            }
+        }
+    });
+
+</script>
+
+</body>
+</html>
+
+
+<!--
+Account (" + user + ")
+can replace what the account says
+-->
+
+
+
+
+
+

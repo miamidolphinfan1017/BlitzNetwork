@@ -1,0 +1,660 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>NFL Quizzes</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+    
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html" class="nav-active">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+
+<div class="login-bg"></div>
+
+    <main class="login-main">
+        <div class="login-box" id="quiz-container">
+            <div id="quiz-setup" style="position:relative;">
+                <h1>Choose Your Quiz</h1>
+                <p class="muted" style="margin-top:5px;">Pick a mode, then choose question count.</p>
+                
+                <div id="quiz-mode-card" class="info-section" style="padding:14px;text-align:center;margin-top:14px;">
+                    <h3>Pick a Mode</h3>
+                    <div class="quiz-choice-grid">
+                        <button class="quiz-btn select-quiz-btn" data-mode="current">Current NFL</button>
+                        <button class="quiz-btn select-quiz-btn" data-mode="alltime">All-Time</button>
+                        <button class="quiz-btn select-quiz-btn" data-mode="both">Both</button>
+                    </div>
+                </div>
+
+                <div id="quiz-count-card" class="info-section" style="padding:14px;text-align:center;margin-top:14px;display:none;position:relative;">
+                    <h3>Pick # of Questions</h3>
+                    <div class="quiz-count-grid">
+                        <button class="quiz-btn select-count-btn" data-count="5">5</button>
+                        <button class="quiz-btn select-count-btn" data-count="10">10</button>
+                        <button class="quiz-btn select-count-btn" data-count="15">15</button>
+                        <button class="quiz-btn select-count-btn" data-count="20">20</button>
+                        <button class="quiz-btn select-count-btn" data-count="25">25</button>
+                        <button class="quiz-btn select-count-btn" data-count="30">30</button>
+                        <button class="quiz-btn select-count-btn" data-count="40">40</button>
+                        <button class="quiz-btn select-count-btn" data-count="50">50</button>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center;">
+                    <button id="start-quiz-btn" class="quiz-btn" style="display:none;">Start Quiz</button>
+                    <button id="random-quiz-btn" class="quiz-btn" style="background:#4CAF50;">Random 🎲</button>
+                </div>
+            </div>
+
+            <div id="quiz-play" style="display:none;">
+                <h1 id="question-number">Question 1</h1>
+                <hr style="margin: 10px 0; opacity: 0.3;">
+                
+                <p id="question-text" style="font-size: 1.2rem; margin: 20px 0; min-height: 60px;">
+                    Loading question...
+                </p>
+                
+                <div id="options-container"></div>
+
+                <p id="feedback" style="margin-top: 20px; font-weight: bold; min-height: 30px;"></p>
+            </div>
+        </div>
+    </main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check memory for the user
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        // If logged in, update the buttons
+        if (user) {
+            if (navBtn) { 
+                navBtn.innerText = "ACCOUNT"; 
+                navBtn.href = "Account.html"; 
+            }
+            if (sideLink) { 
+                sideLink.innerText = "Account"; 
+                sideLink.href = "Account.html"; 
+            }
+        }
+        
+        // --- 2. AUTO-HIGHLIGHT SIDEBAR LINK ---
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+    });
+
+
+
+    // Check both memory types
+    const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    const navButton = document.getElementById('nav-login-btn');
+
+    if (navButton) {
+
+        // --- AUTO-HIGHLIGHT ACTIVE NAV LINK ---
+        // 1. Get the name of the current file (e.g., "Quizzes.html")
+        const currentFile = decodeURIComponent(window.location.pathname.split("/").pop());
+
+        // 2. Find all links in the navbar
+        const navLinks = document.querySelectorAll('.navbarlist a');
+
+        // 3. Loop through them and add the 'nav-active' class to the one that matches
+        navLinks.forEach(link => {
+            const linkFile = link.getAttribute('href');
+            
+            if (linkFile === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+
+        if (user) {
+            // If someone IS logged in
+            navButton.innerText = "Profile";
+            navButton.href = "Account.html"; 
+        } else {
+            // If NO ONE is logged in
+            navButton.innerText = "Login";
+            navButton.href = "Login.html";
+        }
+    }
+
+    // --- FOR THE QUIZ ---
+
+    const setupView = document.getElementById("quiz-setup");
+    const playView = document.getElementById("quiz-play");
+    const startBtn = document.getElementById("start-quiz-btn");
+    const randomBtn = document.getElementById("random-quiz-btn");
+    const countCard = document.getElementById("quiz-count-card");
+    const modeCard = document.getElementById("quiz-mode-card");
+
+    const questionCounts = [10, 15, 20, 25, 30, 40, 50];
+    let selectedMode = "";
+    let selectedCount = 0;
+    let quizData = [];
+    let currentQuestion = 0;
+    let score = 0;
+
+    function makePlaceholderSet(prefix, count) {
+        const items = [];
+        for (let i = 1; i <= count; i++) {
+            items.push({
+                q: `${prefix} Question ${i}`,
+                a: `${prefix} Answer A ${i}`,
+                options: [
+                    `${prefix} Answer A ${i}`,
+                    `${prefix} Answer B ${i}`,
+                    `${prefix} Answer C ${i}`,
+                    `${prefix} Answer D ${i}`
+                ]
+            });
+        }
+        return items;
+    }
+
+    const currentQuestions = [
+        { id: 1, question: "Which team won Super Bowl LX in February 2026?", options: ["Seattle Seahawks", "New England Patriots", "Kansas City Chiefs", "San Francisco 49ers"], answer: "Seattle Seahawks", difficulty: "easy" },
+        { id: 2, question: "Who is the star quarterback for the Kansas City Chiefs?", options: ["Patrick Mahomes", "Josh Allen", "Joe Burrow", "Lamar Jackson"], answer: "Patrick Mahomes", difficulty: "easy" },
+        { id: 3, question: "Which city is home to the Lions?", options: ["Detroit", "Chicago", "Green Bay", "Minnesota"], answer: "Detroit", difficulty: "easy" },
+        { id: 4, question: "What is the primary color of the Cleveland Browns' helmets?", options: ["Orange", "Brown", "White", "Black"], answer: "Orange", difficulty: "easy" },
+        { id: 5, question: "How many points is a touchdown worth (before the extra point)?", options: ["3", "6", "7", "2"], answer: "6", difficulty: "easy" },
+        { id: 6, question: "Who was the #1 overall pick in the 2025 NFL Draft?", options: ["Shedeur Sanders", "Caleb Williams", "Travis Hunter", "Quinn Ewers"], answer: "Shedeur Sanders", difficulty: "easy" },
+        { id: 7, question: "Which team has a star pass rusher named Myles Garrett?", options: ["Cleveland Browns", "Pittsburgh Steelers", "Dallas Cowboys", "LA Rams"], answer: "Cleveland Browns", difficulty: "easy" },
+        { id: 8, question: "Which position does Cam Little play?", options: ["Kicker", "Quarterback", "Wide Receiver", "Linebacker"], answer: "Kicker", difficulty: "easy" },
+        { id: 9, question: "What team does Christian McCaffrey play for?", options: ["San Francisco 49ers", "Carolina Panthers", "Seattle Seahawks", "Denver Broncos"], answer: "San Francisco 49ers", difficulty: "easy" },
+        { id: 10, question: "How many players are on the field for one team at a time?", options: ["11", "12", "10", "9"], answer: "11", difficulty: "easy" },
+        { id: 11, question: "Which team won the Super Bowl in 2024 and 2025?", options: ["Kansas City Chiefs", "Philadelphia Eagles", "Baltimore Ravens", "Buffalo Bills"], answer: "Kansas City Chiefs", difficulty: "easy" },
+        { id: 12, question: "What is the name of the stadium where the Dallas Cowboys play?", options: ["AT&T Stadium", "SoFi Stadium", "MetLife Stadium", "Allegiant Stadium"], answer: "AT&T Stadium", difficulty: "easy" },
+        { id: 13, question: "Which team uses the 'Terrible Towel'?", options: ["Pittsburgh Steelers", "Cleveland Browns", "Cincinnati Bengals", "Baltimore Ravens"], answer: "Pittsburgh Steelers", difficulty: "easy" },
+        { id: 14, question: "Which player is known as 'Cheetah'?", options: ["Tyreek Hill", "Jaylen Waddle", "Justin Jefferson", "Ja'Marr Chase"], answer: "Tyreek Hill", difficulty: "easy" },
+        { id: 15, question: "In what city was Super Bowl LX (2026) held?", options: ["Santa Clara", "Las Vegas", "New Orleans", "Miami"], answer: "Santa Clara", difficulty: "easy" },
+        { id: 16, question: "What is the maximum number of downs a team gets to reach a first down?", options: ["4", "3", "5", "2"], answer: "4", difficulty: "easy" },
+        { id: 17, question: "Who is the head coach of the Pittsburgh Steelers?", options: ["Mike Tomlin", "John Harbaugh", "Andy Reid", "Sean McVay"], answer: "Mike Tomlin", difficulty: "easy" },
+        { id: 18, question: "Which team drafted Caleb Williams #1 overall in 2024?", options: ["Chicago Bears", "Washington Commanders", "New England Patriots", "Arizona Cardinals"], answer: "Chicago Bears", difficulty: "easy" },
+        { id: 19, question: "What do you call the play where the defense tackles the QB behind the line?", options: ["Sack", "Interception", "Fumble", "Safety"], answer: "Sack", difficulty: "easy" },
+        { id: 20, question: "Which team plays their home games at Lambeau Field?", options: ["Green Bay Packers", "Minnesota Vikings", "Detroit Lions", "Chicago Bears"], answer: "Green Bay Packers", difficulty: "easy" },
+        { id: 21, question: "Who is the quarterback for the Baltimore Ravens?", options: ["Lamar Jackson", "Joe Burrow", "Deshaun Watson", "Russell Wilson"], answer: "Lamar Jackson", difficulty: "easy" },
+        { id: 22, question: "Which team did Saquon Barkley join in 2024?", options: ["Philadelphia Eagles", "New York Giants", "Dallas Cowboys", "Chicago Bears"], answer: "Philadelphia Eagles", difficulty: "easy" },
+        { id: 23, question: "What is the term for a 3-point kick?", options: ["Field Goal", "Punt", "Extra Point", "Kickoff"], answer: "Field Goal", difficulty: "easy" },
+        { id: 24, question: "Which team has a star receiver named CeeDee Lamb?", options: ["Dallas Cowboys", "Houston Texans", "Atlanta Falcons", "Miami Dolphins"], answer: "Dallas Cowboys", difficulty: "easy" },
+        { id: 25, question: "Which conference do the New York Jets play in?", options: ["AFC", "NFC", "WFC", "EFC"], answer: "AFC", difficulty: "easy" },
+        { id: 26, question: "In the 2025 season, Myles Garrett broke the NFL single-season record for sacks. How many did he get?", options: ["23.0", "22.5", "21.0", "24.5"], answer: "23.0", difficulty: "medium" },
+        { id: 27, question: "Which team does kicker Cam Little play for as of 2026?", options: ["Jacksonville Jaguars", "Dallas Cowboys", "Kansas City Chiefs", "Detroit Lions"], answer: "Jacksonville Jaguars", difficulty: "medium" },
+        { id: 28, question: "Who won the NFL MVP for the 2025 season?", options: ["Josh Allen", "Lamar Jackson", "C.J. Stroud", "Jaxon Smith-Njigba"], answer: "Josh Allen", difficulty: "medium" },
+        { id: 29, question: "Which Seahawks player won the 2025 Offensive Player of the Year?", options: ["Jaxon Smith-Njigba", "Kenneth Walker III", "DK Metcalf", "Sam Darnold"], answer: "Jaxon Smith-Njigba", difficulty: "medium" },
+        { id: 30, question: "Where did the Jaguars' Cam Little play college football?", options: ["Arkansas", "Alabama", "LSU", "Georgia"], answer: "Arkansas", difficulty: "medium" },
+        { id: 31, question: "Who was the quarterback for the Seahawks in their Super Bowl LX victory?", options: ["Sam Darnold", "Geno Smith", "Drew Lock", "Bo Nix"], answer: "Sam Darnold", difficulty: "medium" },
+        { id: 32, question: "Which team traded for WR Jaylen Waddle in March 2026?", options: ["Denver Broncos", "New York Jets", "Kansas City Chiefs", "Buffalo Bills"], answer: "Denver Broncos", difficulty: "medium" },
+        { id: 33, question: "Myles Garrett surpassed which Browns legend to become the all-time franchise sack leader?", options: ["Clay Matthews Jr.", "Joe Thomas", "Jerry Sherk", "Paul Wiggin"], answer: "Clay Matthews Jr.", difficulty: "medium" },
+        { id: 34, question: "Which rookie quarterback set a record with an 89.7% completion rate in a single game in 2024?", options: ["Bo Nix", "Caleb Williams", "Jayden Daniels", "Drake Maye"], answer: "Bo Nix", difficulty: "medium" },
+        { id: 35, question: "What star CB did the Chiefs trade to the Rams in early 2026?", options: ["Trent McDuffie", "L'Jarius Sneed", "Jaylen Watson", "Joshua Williams"], answer: "Trent McDuffie", difficulty: "medium" },
+        { id: 36, question: "Which team signed RB Kenneth Walker III in free agency in March 2026?", options: ["Kansas City Chiefs", "Detroit Lions", "Dallas Cowboys", "Philadelphia Eagles"], answer: "Kansas City Chiefs", difficulty: "medium" },
+        { id: 37, question: "Who led the NFL in receiving yards during the 2025 regular season?", options: ["Jaxon Smith-Njigba", "Justin Jefferson", "CeeDee Lamb", "Puka Nacua"], answer: "Jaxon Smith-Njigba", difficulty: "medium" },
+        { id: 38, question: "Which QB was traded to the Chiefs to be Mahomes' backup in 2026?", options: ["Justin Fields", "Geno Smith", "Russell Wilson", "Mac Jones"], answer: "Justin Fields", difficulty: "medium" },
+        { id: 39, question: "Who was named the 2025 NFL Defensive Player of the Year?", options: ["Carson Schwesinger", "Myles Garrett", "T.J. Watt", "Maxx Crosby"], answer: "Carson Schwesinger", difficulty: "medium" },
+        { id: 40, question: "Which team did the Steelers acquire WR Michael Pittman Jr. from in 2026?", options: ["Indianapolis Colts", "Chicago Bears", "Houston Texans", "Arizona Cardinals"], answer: "Indianapolis Colts", difficulty: "medium" },
+        { id: 41, question: "How many games did the Seattle Seahawks win in the 2025 regular season?", options: ["14", "13", "15", "12"], answer: "14", difficulty: "medium" },
+        { id: 42, question: "Which team hired Jeff Hafley as their head coach for the 2026 season?", options: ["Miami Dolphins", "New York Jets", "Tennessee Titans", "Las Vegas Raiders"], answer: "Miami Dolphins", difficulty: "medium" },
+        { id: 43, question: "Which player holds the NFL record for most receiving yards by a rookie (set in 2023)?", options: ["Puka Nacua", "Justin Jefferson", "Ja'Marr Chase", "Marvin Harrison Jr."], answer: "Puka Nacua", difficulty: "medium" },
+        { id: 44, question: "Which team does QB Drake Maye play for as of March 2026?", options: ["New England Patriots", "Washington Commanders", "New York Giants", "Minnesota Vikings"], answer: "New England Patriots", difficulty: "medium" },
+        { id: 45, question: "Who is the owner of the Dallas Cowboys?", options: ["Jerry Jones", "Robert Kraft", "Clark Hunt", "Stan Kroenke"], answer: "Jerry Jones", difficulty: "medium" },
+        { id: 46, question: "In the 2025 season, which kicker made two field goals longer than 66 yards?", options: ["Cam Little", "Justin Tucker", "Brandon Aubrey", "Jason Myers"], answer: "Cam Little", difficulty: "medium" },
+        { id: 47, question: "Which team plays in the NFC North and wears Honolulu Blue?", options: ["Detroit Lions", "Minnesota Vikings", "Chicago Bears", "Green Bay Packers"], answer: "Detroit Lions", difficulty: "medium" },
+        { id: 48, question: "Who was the offensive coordinator for the Super Bowl-winning 2025 Seahawks?", options: ["Ryan Grubb", "Ben Johnson", "Bobby Slowik", "Klint Kubiak"], answer: "Ryan Grubb", difficulty: "medium" },
+        { id: 49, question: "Which player is the highest-paid cornerback in NFL history as of March 2026?", options: ["Trent McDuffie", "Jalen Ramsey", "Patrick Surtain II", "Sauce Gardner"], answer: "Trent McDuffie", difficulty: "medium" },
+        { id: 50, question: "Which team won the AFC East in the 2025 season?", options: ["Buffalo Bills", "Miami Dolphins", "New York Jets", "New England Patriots"], answer: "New England Patriots", difficulty: "medium" },
+        { id: 51, question: "In November 2025, Cam Little set the NFL record for the longest field goal. How many yards was it?", options: ["68 yards", "67 yards", "69 yards", "70 yards"], answer: "68 yards", difficulty: "hard" },
+        { id: 52, question: "Myles Garrett broke the single-season sack record in 2025 by tackling which QB?", options: ["Joe Burrow", "Lamar Jackson", "Drake Maye", "Caleb Williams"], answer: "Joe Burrow", difficulty: "hard" },
+        { id: 53, question: "Who was the first rookie kicker in NFL history to reach 50 made field goals?", options: ["Cam Little", "Brandon Aubrey", "Justin Tucker", "Harrison Butker"], answer: "Cam Little", difficulty: "hard" },
+        { id: 54, question: "Which player had the most scrimmage yards in the 2025 NFL season?", options: ["Bijan Robinson", "Christian McCaffrey", "Saquon Barkley", "Breece Hall"], answer: "Bijan Robinson", difficulty: "hard" },
+        { id: 55, question: "What was the score of Super Bowl LX?", options: ["29-13", "31-24", "25-22", "20-17"], answer: "29-13", difficulty: "hard" },
+        { id: 56, question: "Which team did the Ravens sign edge rusher Trey Hendrickson from in 2026?", options: ["Cincinnati Bengals", "New Orleans Saints", "Cleveland Browns", "Las Vegas Raiders"], answer: "Cincinnati Bengals", difficulty: "hard" },
+        { id: 57, question: "Who won the 2025 AP Offensive Rookie of the Year?", options: ["Tetairoa McMillan", "Shedeur Sanders", "Luther Burden III", "Ollie Gordon II"], answer: "Tetairoa McMillan", difficulty: "hard" },
+        { id: 58, question: "Against which team did Cam Little kick his record-breaking 68-yard field goal?", options: ["Las Vegas Raiders", "Tennessee Titans", "Indianapolis Colts", "Houston Texans"], answer: "Las Vegas Raiders", difficulty: "hard" },
+        { id: 59, question: "How many first-place votes did Jaxon Smith-Njigba receive for OPOY in 2025?", options: ["14", "20", "12", "8"], answer: "14", difficulty: "hard" },
+        { id: 60, question: "Which QB became the first in history to win 12+ games in consecutive seasons with two different teams (2024-2025)?", options: ["Sam Darnold", "Kirk Cousins", "Russell Wilson", "Baker Mayfield"], answer: "Sam Darnold", difficulty: "hard" },
+        { id: 61, question: "Which team traded away D.K. Metcalf before the 2025 season?", options: ["Seattle Seahawks", "Pittsburgh Steelers", "New York Jets", "Chicago Bears"], answer: "Seattle Seahawks", difficulty: "hard" },
+        { id: 62, question: "What is the new NFL rule proposal for 2026 regarding onside kicks?", options: ["Declare any time", "4th & 20 play", "No onside kicks", "Kicking from 50"], answer: "Declare any time", difficulty: "hard" },
+        { id: 63, question: "Who was the second-highest sack leader in 2025 behind Myles Garrett?", options: ["T.J. Watt", "Maxx Crosby", "Aidan Hutchinson", "Micah Parsons"], answer: "T.J. Watt", difficulty: "hard" },
+        { id: 64, question: "Cam Little's 67-yard field goal in Jan 2026 set what specific sub-record?", options: ["Longest Outdoor FG", "Longest Playoff FG", "Most 60+ in a game", "Longest Game Winner"], answer: "Longest Outdoor FG", difficulty: "hard" },
+        { id: 65, question: "Which player had a 45-yard pick-six in Super Bowl LX?", options: ["Uchenna Nwosu", "Devon Witherspoon", "Tariq Woolen", "Boye Mafe"], answer: "Uchenna Nwosu", difficulty: "hard" },
+        { id: 66, question: "Who led all rookie QBs in passing yards in 2025?", options: ["Cam Ward", "Jaxson Dart", "Tyler Shough", "Shedeur Sanders"], answer: "Cam Ward", difficulty: "hard" },
+        { id: 67, question: "Which team acquired DJ Moore in a trade in March 2026?", options: ["Buffalo Bills", "Cleveland Browns", "Houston Texans", "Kansas City Chiefs"], answer: "Buffalo Bills", difficulty: "hard" },
+        { id: 68, question: "How many field goals did Jason Myers kick in Super Bowl LX (setting a SB record)?", options: ["5", "4", "6", "3"], answer: "5", difficulty: "hard" },
+        { id: 69, question: "Which team did the Dolphins trade Tyreek Hill to in 2025?", options: ["New York Jets", "Kansas City Chiefs", "Chicago Bears", "He was released"], answer: "New York Jets", difficulty: "hard" },
+        { id: 70, question: "Who is the GM of the Miami Dolphins as of March 2026?", options: ["Jon Eric-Sullivan", "Chris Grier", "John Lynch", "Brett Veach"], answer: "Jon Eric-Sullivan", difficulty: "hard" },
+        { id: 71, question: "In the 2025 season, which running back joined Marshall Faulk as the only RBs with 900+ receiving yards in multiple seasons?", options: ["Christian McCaffrey", "Bijan Robinson", "Breece Hall", "Jahmyr Gibbs"], answer: "Christian McCaffrey", difficulty: "hard" },
+        { id: 72, question: "Which team traded for QB Geno Smith in March 2026?", options: ["New York Jets", "Las Vegas Raiders", "Tennessee Titans", "Miami Dolphins"], answer: "New York Jets", difficulty: "hard" },
+        { id: 73, question: "Myles Garrett became the first player since 1982 to record 12+ sacks in how many consecutive seasons?", options: ["6", "5", "7", "4"], answer: "6", difficulty: "hard" },
+        { id: 74, question: "Which team will the Eagles play in Brazil to open the 2024 season (retrospective)?", options: ["Green Bay Packers", "Cleveland Browns", "Miami Dolphins", "Atlanta Falcons"], answer: "Green Bay Packers", difficulty: "hard" },
+        { id: 75, question: "What is the name of the stadium that will host Super Bowl LXI in 2027?", options: ["Mercedes-Benz Stadium", "SoFi Stadium", "MetLife Stadium", "Nissan Stadium"], answer: "Mercedes-Benz Stadium", difficulty: "hard" },
+        { id: 76, question: "Myles Garrett's record 23rd sack of 2025 occurred with how much time left in the game?", options: ["Late 4th Quarter", "Early 1st Quarter", "Last play of 2nd", "Overtime"], answer: "Late 4th Quarter", difficulty: "impossible" },
+        { id: 77, question: "Exactly how many days old was Cam Little when he became the youngest player to make 50 field goals?", options: ["22 years, 119 days", "22 years, 10 days", "21 years, 350 days", "23 years, 2 days"], answer: "22 years, 119 days", difficulty: "impossible" },
+        { id: 78, question: "Which specific player hit Drake Maye to cause the fumble/interception in Super Bowl LX?", options: ["Devon Witherspoon", "Boye Mafe", "Leonard Williams", "Julian Love"], answer: "Devon Witherspoon", difficulty: "impossible" },
+        { id: 79, question: "What was Jaxon Smith-Njigba's total receiving yardage in the 2025 regular season?", options: ["1,793", "1,809", "1,709", "1,822"], answer: "1,793", difficulty: "impossible" },
+        { id: 80, question: "Which rookie quarterback in 2025 had the highest Pressure-to-Sack rate at 23.9%?", options: ["Cam Ward", "Jaxson Dart", "Tyler Shough", "Shedeur Sanders"], answer: "Cam Ward", difficulty: "impossible" },
+        { id: 81, question: "How many scrimmage yards did Bijan Robinson finish with in 2025, the 6th most in NFL history?", options: ["2,255", "2,370", "2,429", "2,392"], answer: "2,255", difficulty: "impossible" },
+        { id: 82, question: "What was the specific trade return the Chiefs received for Trent McDuffie in 2026?", options: ["2026 1st, 5th, 6th & 2027 3rd", "2026 1st & 2nd", "2026 1st & 3rd", "2027 1st & 2026 4th"], answer: "2026 1st, 5th, 6th & 2027 3rd", difficulty: "impossible" },
+        { id: 83, question: "Who did Jaxon Smith-Njigba surpass for the most receiving yards at age 23 or younger?", options: ["Justin Jefferson", "Isaac Bruce", "Randy Moss", "Ja'Marr Chase"], answer: "Justin Jefferson", difficulty: "impossible" },
+        { id: 84, question: "In 2025, how many deep receiving yards (20+ yards) did Jaxon Smith-Njigba lead the league with?", options: ["542", "454", "610", "498"], answer: "542", difficulty: "impossible" },
+        { id: 85, question: "Which QB holds the record for most seasons with 40+ offensive touchdowns (tied with Aaron Rodgers in 2025)?", options: ["Josh Allen", "Patrick Mahomes", "Joe Burrow", "Lamar Jackson"], answer: "Josh Allen", difficulty: "impossible" },
+        { id: 86, question: "Cam Little's 2025 Jaguars franchise record for points in a season was exactly how many?", options: ["140", "138", "144", "132"], answer: "140", difficulty: "impossible" },
+        { id: 87, question: "What was the PFF grade for #1 overall pick Cam Ward in his 2025 rookie season?", options: ["58.5", "62.1", "55.4", "60.0"], answer: "58.5", difficulty: "impossible" },
+        { id: 88, question: "Which player did the Broncos trade to the Panthers for Andy Dalton in March 2026?", options: ["No player (Draft pick only)", "Sydney Brown", "Garrett Bradbury", "Zaire Franklin"], answer: "No player (Draft pick only)", difficulty: "impossible" },
+        { id: 89, question: "How many deep receptions did Jaxon Smith-Njigba have in 2025?", options: ["13", "11", "15", "10"], answer: "13", difficulty: "impossible" },
+        { id: 90, question: "In 2025, Myles Garrett became the oldest player to do what, on October 26?", options: ["Reach 120 career sacks", "Win DPOY twice", "Break sack record", "Most sacks under age 30"], answer: "Most sacks under age 30", difficulty: "impossible" },
+        { id: 91, question: "Which rookie RB in 2025 averaged 16.0 PPR fantasy points per game for the Giants?", options: ["Cam Skattebo", "Quinshon Judkins", "Omarion Hampton", "Ollie Gordon II"], answer: "Cam Skattebo", difficulty: "impossible" },
+        { id: 92, question: "How many games in 2025 did Jaxon Smith-Njigba record 72+ receiving yards?", options: ["15", "14", "16", "13"], answer: "15", difficulty: "impossible" },
+        { id: 93, question: "In the 2026 rule proposals, which team proposed allowing draft selections to be traded up to five seasons in the future?", options: ["Cleveland Browns", "Pittsburgh Steelers", "Dallas Cowboys", "Kansas City Chiefs"], answer: "Cleveland Browns", difficulty: "impossible" },
+        { id: 94, question: "Who was the only rookie QB to start every game for his team in the 2025 season?", options: ["Cam Ward", "Shedeur Sanders", "Tyler Shough", "Jaxson Dart"], answer: "Cam Ward", difficulty: "impossible" },
+        { id: 95, question: "What was the exact completion percentage for Tyler Shough in his 2025 rookie campaign?", options: ["67.6%", "63.7%", "59.8%", "61.2%"], answer: "67.6%", difficulty: "impossible" },
+        { id: 96, question: "Which team does safety Minkah Fitzpatrick play for as of March 11, 2026?", options: ["New York Jets", "Pittsburgh Steelers", "Miami Dolphins", "Baltimore Ravens"], answer: "New York Jets", difficulty: "impossible" },
+        { id: 97, question: "How many games did Myles Garrett record at least half a sack in during his final 11 games of 2025?", options: ["10", "11", "9", "8"], answer: "10", difficulty: "impossible" },
+        { id: 98, question: "Which player was the 2025 NFL Comeback Player of the Year?", options: ["Christian McCaffrey", "Aaron Rodgers", "Joe Burrow", "Nick Chubb"], answer: "Christian McCaffrey", difficulty: "impossible" },
+        { id: 99, question: "What is the specific date Cam Little made his record-breaking 68-yard field goal?", options: ["November 2, 2025", "January 4, 2026", "December 14, 2025", "October 26, 2025"], answer: "November 2, 2025", difficulty: "impossible" },
+        { id: 100, question: "Which team will the Eagles face in the 2026 season opener in Brazil?", options: ["None", "Dallas Cowboys", "Green Bay Packers", "LA Rams"], answer: "None", difficulty: "impossible" }
+    ];
+
+    const allTimeQuestions = [
+        { id: 1, question: "Who holds the NFL record for the most career passing yards?", options: ["Tom Brady", "Drew Brees", "Peyton Manning", "Brett Favre"], answer: "Tom Brady", difficulty: "easy" },
+        { id: 2, question: "Which team has the most Super Bowl wins in NFL history (tied with the Patriots)?", options: ["Pittsburgh Steelers", "Dallas Cowboys", "San Francisco 49ers", "Green Bay Packers"], answer: "Pittsburgh Steelers", difficulty: "easy" },
+        { id: 3, question: "Who is the NFL's all-time leading rusher?", options: ["Emmitt Smith", "Walter Payton", "Barry Sanders", "Frank Gore"], answer: "Emmitt Smith", difficulty: "easy" },
+        { id: 4, question: "Which wide receiver holds nearly every major all-time receiving record?", options: ["Jerry Rice", "Randy Moss", "Terrell Owens", "Larry Fitzgerald"], answer: "Jerry Rice", difficulty: "easy" },
+        { id: 5, question: "What is the name of the trophy awarded to the Super Bowl winner?", options: ["Vince Lombardi Trophy", "Walter Camp Trophy", "John Heisman Trophy", "Pete Rozelle Trophy"], answer: "Vince Lombardi Trophy", difficulty: "easy" },
+        { id: 6, question: "How many points is a safety worth?", options: ["2", "3", "1", "6"], answer: "2", difficulty: "easy" },
+        { id: 7, question: "Which player has won the most Super Bowl rings as a player?", options: ["Tom Brady", "Charles Haley", "Joe Montana", "Terry Bradshaw"], answer: "Tom Brady", difficulty: "easy" },
+        { id: 8, question: "Which team is the only one to ever have a 'Perfect Season' (undefeated including the Super Bowl)?", options: ["1972 Miami Dolphins", "1985 Chicago Bears", "2007 New England Patriots", "1998 Minnesota Vikings"], answer: "1972 Miami Dolphins", difficulty: "easy" },
+        { id: 9, question: "What city do the Bears play in?", options: ["Chicago", "Detroit", "Cleveland", "Cincinnati"], answer: "Chicago", difficulty: "easy" },
+        { id: 10, question: "Who is known as 'Joe Cool' and won 4 Super Bowls with the 49ers?", options: ["Joe Montana", "Joe Namath", "Joe Burrow", "Joe Flacco"], answer: "Joe Montana", difficulty: "easy" },
+        { id: 11, question: "Which position is responsible for kicking field goals?", options: ["Kicker", "Punter", "Quarterback", "Tight End"], answer: "Kicker", difficulty: "easy" },
+        { id: 12, question: "What is the length of a standard NFL football field (excluding end zones)?", options: ["100 yards", "110 yards", "120 yards", "90 yards"], answer: "100 yards", difficulty: "easy" },
+        { id: 13, question: "Which team is famous for their 'Star' logo on their helmets?", options: ["Dallas Cowboys", "Houston Texans", "New England Patriots", "Tennessee Titans"], answer: "Dallas Cowboys", difficulty: "easy" },
+        { id: 14, question: "Who was the first overall pick in the 1998 NFL Draft, often debated against Ryan Leaf?", options: ["Peyton Manning", "Charles Woodson", "Randy Moss", "Fred Taylor"], answer: "Peyton Manning", difficulty: "easy" },
+        { id: 15, question: "Which legendary coach is the Green Bay Packers' stadium named after?", options: ["Vince Lombardi", "Curly Lambeau", "John Madden", "Don Shula"], answer: "Curly Lambeau", difficulty: "easy" },
+        { id: 16, question: "How many teams currently play in the NFL?", options: ["32", "30", "31", "28"], answer: "32", difficulty: "easy" },
+        { id: 17, question: "Which team does the 'Frozen Tundra' refer to?", options: ["Green Bay Packers", "Minnesota Vikings", "Buffalo Bills", "New England Patriots"], answer: "Green Bay Packers", difficulty: "easy" },
+        { id: 18, question: "Who is the NFL's all-time leader in interceptions thrown?", options: ["Brett Favre", "George Blanda", "John Elway", "Vinny Testaverde"], answer: "Brett Favre", difficulty: "easy" },
+        { id: 19, question: "Which Manning brother won two Super Bowls with the New York Giants?", options: ["Eli Manning", "Peyton Manning", "Archie Manning", "Cooper Manning"], answer: "Eli Manning", difficulty: "easy" },
+        { id: 20, question: "What is the term for a pass caught by the defense?", options: ["Interception", "Fumble", "Sack", "Incompletion"], answer: "Interception", difficulty: "easy" },
+        { id: 21, question: "Which team was the first to win 5 Super Bowls?", options: ["San Francisco 49ers", "Dallas Cowboys", "Pittsburgh Steelers", "New England Patriots"], answer: "San Francisco 49ers", difficulty: "easy" },
+        { id: 22, question: "What is the name of the annual game between the AFC and NFC stars?", options: ["Pro Bowl", "Super Bowl", "All-Star Game", "Star Bowl"], answer: "Pro Bowl", difficulty: "easy" },
+        { id: 23, question: "Who was the primary RB for the 'Greatest Show on Turf' Rams?", options: ["Marshall Faulk", "Eric Dickerson", "Steven Jackson", "Jerome Bettis"], answer: "Marshall Faulk", difficulty: "easy" },
+        { id: 24, question: "Which city do the Saints play in?", options: ["New Orleans", "Atlanta", "Charlotte", "Jacksonville"], answer: "New Orleans", difficulty: "easy" },
+        { id: 25, question: "What is the maximum number of players allowed on the field for one team?", options: ["11", "12", "10", "13"], answer: "11", difficulty: "easy" },
+        { id: 26, question: "Who holds the record for the most career sacks in NFL history?", options: ["Bruce Smith", "Reggie White", "Kevin Greene", "Julius Peppers"], answer: "Bruce Smith", difficulty: "medium" },
+        { id: 27, question: "Which kicker held the record for the longest field goal (66 yards) before Cam Little broke it in 2025?", options: ["Justin Tucker", "Matt Prater", "Tom Dempsey", "Graham Gano"], answer: "Justin Tucker", difficulty: "medium" },
+        { id: 28, question: "Who has the most career interceptions by a defensive player?", options: ["Paul Krause", "Emlen Tunnell", "Rod Woodson", "Dick 'Night Train' Lane"], answer: "Paul Krause", difficulty: "medium" },
+        { id: 29, question: "Which player holds the record for the most rushing yards in a single season?", options: ["Eric Dickerson", "Adrian Peterson", "Jamal Lewis", "Barry Sanders"], answer: "Eric Dickerson", difficulty: "medium" },
+        { id: 30, question: "Who was the first player to ever rush for 2,000 yards in a single season?", options: ["O.J. Simpson", "Eric Dickerson", "Barry Sanders", "Jim Brown"], answer: "O.J. Simpson", difficulty: "medium" },
+        { id: 31, question: "Which quarterback has the most career regular-season losses?", options: ["Tom Brady", "Brett Favre", "Archie Manning", "Vinny Testaverde"], answer: "Tom Brady", difficulty: "medium" },
+        { id: 32, question: "Who holds the record for most touchdowns scored in a single season?", options: ["LaDainian Tomlinson", "Shaun Alexander", "Priest Holmes", "Christian McCaffrey"], answer: "LaDainian Tomlinson", difficulty: "medium" },
+        { id: 33, question: "Which team did the 'Purple People Eaters' defensive line play for?", options: ["Minnesota Vikings", "Baltimore Ravens", "Washington Redskins", "Purple Bay Packers"], answer: "Minnesota Vikings", difficulty: "medium" },
+        { id: 34, question: "Who was the MVP of Super Bowl III, famously 'guaranteeing' a victory?", options: ["Joe Namath", "Terry Bradshaw", "Bart Starr", "Johnny Unitas"], answer: "Joe Namath", difficulty: "medium" },
+        { id: 35, question: "Which coach has the most career wins (regular season and playoffs) in NFL history?", options: ["Don Shula", "Bill Belichick", "George Halas", "Andy Reid"], answer: "Don Shula", difficulty: "medium" },
+        { id: 36, question: "Who holds the record for the most receiving yards in a single game (336)?", options: ["Flipper Anderson", "Calvin Johnson", "Stefon Diggs", "Jerry Rice"], answer: "Flipper Anderson", difficulty: "medium" },
+        { id: 37, question: "Which NFL franchise was originally known as the Decatur Staleys?", options: ["Chicago Bears", "Detroit Lions", "Arizona Cardinals", "Green Bay Packers"], answer: "Chicago Bears", difficulty: "medium" },
+        { id: 38, question: "Who is the only defensive player to ever win the NFL MVP award twice?", options: ["Alan Page", "Lawrence Taylor", "Reggie White", "None (Only once)"], answer: "None (Only once)", difficulty: "medium" },
+        { id: 39, question: "Which quarterback holds the record for the most passing touchdowns in a single game (7)?", options: ["Drew Brees", "Peyton Manning", "Nick Foles", "All of these tied"], answer: "All of these tied", difficulty: "medium" },
+        { id: 40, question: "Who was the first African-American quarterback to win a Super Bowl?", options: ["Doug Williams", "Warren Moon", "Randall Cunningham", "Russell Wilson"], answer: "Doug Williams", difficulty: "medium" },
+        { id: 41, question: "Which team drafted John Elway #1 overall, only for him to refuse to play for them?", options: ["Baltimore Colts", "Denver Broncos", "New York Giants", "San Diego Chargers"], answer: "Baltimore Colts", difficulty: "medium" },
+        { id: 42, question: "Who is the all-time leader in career punting average?", options: ["Shane Lechler", "Johnny Hekker", "Ray Guy", "Marquette King"], answer: "Shane Lechler", difficulty: "medium" },
+        { id: 43, question: "Which city hosted the very first Super Bowl?", options: ["Los Angeles", "Miami", "New Orleans", "Houston"], answer: "Los Angeles", difficulty: "medium" },
+        { id: 44, question: "Who was the first player to win three consecutive NFL MVP awards?", options: ["Brett Favre", "Peyton Manning", "Jim Brown", "Tom Brady"], answer: "Brett Favre", difficulty: "medium" },
+        { id: 45, question: "Which team was the first to go 0-16 in a season?", options: ["Detroit Lions", "Cleveland Browns", "Tampa Bay Buccaneers", "Jacksonville Jaguars"], answer: "Detroit Lions", difficulty: "medium" },
+        { id: 46, question: "Who is the all-time leader in field goals made?", options: ["Adam Vinatieri", "Morten Andersen", "Gary Anderson", "Justin Tucker"], answer: "Adam Vinatieri", difficulty: "medium" },
+        { id: 47, question: "Which player is the only one to be in the Hall of Fame for both Football and Baseball?", options: ["None", "Deion Sanders", "Bo Jackson", "Jim Thorpe"], answer: "None", difficulty: "medium" },
+        { id: 48, question: "Who was the MVP of the first two Super Bowls?", options: ["Bart Starr", "Joe Namath", "Terry Bradshaw", "Len Dawson"], answer: "Bart Starr", difficulty: "medium" },
+        { id: 49, question: "Which stadium is the oldest currently in use by an NFL team?", options: ["Soldier Field", "Lambeau Field", "Arrowhead Stadium", "Highmark Stadium"], answer: "Soldier Field", difficulty: "medium" },
+        { id: 50, question: "Who holds the record for most receptions in a single season?", options: ["Michael Thomas", "Cooper Kupp", "Marvin Harrison", "Justin Jefferson"], answer: "Michael Thomas", difficulty: "medium" },
+        { id: 51, question: "Who holds the NFL record for the most career fumble recoveries?", options: ["Jim Marshall", "Warren Moon", "Brett Favre", "Rod Woodson"], answer: "Jim Marshall", difficulty: "hard" },
+        { id: 52, question: "Which player holds the record for the most interceptions in a single season (14)?", options: ["Dick 'Night Train' Lane", "Lester Hayes", "Paul Krause", "Mel Blount"], answer: "Dick 'Night Train' Lane", difficulty: "hard" },
+        { id: 53, question: "Who is the only player to win Super Bowl MVP on a losing team?", options: ["Chuck Howley", "Bob Lilly", "Joe Montana", "Larry Csonka"], answer: "Chuck Howley", difficulty: "hard" },
+        { id: 54, question: "What was the lowest-scoring Super Bowl in history?", options: ["Super Bowl LIII (13-3)", "Super Bowl VII (14-7)", "Super Bowl IX (16-6)", "Super Bowl III (16-7)"], answer: "Super Bowl LIII (13-3)", difficulty: "hard" },
+        { id: 55, question: "Who was the first player to score a touchdown in Super Bowl history?", options: ["Max McGee", "Bart Starr", "Jim Taylor", "Elijah Pitts"], answer: "Max McGee", difficulty: "hard" },
+        { id: 56, question: "Which NFL team has the most Hall of Famers?", options: ["Chicago Bears", "Green Bay Packers", "New York Giants", "Pittsburgh Steelers"], answer: "Chicago Bears", difficulty: "hard" },
+        { id: 57, question: "Who holds the record for the most career postseason receiving yards?", options: ["Jerry Rice", "Julian Edelman", "Travis Kelce", "Michael Irvin"], answer: "Jerry Rice", difficulty: "hard" },
+        { id: 58, question: "Which quarterback was the first to pass for 5,000 yards in a season?", options: ["Dan Marino", "Drew Brees", "Peyton Manning", "Tom Brady"], answer: "Dan Marino", difficulty: "hard" },
+        { id: 59, question: "Who is the only kicker to ever win the NFL MVP award?", options: ["Mark Moseley", "Adam Vinatieri", "Justin Tucker", "Lou Groza"], answer: "Mark Moseley", difficulty: "hard" },
+        { id: 60, question: "Which team was the first to use a logo on their helmets?", options: ["Los Angeles Rams", "Cleveland Browns", "Pittsburgh Steelers", "Chicago Bears"], answer: "Los Angeles Rams", difficulty: "hard" },
+        { id: 61, question: "Who holds the record for the most sacks in a single game (7.0)?", options: ["Derrick Thomas", "Osi Umenyiora", "Adrian Clayborn", "Fred Dean"], answer: "Derrick Thomas", difficulty: "hard" },
+        { id: 62, question: "Which team drafted Brett Favre?", options: ["Atlanta Falcons", "Green Bay Packers", "New York Jets", "Minnesota Vikings"], answer: "Atlanta Falcons", difficulty: "hard" },
+        { id: 63, question: "Who was the first expansion team to join the NFL?", options: ["Dallas Cowboys", "Minnesota Vikings", "Atlanta Falcons", "Miami Dolphins"], answer: "Dallas Cowboys", difficulty: "hard" },
+        { id: 64, question: "What year was the NFL founded?", options: ["1920", "1919", "1922", "1925"], answer: "1920", difficulty: "hard" },
+        { id: 65, question: "Who holds the record for the longest run from scrimmage (99 yards)?", options: ["Tony Dorsett", "Derrick Henry", "Both are tied", "Ahman Green"], answer: "Both are tied", difficulty: "hard" },
+        { id: 66, question: "Which quarterback has the most career rushing touchdowns?", options: ["Cam Newton", "Josh Allen", "Jalen Hurts", "Michael Vick"], answer: "Cam Newton", difficulty: "hard" },
+        { id: 67, question: "Who is the all-time leader in punt return touchdowns?", options: ["Devin Hester", "Eric Metcalf", "Brian Mitchell", "Deion Sanders"], answer: "Devin Hester", difficulty: "hard" },
+        { id: 68, question: "Which team has the worst all-time winning percentage in NFL history?", options: ["Tampa Bay Buccaneers", "Jacksonville Jaguars", "Arizona Cardinals", "Cleveland Browns"], answer: "Tampa Bay Buccaneers", difficulty: "hard" },
+        { id: 69, question: "Who holds the record for the most career tackles?", options: ["London Fletcher", "Ray Lewis", "Ray Nitschke", "Dick Butkus"], answer: "London Fletcher", difficulty: "hard" },
+        { id: 70, question: "Which college has produced the most NFL Hall of Famers?", options: ["Notre Dame", "USC", "Ohio State", "Michigan"], answer: "Notre Dame", difficulty: "hard" },
+        { id: 71, question: "Who holds the record for the most safety's in a career (4)?", options: ["Ted Hendricks", "Doug English", "Jared Allen", "All three tied"], answer: "All three tied", difficulty: "hard" },
+        { id: 72, question: "What was the original name of the New York Jets?", options: ["New York Titans", "New York Americans", "New York Nationals", "New York Empires"], answer: "New York Titans", difficulty: "hard" },
+        { id: 73, question: "Who was the first player to have his jersey number retired?", options: ["Red Grange", "Don Hutson", "Ray Flaherty", "Jim Thorpe"], answer: "Ray Flaherty", difficulty: "hard" },
+        { id: 74, question: "Which team won the very first NFL Championship in 1920?", options: ["Akron Pros", "Decatur Staleys", "Canton Bulldogs", "Rock Island Independents"], answer: "Akron Pros", difficulty: "hard" },
+        { id: 75, question: "Who holds the record for most career blocked kicks?", options: ["Ted Hendricks", "Julius Peppers", "Shaun Rogers", "Alan Page"], answer: "Ted Hendricks", difficulty: "hard" },
+        { id: 76, question: "Which team is the only one to never have a 4,000-yard passer in a season?", options: ["Chicago Bears", "New York Jets", "Philadelphia Eagles", "Tennessee Titans"], answer: "Chicago Bears", difficulty: "impossible" },
+        { id: 77, question: "Who was the first player to ever be drafted in the first-ever NFL Draft in 1936?", options: ["Jay Berwanger", "Riley Smith", "Bill Shakespeare", "Joe Stydahar"], answer: "Jay Berwanger", difficulty: "impossible" },
+        { id: 78, question: "What was the specific score of the highest-scoring game in NFL history?", options: ["72-41", "73-0", "66-37", "54-51"], answer: "72-41", difficulty: "impossible" },
+        { id: 79, question: "Who holds the record for the most points scored in a single game by one player (40)?", options: ["Ernie Nevers", "Alvin Kamara", "Gale Sayers", "Dub Jones"], answer: "Ernie Nevers", difficulty: "impossible" },
+        { id: 80, question: "Which player holds the record for the most consecutive games with a touchdown (18)?", options: ["Tommie Smith", "Lennon Creer", "LaDainian Tomlinson", "O.J. Simpson"], answer: "Tommie Smith", difficulty: "impossible" },
+        { id: 81, question: "Who is the only player to record a sack, an interception, and a touchdown in a Super Bowl?", options: ["None", "James Harrison", "Ray Lewis", "Malcolm Smith"], answer: "None", difficulty: "impossible" },
+        { id: 82, question: "What was the name of the NFL team that played in Dallas before the Cowboys?", options: ["Dallas Texans", "Dallas Rangers", "Dallas Steers", "Dallas Rebels"], answer: "Dallas Texans", difficulty: "impossible" },
+        { id: 83, question: "Which quarterback holds the record for the most consecutive completions in a game (25)?", options: ["Philip Rivers", "Nick Foles", "Marcus Mariota", "Ryan Tannehill"], answer: "Nick Foles", difficulty: "impossible" },
+        { id: 84, question: "Who was the first kicker to use the 'soccer-style' kick in the NFL?", options: ["Pete Gogolak", "Charlie Gogolak", "Garo Yepremian", "Jan Stenerud"], answer: "Pete Gogolak", difficulty: "impossible" },
+        { id: 85, question: "Which team holds the record for the most points in a postseason game (73)?", options: ["Chicago Bears", "Washington Redskins", "Los Angeles Rams", "Buffalo Bills"], answer: "Chicago Bears", difficulty: "impossible" },
+        { id: 86, question: "Who was the head coach of the 'Steagles' (merged Steelers and Eagles during WWII)?", options: ["Greasy Neale & Walt Kiesling", "Curly Lambeau", "George Halas", "Steve Owen"], answer: "Greasy Neale & Walt Kiesling", difficulty: "impossible" },
+        { id: 87, question: "Which player has the most career post-season interceptions (9)?", options: ["Ed Reed", "Charlie Waters", "Bill Simpson", "Ronnie Lott"], answer: "Ed Reed", difficulty: "impossible" },
+        { id: 88, question: "Who is the only player in NFL history with 1,000 yards rushing and 1,000 yards receiving in a single season?", options: ["Roger Craig", "Marshall Faulk", "Christian McCaffrey", "All three"], answer: "All three", difficulty: "impossible" },
+        { id: 89, question: "Which player had the most career rushing yards without ever having a 100-yard game in a season?", options: ["Not a tracked stat", "Dave Hampton", "Frank Gore", "Herschel Walker"], answer: "Not a tracked stat", difficulty: "impossible" },
+        { id: 90, question: "Who holds the record for most career touches without a fumble (870)?", options: ["Wayne Gallman", "Jamaal Williams", "Ray Rice", "DeAngelo Williams"], answer: "Jamaal Williams", difficulty: "impossible" },
+        { id: 91, question: "Which offensive lineman has the most career starts in NFL history?", options: ["Bruce Matthews", "Mick Tingelhoff", "Joe Thomas", "Gene Upshaw"], answer: "Bruce Matthews", difficulty: "impossible" },
+        { id: 92, question: "Who was the only player to win NFL MVP and then be out of the league the following year?", options: ["None", "Bo Jackson", "Jim Brown", "Terrell Davis"], answer: "None", difficulty: "impossible" },
+        { id: 93, question: "What is the longest game in NFL history in terms of actual clock time?", options: ["82 mins 40 secs", "77 mins 10 secs", "91 mins 12 secs", "85 mins 0 secs"], answer: "82 mins 40 secs", difficulty: "impossible" },
+        { id: 94, question: "Who holds the record for the most fumble return touchdowns in a career (6)?", options: ["Jason Taylor", "Ronde Barber", "Bobby Bell", "Derrick Thomas"], answer: "Jason Taylor", difficulty: "impossible" },
+        { id: 95, question: "Which team holds the record for most consecutive regular season wins (23)?", options: ["Indianapolis Colts", "New England Patriots", "Chicago Bears", "Miami Dolphins"], answer: "Indianapolis Colts", difficulty: "impossible" },
+        { id: 96, question: "Who was the oldest player to ever play in an NFL game (48 years old)?", options: ["George Blanda", "Morten Andersen", "Adam Vinatieri", "Ben Agajanian"], answer: "George Blanda", difficulty: "impossible" },
+        { id: 97, question: "Which player had the most career receiving yards for the Detroit Lions before Calvin Johnson?", options: ["Herman Moore", "Gail Cogdill", "Brett Perriman", "Charlie Sanders"], answer: "Herman Moore", difficulty: "impossible" },
+        { id: 98, question: "What was the highest attendance for an NFL game (105,121)?", options: ["Cowboys vs Giants (2009)", "Cardinals vs 49ers (Mexico)", "Cowboys vs Oilers (Mexico)", "Redskins vs 49ers (Japan)"], answer: "Cowboys vs Giants (2009)", difficulty: "impossible" },
+        { id: 99, question: "Who holds the record for most consecutive field goals made (44)?", options: ["Nick Folk", "Adam Vinatieri", "Justin Tucker", "Mike Vanderjagt"], answer: "Nick Folk", difficulty: "impossible" },
+        { id: 100, question: "Which player is the only one to record a safety in back-to-back games?", options: ["Doug English", "Justin Houston", "Jared Allen", "Cameron Wake"], answer: "Doug English", difficulty: "impossible" }
+    ];
+
+    function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function getPool(mode) {
+        if (mode === "current") return currentQuestions;
+        if (mode === "alltime") return allTimeQuestions;
+        return currentQuestions.concat(allTimeQuestions);
+    }
+
+    function buildQuiz(mode, count) {
+        const pool = getPool(mode);
+        const chosen = shuffle(pool).slice(0, count);
+        return chosen.map(q => {
+            const questionText = q.q || q.question;
+            const answerText = q.a || q.answer;
+            const options = shuffle(q.options || []);
+            return { q: questionText, a: answerText, options };
+        });
+    }
+
+    function updateStartState() {
+        if (selectedMode && selectedCount) {
+            startBtn.style.display = "inline-block";
+        } else {
+            startBtn.style.display = "none";
+        }
+    }
+
+    document.querySelectorAll(".select-quiz-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            selectedMode = btn.dataset.mode;
+            document.querySelectorAll(".select-quiz-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            if (countCard) countCard.style.display = "block";
+            if (modeCard) modeCard.style.display = "none";
+            updateStartState();
+        });
+    });
+
+    document.querySelectorAll(".select-count-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            selectedCount = parseInt(btn.dataset.count, 10);
+            document.querySelectorAll(".select-count-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            updateStartState();
+        });
+    });
+
+    if (startBtn) {
+        startBtn.addEventListener("click", () => {
+            quizData = buildQuiz(selectedMode, selectedCount);
+            currentQuestion = 0;
+            score = 0;
+            setupView.style.display = "none";
+            playView.style.display = "block";
+            loadQuestion();
+        });
+    }
+
+    if (randomBtn) {
+        randomBtn.addEventListener("click", () => {
+            const modes = ["current", "alltime", "both"];
+            selectedMode = modes[Math.floor(Math.random() * modes.length)];
+            selectedCount = questionCounts[Math.floor(Math.random() * questionCounts.length)];
+            quizData = buildQuiz(selectedMode, selectedCount);
+            currentQuestion = 0;
+            score = 0;
+            setupView.style.display = "none";
+            playView.style.display = "block";
+            loadQuestion();
+        });
+    }
+
+    function loadQuestion() {
+        const data = quizData[currentQuestion];
+        document.getElementById('question-number').innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+        document.getElementById('question-text').innerText = data.q;
+        document.getElementById('feedback').innerText = "";
+        
+        const optionsDiv = document.getElementById('options-container');
+        optionsDiv.innerHTML = ""; 
+
+        data.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.className = "quiz-btn"; 
+            btn.onclick = () => checkAnswer(opt, data.a);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, correct) {
+        const feedback = document.getElementById('feedback');
+        const buttons = document.querySelectorAll('#options-container .quiz-btn');
+        buttons.forEach(b => b.disabled = true);
+
+        if (selected === correct) {
+            score++;
+            feedback.innerText = "Correct!";
+            feedback.style.color = "#27911d";
+            feedback.style.fontSize = "24px";
+        } else {
+            feedback.innerText = "Incorrect!";
+            feedback.style.color = "#bf0006";
+            feedback.style.fontSize = "24px";
+        }
+
+        setTimeout(() => {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }, 700);
+    }
+
+    function getDifficultyWeight(level) {
+        const key = String(level || '').toLowerCase();
+        if (key === 'easy') return 1.0;
+        if (key === 'medium') return 1.15;
+        if (key === 'hard') return 1.3;
+        if (key === 'impossible') return 1.5;
+        return 1.0;
+    }
+
+    function showResults() {
+        confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
+
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const scoreKey = user ? `BestScore_${user}` : 'BestScore_Guest';
+        let personalBest = localStorage.getItem(scoreKey) || 0;
+
+        const totalQuestions = quizData.length || 0;
+        const accuracy = totalQuestions ? (score / totalQuestions) * 100 : 0;
+        const avgDifficulty = totalQuestions
+            ? quizData.reduce((sum, q) => sum + getDifficultyWeight(q.difficulty), 0) / totalQuestions
+            : 1;
+        const rankScore = accuracy * avgDifficulty;
+
+        if (score > personalBest) {
+            localStorage.setItem(scoreKey, score);
+            personalBest = score;
+        }
+
+        if (user) {
+            const leaderboardData = JSON.parse(localStorage.getItem('nfl_leaderboard')) || [];
+            const profile = JSON.parse(localStorage.getItem(`profile_${user}`) || '{}');
+            const avatar = profile.avatar || '';
+            const displayName = profile.displayName || user;
+            leaderboardData.push({
+                name: user,
+                displayName: displayName,
+                avatar: avatar,
+                score: score,
+                total: totalQuestions,
+                accuracy: accuracy,
+                avgDifficulty: avgDifficulty,
+                rankScore: rankScore,
+                date: new Date().toLocaleDateString()
+            });
+            leaderboardData.sort((a, b) => (b.rankScore || 0) - (a.rankScore || 0));
+            localStorage.setItem('nfl_leaderboard', JSON.stringify(leaderboardData.slice(0, 10)));
+        }
+
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+            <h1 style="font-size: 2rem;">Quiz Finished!</h1>
+            <p style="font-size: 1.5rem; margin: 10px 0;">Your Score: ${score} / ${quizData.length}</p>
+            <p style="font-size: 1.2rem; color: #27911d; margin-bottom: 20px; font-weight: bold;">
+                🏆 My Best: ${personalBest} / ${quizData.length}
+            </p>
+            <button id="lb-btn" class="quiz-btn" style="background: #4CAF50; margin-bottom: 10px;">View the Leaderboard</button>
+            <button onclick="location.reload()" class="quiz-btn">Try Again</button>
+            <button onclick="resetBest()" class="quiz-btn" style="background-color: #FF5252; margin-top: 10px;">Reset Personal Best</button>
+            <br><br><br>
+            <a href="index.html" style="color: white; text-decoration: underline;">Back to Home</a>
+        `;
+
+        document.getElementById('lb-btn').onclick = function() {
+            if (!user) {
+                localStorage.setItem('pendingScore', score);
+                localStorage.setItem('pendingScoreTotal', totalQuestions);
+                localStorage.setItem('pendingScoreAccuracy', accuracy.toString());
+                localStorage.setItem('pendingScoreAvgDifficulty', avgDifficulty.toString());
+                localStorage.setItem('pendingScoreRank', rankScore.toString());
+                if (confirm("Please login to view the leaderboard and save your score!")) {
+                    localStorage.setItem('redirectAfterLogin', 'Leaderboard.html');
+                    window.location.href = 'Login.html';
+                }
+            } else {
+                window.location.href = 'Leaderboard.html';
+            }
+        };
+    }
+
+    function resetBest() {
+        if (confirm("Are you sure you want to reset your personal best?")) {
+            const user = localStorage.getItem('currentUser');
+            const scoreKey = user ? `BestScore_${user}` : 'BestScore_Guest';
+            localStorage.removeItem(scoreKey);
+            location.reload();
+        }
+    }
+</script>
+
+
+</body>
+</html>
+
+
+
+

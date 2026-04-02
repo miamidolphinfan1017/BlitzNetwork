@@ -1,0 +1,1750 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>NFL Games Hub</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="NFL Games Hub">
+  <meta name="keywords" content="NFL, Games, Fantasy, Predictions, Trivia">
+  <meta name="author" content="Riley Cooperman">
+  <meta name="viewport" content="width=device-width, initial scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+</head>
+<body class="games-page">
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html" class="nav-active">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<div class="login-bg"></div>
+
+<main class="login-main">
+    <div class="login-box games-box">
+        <div id="games-hub">
+            <div class="games-hero">
+                <h1>Games Hub</h1>
+                <p class="muted">Pick a game mode to play now, or explore what’s coming next.</p>
+            </div>
+
+            <div id="games-grid" class="games-grid"></div>
+        </div>
+
+        <section id="game-predictions" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Prediction Challenge</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Pick winners and predict scores. We’ll grade you and add your result to the local leaderboard.</p>
+
+            <form id="prediction-form" class="prediction-form"></form>
+
+            <div class="prediction-actions">
+                <button type="submit" form="prediction-form" class="quiz-btn game-btn">Submit Predictions</button>
+                <div id="prediction-result" class="prediction-result muted"></div>
+            </div>
+
+            <div class="prediction-leaderboard">
+                <h3>Prediction Leaderboard</h3>
+                <div id="prediction-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-polls" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Hot Take Polls</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Vote on league hot takes and see how the community feels.</p>
+
+            <div id="polls-grid" class="polls-grid"></div>
+        </section>
+
+        <section id="game-startsit" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Start / Sit Challenge</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Pick who you’d start. We’ll score you against expert picks.</p>
+
+            <form id="startsit-form" class="prediction-form"></form>
+
+            <div class="prediction-actions">
+                <button type="submit" form="startsit-form" class="quiz-btn game-btn">Submit Picks</button>
+                <div id="startsit-result" class="prediction-result muted"></div>
+            </div>
+
+            <div class="prediction-leaderboard">
+                <h3>Start/Sit Leaderboard</h3>
+                <div id="startsit-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-statline" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Guess the Stat Line</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Predict a player’s stat line and earn points for accuracy.</p>
+
+            <form id="statline-form" class="prediction-form"></form>
+
+            <div class="prediction-actions">
+                <button type="submit" form="statline-form" class="quiz-btn game-btn">Submit Stat Lines</button>
+                <div id="statline-result" class="prediction-result muted"></div>
+            </div>
+
+            <div class="prediction-leaderboard">
+                <h3>Stat Line Leaderboard</h3>
+                <div id="statline-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-logo" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Logo Flash Challenge</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">A logo flashes for a moment. Pick the correct team.</p>
+
+            <div class="game-play">
+                <div id="logo-round" class="muted">Round 1 of 5</div>
+                <div id="logo-display" class="game-display">READY?</div>
+                <div id="logo-choices" class="game-choices"></div>
+                <button id="logo-start-btn" class="quiz-btn game-btn">Start Round</button>
+                <div id="logo-result" class="prediction-result muted"></div>
+            </div>
+
+            <div class="prediction-leaderboard">
+                <h3>Logo Flash Leaderboard</h3>
+                <div id="logo-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-stadium" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Stadium GeoGuessr</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Drop a pin where you think the stadium is. Score is based on distance.</p>
+
+            <div class="geo-controls">
+                <label class="muted">Rounds</label>
+                <select id="geo-rounds" class="matchup-select">
+                    <option value="3">3</option>
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                </select>
+                <button id="geo-start-btn" class="quiz-btn game-btn">Start Game</button>
+                <div id="geo-round" class="muted">Round 0 of 0</div>
+                <div id="geo-score" class="muted">Score: 0</div>
+            </div>
+
+            <div class="geo-photo-wrap">
+                <img id="geo-photo" alt="Stadium photo">
+            </div>
+
+            <div id="geo-map" class="geo-map"></div>
+
+            <div class="prediction-actions">
+                <button id="geo-submit-btn" class="quiz-btn game-btn" disabled>Submit Guess</button>
+                <button id="geo-next-btn" class="quiz-btn game-btn" style="display:none;">Next Round</button>
+                <div id="geo-result" class="prediction-result muted"></div>
+            </div>
+
+            <div class="prediction-leaderboard">
+                <h3>GeoGuessr Leaderboard</h3>
+                <div id="geo-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-fantasy" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Fantasy Lineup Simulator</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Build a lineup under the cap. Higher projection wins.</p>
+
+            <div class="fantasy-cap">Cap Remaining: <span id="cap-remaining">$200</span> | Projection: <span id="cap-proj">0.0</span></div>
+            <form id="fantasy-form" class="prediction-form"></form>
+            <div class="prediction-actions">
+                <button type="button" id="fantasy-save-btn" class="quiz-btn game-btn">Save Lineup</button>
+                <div id="fantasy-result" class="prediction-result muted"></div>
+            </div>
+            <div class="prediction-leaderboard">
+                <h3>Top Lineups</h3>
+                <div id="fantasy-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-draft" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Draft War</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Pick the best player each round and beat the AI grade.</p>
+            <div class="game-play">
+                <div id="draft-round" class="muted">Round 1 of 5</div>
+                <div id="draft-choices" class="game-choices"></div>
+                <button id="draft-start-btn" class="quiz-btn game-btn">Start Draft</button>
+                <div id="draft-result" class="prediction-result muted"></div>
+            </div>
+            <div class="prediction-leaderboard">
+                <h3>Draft War Leaderboard</h3>
+                <div id="draft-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-trivia" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Position Trivia Blitz</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Answer 5 quick questions. No hints. Fast pace.</p>
+            <div class="game-play">
+                <div id="trivia-round" class="muted">Question 1 of 5</div>
+                <div id="trivia-question" class="game-display">READY?</div>
+                <div id="trivia-choices" class="game-choices"></div>
+                <button id="trivia-start-btn" class="quiz-btn game-btn">Start Quiz</button>
+                <div id="trivia-result" class="prediction-result muted"></div>
+            </div>
+            <div class="prediction-leaderboard">
+                <h3>Trivia Blitz Leaderboard</h3>
+                <div id="trivia-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+
+        <section id="game-matchup" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Matchup Builder</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Pick two teams and compare strengths. Vote the winner.</p>
+            <div class="matchup-grid">
+                <select id="matchup-team-a" class="matchup-select"></select>
+                <select id="matchup-team-b" class="matchup-select"></select>
+                <button id="matchup-build-btn" class="quiz-btn game-btn">Build Matchup</button>
+            </div>
+            <div id="matchup-card" class="prediction-row" style="display:none;"></div>
+            <div class="prediction-actions">
+                <button id="matchup-vote-a" class="quiz-btn game-btn">Vote Team A</button>
+                <button id="matchup-vote-b" class="quiz-btn game-btn">Vote Team B</button>
+                <div id="matchup-result" class="prediction-result muted"></div>
+            </div>
+        </section>
+
+        <section id="game-bracket" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Playoff Bracket Builder</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Fill in the bracket and save your champion.</p>
+            <div id="bracket-grid" class="bracket-grid"></div>
+            <div class="prediction-actions">
+                <button id="bracket-save-btn" class="quiz-btn game-btn">Save Bracket</button>
+                <div id="bracket-result" class="prediction-result muted"></div>
+            </div>
+        </section>
+
+        <section id="game-timeline" class="game-panel" aria-hidden="true">
+            <div class="game-panel-header">
+                <h2>Career Timeline Guess</h2>
+                <button class="quiz-btn game-btn" onclick="scrollToHub()">Back to Games</button>
+            </div>
+            <p class="muted">Arrange a player’s teams in order. Pick the correct sequence.</p>
+            <div id="timeline-question" class="game-display">READY?</div>
+            <div id="timeline-choices" class="game-choices"></div>
+            <button id="timeline-start-btn" class="quiz-btn game-btn">Start Round</button>
+            <div id="timeline-result" class="prediction-result muted"></div>
+            <div class="prediction-leaderboard">
+                <h3>Timeline Guess Leaderboard</h3>
+                <div id="timeline-leaderboard-list" class="prediction-list"></div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+    // THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        if (user) {
+            if (navBtn) { navBtn.innerText = "ACCOUNT"; navBtn.href = "Account.html"; }
+            if (sideLink) { sideLink.innerText = "Account"; sideLink.href = "Account.html"; }
+        }
+    });
+
+    const games = [
+        {
+            id: "fantasy",
+            title: "Fantasy Lineup Simulator",
+            tag: "Strategy",
+            desc: "Drag-and-drop players into positions, track cap space, and build the best lineup.",
+            status: "Play Now",
+            active: true,
+            target: "game-fantasy"
+        },
+        {
+            id: "predictions",
+            title: "Prediction Challenge",
+            tag: "Competitive",
+            desc: "Predict winners and scores, then climb the leaderboard by accuracy.",
+            status: "Play Now",
+            active: true,
+            target: "game-predictions"
+        },
+        {
+            id: "startsit",
+            title: "Start / Sit Challenge",
+            tag: "Quick Play",
+            desc: "Choose who to start each week and compare against expert picks.",
+            status: "Play Now",
+            active: true,
+            target: "game-startsit"
+        },
+        {
+            id: "statline",
+            title: "Guess the Stat Line",
+            tag: "Skill",
+            desc: "Predict a player’s yards, TDs, and catches to earn points by closeness.",
+            status: "Play Now",
+            active: true,
+            target: "game-statline"
+        },
+        {
+            id: "draftwar",
+            title: "Draft War",
+            tag: "Strategy",
+            desc: "Draft against the clock, then get a grade for balance and value.",
+            status: "Play Now",
+            active: true,
+            target: "game-draft"
+        },
+        {
+            id: "trivia",
+            title: "Position Trivia Blitz",
+            tag: "Trivia",
+            desc: "Fast-paced trivia rounds focused on QB, RB, WR, or DEF.",
+            status: "Play Now",
+            active: true,
+            target: "game-trivia"
+        },
+        {
+            id: "matchup",
+            title: "Matchup Builder",
+            tag: "Analysis",
+            desc: "Pick two teams, compare strengths, and vote the winner.",
+            status: "Play Now",
+            active: true,
+            target: "game-matchup"
+        },
+        {
+            id: "bracket",
+            title: "Playoff Bracket Builder",
+            tag: "Season",
+            desc: "Build a bracket and simulate your playoff path.",
+            status: "Play Now",
+            active: true,
+            target: "game-bracket"
+        },
+        {
+            id: "stadium",
+            title: "Stadium GeoGuessr",
+            tag: "Geo",
+            desc: "Drop a pin on the map based on the stadium photo.",
+            status: "Coming Soon",
+            active: false
+        },
+        {
+            id: "logo",
+            title: "Logo Flash Challenge",
+            tag: "Visual",
+            desc: "Logos flash for a second — guess the team quickly.",
+            status: "Play Now",
+            active: true,
+            target: "game-logo"
+        },
+        {
+            id: "polls",
+            title: "Hot Take Polls",
+            tag: "Community",
+            desc: "Vote on league debates and see live results.",
+            status: "Play Now",
+            active: true,
+            target: "game-polls"
+        },
+        {
+            id: "timeline",
+            title: "Career Timeline Guess",
+            tag: "History",
+            desc: "Arrange a player’s teams in the correct order.",
+            status: "Play Now",
+            active: true,
+            target: "game-timeline"
+        }
+    ];
+
+    const grid = document.getElementById("games-grid");
+    const gamesHub = document.getElementById("games-hub");
+
+    function renderGames() {
+        grid.innerHTML = "";
+        games.forEach(game => {
+            const card = document.createElement("div");
+            card.className = "game-card";
+
+            const badge = document.createElement("span");
+            badge.className = "game-badge";
+            badge.textContent = game.tag;
+
+            const title = document.createElement("h3");
+            title.textContent = game.title;
+
+            const desc = document.createElement("p");
+            desc.className = "muted";
+            desc.textContent = game.desc;
+
+            const status = document.createElement("div");
+            status.className = "game-status";
+            status.textContent = game.status;
+
+            const btn = document.createElement("button");
+            btn.className = "quiz-btn game-btn";
+            btn.textContent = game.active ? "Play" : "Coming Soon";
+            btn.disabled = !game.active;
+            if (game.active && game.target) {
+                btn.addEventListener("click", () => openGame(game.target));
+            }
+
+            card.appendChild(badge);
+            card.appendChild(title);
+            card.appendChild(desc);
+            card.appendChild(status);
+            card.appendChild(btn);
+            grid.appendChild(card);
+        });
+    }
+
+    function openGame(targetId) {
+        document.querySelectorAll(".game-panel").forEach(panel => {
+            panel.setAttribute("aria-hidden", "true");
+            panel.classList.remove("game-panel-open");
+        });
+        const panel = document.getElementById(targetId);
+        if (panel) {
+            panel.setAttribute("aria-hidden", "false");
+            panel.classList.add("game-panel-open");
+            if (gamesHub) gamesHub.style.display = "none";
+            if (targetId === "game-stadium" && window.geoMap) {
+                setTimeout(() => {
+                    window.geoMap.invalidateSize();
+                }, 200);
+            }
+            panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+
+    function scrollToHub() {
+        document.querySelectorAll(".game-panel").forEach(panel => {
+            panel.setAttribute("aria-hidden", "true");
+            panel.classList.remove("game-panel-open");
+        });
+        if (gamesHub) gamesHub.style.display = "block";
+        document.querySelector(".games-hero").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Prediction Challenge
+    const predictionMatchups = [
+        { id: "game1", home: "Kansas City Chiefs", away: "Buffalo Bills", actualHome: 27, actualAway: 24 },
+        { id: "game2", home: "San Francisco 49ers", away: "Philadelphia Eagles", actualHome: 21, actualAway: 28 },
+        { id: "game3", home: "Dallas Cowboys", away: "Miami Dolphins", actualHome: 30, actualAway: 26 }
+    ];
+
+    const predictionForm = document.getElementById("prediction-form");
+    const predictionResult = document.getElementById("prediction-result");
+    const predictionList = document.getElementById("prediction-leaderboard-list");
+
+    function buildPredictionForm() {
+        predictionForm.innerHTML = "";
+        predictionMatchups.forEach(matchup => {
+            const row = document.createElement("div");
+            row.className = "prediction-row";
+
+            const title = document.createElement("div");
+            title.className = "prediction-title";
+            title.textContent = `${matchup.away} @ ${matchup.home}`;
+
+            const pick = document.createElement("div");
+            pick.className = "prediction-pick";
+            pick.innerHTML = `
+                <label><input type="radio" name="${matchup.id}-winner" value="away" required> ${matchup.away}</label>
+                <label><input type="radio" name="${matchup.id}-winner" value="home" required> ${matchup.home}</label>
+            `;
+
+            const score = document.createElement("div");
+            score.className = "prediction-score";
+            score.innerHTML = `
+                <input type="number" min="0" max="99" name="${matchup.id}-away" placeholder="${matchup.away} pts" required>
+                <span>—</span>
+                <input type="number" min="0" max="99" name="${matchup.id}-home" placeholder="${matchup.home} pts" required>
+            `;
+
+            row.appendChild(title);
+            row.appendChild(pick);
+            row.appendChild(score);
+            predictionForm.appendChild(row);
+        });
+    }
+
+    function scorePrediction() {
+        let points = 0;
+        let correct = 0;
+        predictionMatchups.forEach(matchup => {
+            const winner = predictionForm.querySelector(`input[name="${matchup.id}-winner"]:checked`).value;
+            const away = parseInt(predictionForm.querySelector(`input[name="${matchup.id}-away"]`).value, 10);
+            const home = parseInt(predictionForm.querySelector(`input[name="${matchup.id}-home"]`).value, 10);
+            const actualWinner = matchup.actualHome > matchup.actualAway ? "home" : "away";
+
+            if (winner === actualWinner) {
+                points += 3;
+                correct += 1;
+            }
+            if (away === matchup.actualAway && home === matchup.actualHome) {
+                points += 2;
+            } else {
+                const diff = Math.abs((away + home) - (matchup.actualAway + matchup.actualHome));
+                if (diff <= 7) points += 1;
+            }
+        });
+        return { points, correct, total: predictionMatchups.length };
+    }
+
+    function savePredictionResult(result) {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = {
+            user,
+            points: result.points,
+            correct: result.correct,
+            total: result.total,
+            date: new Date().toLocaleDateString()
+        };
+        const list = JSON.parse(localStorage.getItem("prediction_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("prediction_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderPredictionLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("prediction_leaderboard") || "[]");
+        if (!list.length) {
+            predictionList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        predictionList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points} pts (${entry.correct}/${entry.total})</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    predictionForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const result = scorePrediction();
+        predictionResult.textContent = `You scored ${result.points} points with ${result.correct}/${result.total} winners.`;
+        savePredictionResult(result);
+        renderPredictionLeaderboard();
+    });
+
+    // Hot Take Polls
+    const polls = [
+        { id: "poll1", question: "Who wins MVP next season?", options: ["Patrick Mahomes", "Josh Allen", "Lamar Jackson", "Other"] },
+        { id: "poll2", question: "Which division is the toughest right now?", options: ["AFC North", "AFC East", "NFC East", "NFC West"] },
+        { id: "poll3", question: "Should the NFL expand to 18 regular-season games?", options: ["Yes", "No", "Undecided"] },
+        { id: "poll4", question: "Best game-day atmosphere?", options: ["Arrowhead", "Lambeau", "Lumen Field", "Lincoln Financial"] }
+    ];
+
+    const pollsGrid = document.getElementById("polls-grid");
+
+    function getPollData(id, options) {
+        const saved = JSON.parse(localStorage.getItem(`poll_${id}`) || "null");
+        if (saved) return saved;
+        return { counts: options.map(() => 0), total: 0 };
+    }
+
+    function savePollData(id, data) {
+        localStorage.setItem(`poll_${id}`, JSON.stringify(data));
+    }
+
+    function renderPolls() {
+        pollsGrid.innerHTML = "";
+        polls.forEach(poll => {
+            const data = getPollData(poll.id, poll.options);
+            const voted = localStorage.getItem(`poll_voted_${poll.id}`);
+            const card = document.createElement("div");
+            card.className = "poll-card game-card";
+
+            card.innerHTML = `
+                <span class="game-badge">Poll</span>
+                <h3>${poll.question}</h3>
+                <div class="poll-options"></div>
+            `;
+
+            const optionsWrap = card.querySelector(".poll-options");
+            poll.options.forEach((opt, idx) => {
+                const percent = data.total ? Math.round((data.counts[idx] / data.total) * 100) : 0;
+                const btn = document.createElement("button");
+                btn.className = "quiz-btn game-btn poll-btn";
+                btn.textContent = voted ? `${opt} — ${percent}%` : opt;
+                btn.disabled = !!voted;
+                btn.addEventListener("click", () => {
+                    if (localStorage.getItem(`poll_voted_${poll.id}`)) return;
+                    data.counts[idx] += 1;
+                    data.total += 1;
+                    savePollData(poll.id, data);
+                    localStorage.setItem(`poll_voted_${poll.id}`, "true");
+                    renderPolls();
+                });
+                optionsWrap.appendChild(btn);
+            });
+
+            pollsGrid.appendChild(card);
+        });
+    }
+
+    renderGames();
+    buildPredictionForm();
+    renderPredictionLeaderboard();
+    renderPolls();
+
+    // Start/Sit Challenge
+    const startSitMatchups = [
+        { id: "ss1", position: "QB", a: "Josh Allen", b: "Lamar Jackson", expert: "Josh Allen" },
+        { id: "ss2", position: "RB", a: "Christian McCaffrey", b: "Bijan Robinson", expert: "Christian McCaffrey" },
+        { id: "ss3", position: "WR", a: "Justin Jefferson", b: "Ja'Marr Chase", expert: "Justin Jefferson" },
+        { id: "ss4", position: "TE", a: "Travis Kelce", b: "George Kittle", expert: "Travis Kelce" }
+    ];
+
+    const startSitForm = document.getElementById("startsit-form");
+    const startSitResult = document.getElementById("startsit-result");
+    const startSitList = document.getElementById("startsit-leaderboard-list");
+
+    function buildStartSitForm() {
+        startSitForm.innerHTML = "";
+        startSitMatchups.forEach(matchup => {
+            const row = document.createElement("div");
+            row.className = "prediction-row";
+
+            const title = document.createElement("div");
+            title.className = "prediction-title";
+            title.textContent = `${matchup.position}: ${matchup.a} vs ${matchup.b}`;
+
+            const pick = document.createElement("div");
+            pick.className = "prediction-pick";
+            pick.innerHTML = `
+                <label><input type="radio" name="${matchup.id}" value="${matchup.a}" required> ${matchup.a}</label>
+                <label><input type="radio" name="${matchup.id}" value="${matchup.b}" required> ${matchup.b}</label>
+            `;
+
+            const score = document.createElement("div");
+            score.className = "prediction-score";
+            score.innerHTML = `<span class="muted">Expert: ${matchup.expert}</span>`;
+
+            row.appendChild(title);
+            row.appendChild(pick);
+            row.appendChild(score);
+            startSitForm.appendChild(row);
+        });
+    }
+
+    function scoreStartSit() {
+        let points = 0;
+        startSitMatchups.forEach(matchup => {
+            const pick = startSitForm.querySelector(`input[name="${matchup.id}"]:checked`).value;
+            if (pick === matchup.expert) points += 2;
+        });
+        return { points, total: startSitMatchups.length * 2 };
+    }
+
+    function saveStartSitResult(result) {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = {
+            user,
+            points: result.points,
+            total: result.total,
+            date: new Date().toLocaleDateString()
+        };
+        const list = JSON.parse(localStorage.getItem("startsit_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("startsit_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderStartSitLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("startsit_leaderboard") || "[]");
+        if (!list.length) {
+            startSitList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        startSitList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points}/${entry.total} pts</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    startSitForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const result = scoreStartSit();
+        startSitResult.textContent = `You scored ${result.points}/${result.total} points.`;
+        saveStartSitResult(result);
+        renderStartSitLeaderboard();
+    });
+
+    // Guess the Stat Line
+    const statLinePlayers = [
+        { id: "sl1", name: "C.J. Stroud", stats: { yards: 282, tds: 2, completions: 22 } },
+        { id: "sl2", name: "Bijan Robinson", stats: { yards: 118, tds: 1, completions: 0 } },
+        { id: "sl3", name: "Justin Jefferson", stats: { yards: 104, tds: 1, completions: 0 } }
+    ];
+
+    const statLineForm = document.getElementById("statline-form");
+    const statLineResult = document.getElementById("statline-result");
+    const statLineList = document.getElementById("statline-leaderboard-list");
+
+    function buildStatLineForm() {
+        statLineForm.innerHTML = "";
+        statLinePlayers.forEach(player => {
+            const row = document.createElement("div");
+            row.className = "prediction-row";
+
+            const title = document.createElement("div");
+            title.className = "prediction-title";
+            title.textContent = player.name;
+
+            const pick = document.createElement("div");
+            pick.className = "prediction-score";
+            pick.innerHTML = `
+                <input type="number" min="0" max="600" name="${player.id}-yards" placeholder="Yards" required>
+                <input type="number" min="0" max="10" name="${player.id}-tds" placeholder="TDs" required>
+                <input type="number" min="0" max="70" name="${player.id}-comp" placeholder="Receptions" required>
+            `;
+
+            const score = document.createElement("div");
+            score.className = "prediction-score";
+            score.innerHTML = `<span class="muted">Closest wins</span>`;
+
+            row.appendChild(title);
+            row.appendChild(pick);
+            row.appendChild(score);
+            statLineForm.appendChild(row);
+        });
+    }
+
+    function scoreStatLine() {
+        let points = 0;
+        statLinePlayers.forEach(player => {
+            const yards = parseInt(statLineForm.querySelector(`input[name="${player.id}-yards"]`).value, 10);
+            const tds = parseInt(statLineForm.querySelector(`input[name="${player.id}-tds"]`).value, 10);
+            const comp = parseInt(statLineForm.querySelector(`input[name="${player.id}-comp"]`).value, 10);
+
+            const yardDiff = Math.abs(yards - player.stats.yards);
+            const tdDiff = Math.abs(tds - player.stats.tds);
+            const compDiff = Math.abs(comp - player.stats.completions);
+
+            if (yardDiff <= 10) points += 3;
+            else if (yardDiff <= 25) points += 2;
+            else if (yardDiff <= 50) points += 1;
+
+            if (tdDiff === 0) points += 2;
+            else if (tdDiff === 1) points += 1;
+
+            if (compDiff <= 2) points += 2;
+            else if (compDiff <= 5) points += 1;
+        });
+        return { points, max: statLinePlayers.length * 7 };
+    }
+
+    function saveStatLineResult(result) {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = {
+            user,
+            points: result.points,
+            max: result.max,
+            date: new Date().toLocaleDateString()
+        };
+        const list = JSON.parse(localStorage.getItem("statline_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("statline_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderStatLineLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("statline_leaderboard") || "[]");
+        if (!list.length) {
+            statLineList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        statLineList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points}/${entry.max} pts</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    statLineForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const result = scoreStatLine();
+        statLineResult.textContent = `You scored ${result.points}/${result.max} points.`;
+        saveStatLineResult(result);
+        renderStatLineLeaderboard();
+    });
+
+    buildStartSitForm();
+    renderStartSitLeaderboard();
+    buildStatLineForm();
+    renderStatLineLeaderboard();
+
+    // Logo Flash Challenge
+    const logoRoundsTotal = 5;
+    const logoData = [
+        { team: "Kansas City Chiefs", logoId: "kc" },
+        { team: "Buffalo Bills", logoId: "buf" },
+        { team: "Dallas Cowboys", logoId: "dal" },
+        { team: "Philadelphia Eagles", logoId: "phi" },
+        { team: "San Francisco 49ers", logoId: "sf" },
+        { team: "Miami Dolphins", logoId: "mia" },
+        { team: "Green Bay Packers", logoId: "gb" },
+        { team: "Detroit Lions", logoId: "det" }
+    ];
+
+    let logoRound = 0;
+    let logoScore = 0;
+    let logoActive = false;
+
+    const logoDisplay = document.getElementById("logo-display");
+    const logoChoices = document.getElementById("logo-choices");
+    const logoRoundEl = document.getElementById("logo-round");
+    const logoResult = document.getElementById("logo-result");
+    const logoStartBtn = document.getElementById("logo-start-btn");
+    const logoList = document.getElementById("logo-leaderboard-list");
+
+    function shuffle(arr) {
+        return arr.slice().sort(() => Math.random() - 0.5);
+    }
+
+    function setLogoRoundText() {
+        logoRoundEl.textContent = `Round ${Math.min(logoRound + 1, logoRoundsTotal)} of ${logoRoundsTotal}`;
+    }
+
+    const logoCache = {};
+    const logoUrls = logoData.map(item => `https://a.espncdn.com/i/teamlogos/nfl/500/${item.logoId}.png`);
+
+    function preloadLogos() {
+        logoUrls.forEach(src => {
+            if (logoCache[src]) return;
+            const img = new Image();
+            img.onload = () => { logoCache[src] = img; };
+            img.src = src;
+        });
+    }
+
+    function buildLogoRound() {
+        if (logoRound >= logoRoundsTotal) {
+            finishLogoGame();
+            return;
+        }
+        logoActive = true;
+        logoResult.textContent = "";
+        setLogoRoundText();
+        logoChoices.innerHTML = "";
+
+        const question = logoData[Math.floor(Math.random() * logoData.length)];
+        const options = shuffle([question.team, ...shuffle(logoData.filter(t => t.team !== question.team)).slice(0, 3).map(t => t.team)]);
+
+        const src = `https://a.espncdn.com/i/teamlogos/nfl/500/${question.logoId}.png`;
+        logoDisplay.classList.remove("logo-hidden", "hold");
+        logoDisplay.innerHTML = `<span class="muted">Loading logo...</span>`;
+        const cached = logoCache[src];
+        const img = cached ? cached.cloneNode() : new Image();
+        img.alt = `${question.team} logo`;
+        const showLogo = () => {
+            logoDisplay.innerHTML = "";
+            logoDisplay.appendChild(img);
+            logoDisplay.classList.add("flash");
+
+            setTimeout(() => {
+                logoDisplay.classList.remove("flash");
+                logoDisplay.classList.add("logo-hidden");
+                options.forEach(opt => {
+                    const btn = document.createElement("button");
+                    btn.className = "quiz-btn game-btn";
+                    btn.textContent = opt;
+                    btn.addEventListener("click", () => {
+                        if (!logoActive) return;
+                        logoActive = false;
+                        logoDisplay.classList.remove("logo-hidden");
+                        if (opt === question.team) {
+                            logoScore += 1;
+                            logoResult.textContent = "Correct!";
+                        } else {
+                            logoResult.textContent = `Wrong — it was ${question.team}.`;
+                        }
+                        logoRound += 1;
+                        logoStartBtn.textContent = logoRound >= logoRoundsTotal ? "Finish" : "Next Round";
+                    });
+                    logoChoices.appendChild(btn);
+                });
+            }, 250);
+        };
+
+        if (cached) {
+            showLogo();
+        } else {
+            img.onload = () => {
+                logoCache[src] = img;
+                showLogo();
+            };
+            img.onerror = () => {
+                logoDisplay.textContent = question.team;
+                logoDisplay.classList.add("flash");
+                setTimeout(() => {
+                    logoDisplay.classList.remove("flash");
+                }, 250);
+            };
+            img.src = src;
+        }
+    }
+
+    function finishLogoGame() {
+        logoDisplay.textContent = "Game Complete";
+        logoChoices.innerHTML = "";
+        logoResult.textContent = `Final score: ${logoScore}/${logoRoundsTotal}`;
+        saveLogoScore();
+        renderLogoLeaderboard();
+        logoStartBtn.textContent = "Play Again";
+        logoRound = 0;
+        logoScore = 0;
+    }
+
+    function saveLogoScore() {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = { user, points: logoScore, total: logoRoundsTotal, date: new Date().toLocaleDateString() };
+        const list = JSON.parse(localStorage.getItem("logo_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("logo_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderLogoLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("logo_leaderboard") || "[]");
+        if (!list.length) {
+            logoList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        logoList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points}/${entry.total}</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    logoStartBtn.addEventListener("click", buildLogoRound);
+    setLogoRoundText();
+    renderLogoLeaderboard();
+    preloadLogos();
+    // Stadium GeoGuessr
+    const geoTeamList = [
+        { code: "ARI", name: "Cardinals", image: "Cardinals" },
+        { code: "ATL", name: "Falcons", image: "Falcons" },
+        { code: "BAL", name: "Ravens", image: "Ravens" },
+        { code: "BUF", name: "Bills", image: "Bills" },
+        { code: "CAR", name: "Panthers", image: "Panthers" },
+        { code: "CHI", name: "Bears", image: "Bears" },
+        { code: "CIN", name: "Bengals", image: "Bengals" },
+        { code: "CLE", name: "Browns", image: "Browns" },
+        { code: "DAL", name: "Cowboys", image: "Cowboys" },
+        { code: "DEN", name: "Broncos", image: "Broncos" },
+        { code: "DET", name: "Lions", image: "Lions" },
+        { code: "GB", name: "Packers", image: "Packers" },
+        { code: "HOU", name: "Texans", image: "Texans" },
+        { code: "IND", name: "Colts", image: "Colts" },
+        { code: "JAX", name: "Jaguars", image: "Jaguars" },
+        { code: "KC", name: "Chiefs", image: "Chiefs" },
+        { code: "LV", name: "Raiders", image: "Raiders" },
+        { code: "LAC", name: "Chargers", image: "Chargers" },
+        { code: "LAR", name: "Rams", image: "Rams" },
+        { code: "MIA", name: "Dolphins", image: "Dolphins" },
+        { code: "MIN", name: "Vikings", image: "Vikings" },
+        { code: "NE", name: "Patriots", image: "Patriots" },
+        { code: "NO", name: "Saints", image: "Saints" },
+        { code: "NYG", name: "Giants", image: "Giants" },
+        { code: "NYJ", name: "Jets", image: "Jets" },
+        { code: "PHI", name: "Eagles", image: "Eagles" },
+        { code: "PIT", name: "Steelers", image: "Steelers" },
+        { code: "SF", name: "49ers", image: "49ers" },
+        { code: "SEA", name: "Seahawks", image: "Seahawks" },
+        { code: "TB", name: "Buccaneers", image: "Buccaneers" },
+        { code: "TEN", name: "Titans", image: "Titans" },
+        { code: "WAS", name: "Commanders", image: "Commanders" }
+    ];
+
+    const geoMapEl = document.getElementById("geo-map");
+    const geoPhoto = document.getElementById("geo-photo");
+    const geoStartBtn = document.getElementById("geo-start-btn");
+    const geoSubmitBtn = document.getElementById("geo-submit-btn");
+    const geoNextBtn = document.getElementById("geo-next-btn");
+    const geoRoundsSelect = document.getElementById("geo-rounds");
+    const geoRoundEl = document.getElementById("geo-round");
+    const geoScoreEl = document.getElementById("geo-score");
+    const geoResultEl = document.getElementById("geo-result");
+    const geoList = document.getElementById("geo-leaderboard-list");
+
+    let geoMap;
+    let geoGuessMarker;
+    let geoActualMarker;
+    let geoLine;
+    let geoCurrentRound = 0;
+    let geoTotalRounds = 5;
+    let geoTotalScore = 0;
+    let geoRounds = [];
+    let geoCoordsByTeam = {};
+    let geoReady = false;
+    if (geoPhoto) {
+        geoPhoto.style.display = "none";
+    }
+
+    function parseCSV(text) {
+        const lines = text.trim().split(/\r?\n/);
+        const rows = [];
+        let buffer = "";
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            buffer = buffer ? `${buffer} ${line}` : line;
+            const commaCount = (buffer.match(/,/g) || []).length;
+            if (commaCount >= 6) {
+                rows.push(buffer);
+                buffer = "";
+            }
+        }
+        return rows;
+    }
+
+    async function loadStadiumCoords() {
+        const url = "https://raw.githubusercontent.com/ThompsonJamesBliss/WeatherData/master/data/stadium_coordinates.csv";
+        const res = await fetch(url);
+        const text = await res.text();
+        const rows = parseCSV(text);
+        rows.slice(1).forEach(row => {
+            const parts = row.split(",");
+            const stadiumName = parts[0]?.trim();
+            const team = parts[1]?.trim();
+            const lon = parseFloat(parts[3]);
+            const lat = parseFloat(parts[4]);
+            if (!team || Number.isNaN(lat) || Number.isNaN(lon)) return;
+            geoCoordsByTeam[team] = { lat, lon, stadium: stadiumName };
+        });
+        geoReady = true;
+    }
+
+    function initGeoMap() {
+        if (!geoMapEl) return;
+        geoMap = L.map("geo-map").setView([39, -98], 4);
+        window.geoMap = geoMap;
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 18,
+            attribution: "© OpenStreetMap"
+        }).addTo(geoMap);
+
+        geoMap.on("click", (e) => {
+            if (!geoRounds.length || geoCurrentRound >= geoTotalRounds) return;
+            placeGuessMarker(e.latlng);
+        });
+    }
+
+    function placeGuessMarker(latlng) {
+        if (geoGuessMarker) geoMap.removeLayer(geoGuessMarker);
+        geoGuessMarker = L.circleMarker(latlng, { color: "#ff4d4d", radius: 8 }).addTo(geoMap);
+        geoSubmitBtn.disabled = false;
+    }
+
+    function clearGeoMarkers() {
+        if (geoGuessMarker) geoMap.removeLayer(geoGuessMarker);
+        if (geoActualMarker) geoMap.removeLayer(geoActualMarker);
+        if (geoLine) geoMap.removeLayer(geoLine);
+        geoGuessMarker = null;
+        geoActualMarker = null;
+        geoLine = null;
+    }
+
+    function haversine(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    function updateGeoUI() {
+        geoRoundEl.textContent = `Round ${geoCurrentRound}/${geoTotalRounds}`;
+        geoScoreEl.textContent = `Score: ${geoTotalScore}`;
+    }
+
+    function startGeoGame() {
+        if (!geoReady) {
+            geoResultEl.textContent = "Loading stadium data...";
+            return;
+        }
+        geoTotalRounds = parseInt(geoRoundsSelect.value, 10);
+        geoRounds = shuffle(geoTeamList).slice(0, geoTotalRounds);
+        geoCurrentRound = 0;
+        geoTotalScore = 0;
+        geoResultEl.textContent = "";
+        geoSubmitBtn.disabled = true;
+        geoNextBtn.style.display = "none";
+        clearGeoMarkers();
+        nextGeoRound();
+    }
+
+    function nextGeoRound() {
+        if (geoCurrentRound >= geoTotalRounds) {
+            finishGeoGame();
+            return;
+        }
+        geoSubmitBtn.disabled = true;
+        geoNextBtn.style.display = "none";
+        clearGeoMarkers();
+        const team = geoRounds[geoCurrentRound];
+        const coords = geoCoordsByTeam[team.code];
+        team.coords = coords;
+        if (!coords) {
+            geoResultEl.textContent = `Missing coordinates for ${team.name}.`;
+            geoSubmitBtn.disabled = true;
+            return;
+        }
+        const imgName = team.image;
+        geoPhoto.src = `Stadiums/${imgName}.jpg`;
+        geoPhoto.style.display = "block";
+        geoPhoto.onerror = () => {
+            geoPhoto.src = `Stadiums/${imgName}.png`;
+        };
+        geoResultEl.textContent = "";
+        updateGeoUI();
+        geoMap.setView([39, -98], 4);
+    }
+
+    function submitGeoGuess() {
+        if (!geoGuessMarker) return;
+        const team = geoRounds[geoCurrentRound];
+        if (!team.coords) {
+            geoResultEl.textContent = "Missing stadium coordinates.";
+            return;
+        }
+        const guess = geoGuessMarker.getLatLng();
+        const actual = { lat: team.coords.lat, lon: team.coords.lon };
+        geoActualMarker = L.circleMarker([actual.lat, actual.lon], { color: "#2ecc71", radius: 8 }).addTo(geoMap);
+        geoLine = L.polyline([guess, [actual.lat, actual.lon]], { color: "#ffffff" }).addTo(geoMap);
+        geoMap.fitBounds(geoLine.getBounds(), { padding: [30, 30] });
+
+        const distanceKm = haversine(guess.lat, guess.lng, actual.lat, actual.lon);
+        const points = Math.max(0, Math.round(5000 - distanceKm * 2));
+        geoTotalScore += points;
+        geoResultEl.textContent = `${team.name} — ${distanceKm.toFixed(1)} km away. +${points} pts.`;
+        geoSubmitBtn.disabled = true;
+        geoNextBtn.style.display = "inline-block";
+        updateGeoUI();
+        geoCurrentRound += 1;
+    }
+
+    function finishGeoGame() {
+        geoResultEl.textContent = `Game complete. Total score: ${geoTotalScore}`;
+        saveGeoScore();
+        renderGeoLeaderboard();
+    }
+
+    function saveGeoScore() {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = { user, points: geoTotalScore, rounds: geoTotalRounds, date: new Date().toLocaleDateString() };
+        const list = JSON.parse(localStorage.getItem("geo_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("geo_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderGeoLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("geo_leaderboard") || "[]");
+        if (!list.length) {
+            geoList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        geoList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points} pts (${entry.rounds}r)</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    geoStartBtn.addEventListener("click", startGeoGame);
+    geoSubmitBtn.addEventListener("click", submitGeoGuess);
+    geoNextBtn.addEventListener("click", nextGeoRound);
+
+    loadStadiumCoords()
+        .then(() => renderGeoLeaderboard())
+        .catch(() => {
+            geoResultEl.textContent = "Could not load stadium data. Check your connection.";
+        });
+    initGeoMap();
+
+    // Fantasy Lineup Simulator
+    const fantasyCap = 200;
+    const fantasyPlayers = {
+        QB: [
+            { name: "Patrick Mahomes", cost: 60, proj: 24.8 },
+            { name: "Josh Allen", cost: 58, proj: 24.1 },
+            { name: "Lamar Jackson", cost: 55, proj: 23.2 }
+        ],
+        RB: [
+            { name: "Christian McCaffrey", cost: 52, proj: 22.9 },
+            { name: "Bijan Robinson", cost: 44, proj: 19.2 },
+            { name: "Breece Hall", cost: 42, proj: 18.7 }
+        ],
+        WR: [
+            { name: "Justin Jefferson", cost: 50, proj: 22.1 },
+            { name: "Ja'Marr Chase", cost: 47, proj: 21.0 },
+            { name: "CeeDee Lamb", cost: 45, proj: 20.4 }
+        ],
+        TE: [
+            { name: "Travis Kelce", cost: 34, proj: 15.6 },
+            { name: "George Kittle", cost: 30, proj: 14.4 },
+            { name: "Sam LaPorta", cost: 28, proj: 13.8 }
+        ]
+    };
+
+    const fantasyForm = document.getElementById("fantasy-form");
+    const capRemaining = document.getElementById("cap-remaining");
+    const capProj = document.getElementById("cap-proj");
+    const fantasyResult = document.getElementById("fantasy-result");
+    const fantasyList = document.getElementById("fantasy-leaderboard-list");
+
+    function buildFantasyForm() {
+        fantasyForm.innerHTML = "";
+        Object.keys(fantasyPlayers).forEach(pos => {
+            const row = document.createElement("div");
+            row.className = "prediction-row";
+            row.innerHTML = `
+                <div class="prediction-title">${pos}</div>
+                <div class="prediction-score">
+                    <select data-pos="${pos}" class="matchup-select fantasy-select"></select>
+                </div>
+                <div class="prediction-score"><span class="muted">Pick 1</span></div>
+            `;
+            const select = row.querySelector("select");
+            fantasyPlayers[pos].forEach(player => {
+                const opt = document.createElement("option");
+                opt.value = player.name;
+                opt.textContent = `${player.name} ($${player.cost})`;
+                opt.dataset.cost = player.cost;
+                opt.dataset.proj = player.proj;
+                select.appendChild(opt);
+            });
+            select.addEventListener("change", updateFantasyTotals);
+            fantasyForm.appendChild(row);
+        });
+        updateFantasyTotals();
+    }
+
+    function updateFantasyTotals() {
+        let totalCost = 0;
+        let totalProj = 0;
+        fantasyForm.querySelectorAll("select").forEach(sel => {
+            const opt = sel.selectedOptions[0];
+            totalCost += parseInt(opt.dataset.cost, 10);
+            totalProj += parseFloat(opt.dataset.proj);
+        });
+        const remaining = fantasyCap - totalCost;
+        capRemaining.textContent = `$${remaining}`;
+        capRemaining.style.color = remaining < 0 ? "#ff4d4d" : "inherit";
+        capProj.textContent = totalProj.toFixed(1);
+    }
+
+    document.getElementById("fantasy-save-btn").addEventListener("click", () => {
+        let totalCost = 0;
+        let totalProj = 0;
+        const picks = [];
+        fantasyForm.querySelectorAll("select").forEach(sel => {
+            const opt = sel.selectedOptions[0];
+            totalCost += parseInt(opt.dataset.cost, 10);
+            totalProj += parseFloat(opt.dataset.proj);
+            picks.push(opt.value);
+        });
+        if (totalCost > fantasyCap) {
+            fantasyResult.textContent = "Over the cap — adjust your lineup.";
+            return;
+        }
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = { user, proj: totalProj, picks, date: new Date().toLocaleDateString() };
+        const list = JSON.parse(localStorage.getItem("fantasy_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.proj - a.proj);
+        localStorage.setItem("fantasy_leaderboard", JSON.stringify(list.slice(0, 10)));
+        fantasyResult.textContent = `Saved! Projection ${totalProj.toFixed(1)} points.`;
+        renderFantasyLeaderboard();
+    });
+
+    function renderFantasyLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("fantasy_leaderboard") || "[]");
+        if (!list.length) {
+            fantasyList.innerHTML = "<p class=\"muted\">No lineups yet. Be the first!</p>";
+            return;
+        }
+        fantasyList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.proj.toFixed(1)} pts</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    buildFantasyForm();
+    renderFantasyLeaderboard();
+
+    // Draft War
+    const draftPool = [
+        { name: "Justin Jefferson", value: 96 },
+        { name: "Patrick Mahomes", value: 95 },
+        { name: "Myles Garrett", value: 92 },
+        { name: "Christian McCaffrey", value: 94 },
+        { name: "Travis Kelce", value: 88 },
+        { name: "Sauce Gardner", value: 90 },
+        { name: "Lamar Jackson", value: 93 },
+        { name: "CeeDee Lamb", value: 91 }
+    ];
+    const draftRounds = 5;
+    let draftRound = 0;
+    let draftScore = 0;
+    const draftRoundEl = document.getElementById("draft-round");
+    const draftChoices = document.getElementById("draft-choices");
+    const draftStartBtn = document.getElementById("draft-start-btn");
+    const draftResult = document.getElementById("draft-result");
+    const draftList = document.getElementById("draft-leaderboard-list");
+
+    function setDraftRoundText() {
+        draftRoundEl.textContent = `Round ${Math.min(draftRound + 1, draftRounds)} of ${draftRounds}`;
+    }
+
+    function buildDraftRound() {
+        if (draftRound >= draftRounds) {
+            finishDraft();
+            return;
+        }
+        draftResult.textContent = "";
+        setDraftRoundText();
+        draftChoices.innerHTML = "";
+        const options = shuffle(draftPool).slice(0, 3);
+        options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-btn game-btn";
+            btn.textContent = `${opt.name} (${opt.value})`;
+            btn.addEventListener("click", () => {
+                draftScore += opt.value;
+                draftRound += 1;
+                draftStartBtn.textContent = draftRound >= draftRounds ? "Finish" : "Next Round";
+            });
+            draftChoices.appendChild(btn);
+        });
+    }
+
+    function finishDraft() {
+        draftChoices.innerHTML = "";
+        const avg = Math.round(draftScore / draftRounds);
+        draftResult.textContent = `Draft complete. Grade: ${avg}`;
+        saveDraftScore(avg);
+        renderDraftLeaderboard();
+        draftStartBtn.textContent = "Draft Again";
+        draftRound = 0;
+        draftScore = 0;
+    }
+
+    function saveDraftScore(avg) {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = { user, points: avg, date: new Date().toLocaleDateString() };
+        const list = JSON.parse(localStorage.getItem("draft_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("draft_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderDraftLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("draft_leaderboard") || "[]");
+        if (!list.length) {
+            draftList.innerHTML = "<p class=\"muted\">No drafts yet. Be the first!</p>";
+            return;
+        }
+        draftList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points}</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    draftStartBtn.addEventListener("click", buildDraftRound);
+    setDraftRoundText();
+    renderDraftLeaderboard();
+
+    // Position Trivia Blitz
+    const triviaRounds = 5;
+    const triviaQuestions = [
+        { q: "Which position gets the snap on every play?", options: ["Center", "Quarterback", "Guard", "Tackle"], a: "Center" },
+        { q: "Which position primarily catches passes?", options: ["WR", "LB", "DT", "K"], a: "WR" },
+        { q: "Which position kicks field goals?", options: ["K", "QB", "RB", "TE"], a: "K" },
+        { q: "Which position calls defensive plays?", options: ["MLB", "P", "WR", "CB"], a: "MLB" },
+        { q: "Which position lines up behind the QB?", options: ["RB", "DE", "SS", "LT"], a: "RB" }
+    ];
+    let triviaRound = 0;
+    let triviaScore = 0;
+    const triviaRoundEl = document.getElementById("trivia-round");
+    const triviaQuestionEl = document.getElementById("trivia-question");
+    const triviaChoices = document.getElementById("trivia-choices");
+    const triviaStartBtn = document.getElementById("trivia-start-btn");
+    const triviaResult = document.getElementById("trivia-result");
+    const triviaList = document.getElementById("trivia-leaderboard-list");
+
+    function setTriviaRoundText() {
+        triviaRoundEl.textContent = `Question ${Math.min(triviaRound + 1, triviaRounds)} of ${triviaRounds}`;
+    }
+
+    function buildTriviaRound() {
+        if (triviaRound >= triviaRounds) {
+            finishTrivia();
+            return;
+        }
+        triviaResult.textContent = "";
+        setTriviaRoundText();
+        triviaChoices.innerHTML = "";
+        const q = triviaQuestions[triviaRound];
+        triviaQuestionEl.textContent = q.q;
+        q.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-btn game-btn";
+            btn.textContent = opt;
+            btn.addEventListener("click", () => {
+                if (opt === q.a) {
+                    triviaScore += 1;
+                    triviaResult.textContent = "Correct!";
+                } else {
+                    triviaResult.textContent = `Wrong — ${q.a}`;
+                }
+                triviaRound += 1;
+                triviaStartBtn.textContent = triviaRound >= triviaRounds ? "Finish" : "Next Question";
+            });
+            triviaChoices.appendChild(btn);
+        });
+    }
+
+    function finishTrivia() {
+        triviaQuestionEl.textContent = "Quiz Complete";
+        triviaChoices.innerHTML = "";
+        triviaResult.textContent = `Final score: ${triviaScore}/${triviaRounds}`;
+        saveTriviaScore();
+        renderTriviaLeaderboard();
+        triviaStartBtn.textContent = "Play Again";
+        triviaRound = 0;
+        triviaScore = 0;
+    }
+
+    function saveTriviaScore() {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = { user, points: triviaScore, total: triviaRounds, date: new Date().toLocaleDateString() };
+        const list = JSON.parse(localStorage.getItem("trivia_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("trivia_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderTriviaLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("trivia_leaderboard") || "[]");
+        if (!list.length) {
+            triviaList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        triviaList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points}/${entry.total}</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    triviaStartBtn.addEventListener("click", buildTriviaRound);
+    setTriviaRoundText();
+    renderTriviaLeaderboard();
+
+    // Matchup Builder
+    const matchupTeams = [
+        "Kansas City Chiefs", "Buffalo Bills", "Dallas Cowboys", "Philadelphia Eagles",
+        "San Francisco 49ers", "Miami Dolphins", "Green Bay Packers", "Detroit Lions"
+    ];
+    const teamASelect = document.getElementById("matchup-team-a");
+    const teamBSelect = document.getElementById("matchup-team-b");
+    const matchupCard = document.getElementById("matchup-card");
+    const matchupResult = document.getElementById("matchup-result");
+    const matchupVoteA = document.getElementById("matchup-vote-a");
+    const matchupVoteB = document.getElementById("matchup-vote-b");
+    let currentMatchup = null;
+
+    function fillMatchupSelects() {
+        matchupTeams.forEach(team => {
+            const a = document.createElement("option");
+            a.value = team; a.textContent = team;
+            const b = document.createElement("option");
+            b.value = team; b.textContent = team;
+            teamASelect.appendChild(a);
+            teamBSelect.appendChild(b);
+        });
+        teamBSelect.selectedIndex = 1;
+    }
+
+    function buildMatchupCard() {
+        const a = teamASelect.value;
+        const b = teamBSelect.value;
+        if (a === b) {
+            matchupResult.textContent = "Pick two different teams.";
+            return;
+        }
+        const statsA = { offense: Math.floor(Math.random() * 30) + 70, defense: Math.floor(Math.random() * 30) + 70 };
+        const statsB = { offense: Math.floor(Math.random() * 30) + 70, defense: Math.floor(Math.random() * 30) + 70 };
+        currentMatchup = `${a} vs ${b}`;
+        matchupCard.style.display = "grid";
+        matchupCard.innerHTML = `
+            <div class="prediction-title">${a}</div>
+            <div>OFF ${statsA.offense} | DEF ${statsA.defense}</div>
+            <div class="muted">TEAM A</div>
+            <div class="prediction-title">${b}</div>
+            <div>OFF ${statsB.offense} | DEF ${statsB.defense}</div>
+            <div class="muted">TEAM B</div>
+        `;
+        matchupVoteA.textContent = `Vote ${a}`;
+        matchupVoteB.textContent = `Vote ${b}`;
+        matchupResult.textContent = "";
+    }
+
+    document.getElementById("matchup-build-btn").addEventListener("click", buildMatchupCard);
+    matchupVoteA.addEventListener("click", () => saveMatchupVote("A"));
+    matchupVoteB.addEventListener("click", () => saveMatchupVote("B"));
+
+    function saveMatchupVote(side) {
+        if (!currentMatchup) return;
+        const key = `matchup_${currentMatchup}`;
+        const data = JSON.parse(localStorage.getItem(key) || '{"A":0,"B":0}');
+        data[side] += 1;
+        localStorage.setItem(key, JSON.stringify(data));
+        const total = data.A + data.B;
+        const aPct = total ? Math.round((data.A / total) * 100) : 0;
+        const bPct = total ? Math.round((data.B / total) * 100) : 0;
+        matchupResult.textContent = `Votes — Team A: ${aPct}% | Team B: ${bPct}%`;
+    }
+
+    fillMatchupSelects();
+
+    // Playoff Bracket Builder
+    const bracketTeams = ["Chiefs", "Bills", "Bengals", "Ravens", "49ers", "Eagles", "Cowboys", "Lions"];
+    const bracketGrid = document.getElementById("bracket-grid");
+    const bracketResult = document.getElementById("bracket-result");
+
+    function buildBracket() {
+        bracketGrid.innerHTML = "";
+        for (let i = 0; i < 4; i++) {
+            const slot = document.createElement("div");
+            slot.className = "prediction-row";
+            slot.innerHTML = `
+                <div class="prediction-title">Game ${i + 1}</div>
+                <div class="prediction-score">
+                    <select class="matchup-select bracket-team"></select>
+                    <select class="matchup-select bracket-team"></select>
+                </div>
+                <div class="muted">Pick your winner</div>
+            `;
+            const selects = slot.querySelectorAll("select");
+            selects.forEach(sel => {
+                bracketTeams.forEach(t => {
+                    const opt = document.createElement("option");
+                    opt.value = t; opt.textContent = t;
+                    sel.appendChild(opt);
+                });
+            });
+            bracketGrid.appendChild(slot);
+        }
+    }
+
+    document.getElementById("bracket-save-btn").addEventListener("click", () => {
+        const picks = [];
+        bracketGrid.querySelectorAll(".prediction-row").forEach(row => {
+            const selects = row.querySelectorAll("select");
+            picks.push(`${selects[0].value} vs ${selects[1].value}`);
+        });
+        bracketResult.textContent = "Bracket saved! Check back later to compare.";
+        localStorage.setItem("bracket_picks", JSON.stringify(picks));
+    });
+
+    buildBracket();
+
+    // Career Timeline Guess
+    const timelineRounds = 3;
+    const timelineData = [
+        { prompt: "Tom Brady", correct: "Patriots → Buccaneers", options: ["Patriots → Buccaneers", "Buccaneers → Patriots", "Patriots → 49ers"] },
+        { prompt: "Peyton Manning", correct: "Colts → Broncos", options: ["Colts → Broncos", "Broncos → Colts", "Colts → Titans"] },
+        { prompt: "Randy Moss", correct: "Vikings → Raiders → Patriots", options: ["Vikings → Raiders → Patriots", "Patriots → Vikings → Raiders", "Raiders → Patriots → Vikings"] }
+    ];
+    let timelineRound = 0;
+    let timelineScore = 0;
+    const timelineQuestion = document.getElementById("timeline-question");
+    const timelineChoices = document.getElementById("timeline-choices");
+    const timelineStartBtn = document.getElementById("timeline-start-btn");
+    const timelineResult = document.getElementById("timeline-result");
+    const timelineList = document.getElementById("timeline-leaderboard-list");
+
+    function buildTimelineRound() {
+        if (timelineRound >= timelineRounds) {
+            finishTimeline();
+            return;
+        }
+        const q = timelineData[timelineRound];
+        timelineQuestion.textContent = q.prompt;
+        timelineChoices.innerHTML = "";
+        q.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-btn game-btn";
+            btn.textContent = opt;
+            btn.addEventListener("click", () => {
+                if (opt === q.correct) {
+                    timelineScore += 1;
+                    timelineResult.textContent = "Correct!";
+                } else {
+                    timelineResult.textContent = `Wrong — ${q.correct}`;
+                }
+                timelineRound += 1;
+                timelineStartBtn.textContent = timelineRound >= timelineRounds ? "Finish" : "Next";
+            });
+            timelineChoices.appendChild(btn);
+        });
+    }
+
+    function finishTimeline() {
+        timelineQuestion.textContent = "Game Complete";
+        timelineChoices.innerHTML = "";
+        timelineResult.textContent = `Final score: ${timelineScore}/${timelineRounds}`;
+        saveTimelineScore();
+        renderTimelineLeaderboard();
+        timelineStartBtn.textContent = "Play Again";
+        timelineRound = 0;
+        timelineScore = 0;
+    }
+
+    function saveTimelineScore() {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+        const entry = { user, points: timelineScore, total: timelineRounds, date: new Date().toLocaleDateString() };
+        const list = JSON.parse(localStorage.getItem("timeline_leaderboard") || "[]");
+        list.push(entry);
+        list.sort((a, b) => b.points - a.points);
+        localStorage.setItem("timeline_leaderboard", JSON.stringify(list.slice(0, 10)));
+    }
+
+    function renderTimelineLeaderboard() {
+        const list = JSON.parse(localStorage.getItem("timeline_leaderboard") || "[]");
+        if (!list.length) {
+            timelineList.innerHTML = "<p class=\"muted\">No scores yet. Be the first!</p>";
+            return;
+        }
+        timelineList.innerHTML = list.map((entry, idx) => `
+            <div class="prediction-entry">
+                <span>#${idx + 1} ${entry.user}</span>
+                <span>${entry.points}/${entry.total}</span>
+                <span>${entry.date}</span>
+            </div>
+        `).join("");
+    }
+
+    timelineStartBtn.addEventListener("click", buildTimelineRound);
+    renderTimelineLeaderboard();
+</script>
+
+</body>
+</html>
+

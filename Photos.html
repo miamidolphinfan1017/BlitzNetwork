@@ -1,0 +1,570 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<title>NFL Top Photos</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html" class="nav-active">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<div class="photos-wrapper">
+
+<header>
+  <h1 class="top2photosheading">
+        Top 2 Photos From Every Week of the 2025 NFL Season:
+    </h1>
+
+  <h2 class="inmyopinion">
+        (In My Opinion)
+  </h2>
+
+  <div class="week-selector-container">
+    <label for="week-select" class="selector-label">Jump to:</label>
+    <select id="week-select" onchange="scrollToWeek()">
+        <option value="">Select Week</option>
+        <option value="week1">Week 1</option>
+        <option value="week2">Week 2</option>
+        <option value="week3">Week 3</option>
+        <option value="week4">Week 4</option>
+        <option value="week5">Week 5</option>
+        <option value="week6">Week 6</option>
+        <option value="week7">Week 7</option>
+        <option value="week8">Week 8</option>
+        <option value="week9">Week 9</option>
+        <option value="week10">Week 10</option>
+        <option value="week11">Week 11</option>
+    </select>
+</div>
+
+</header>
+
+<div class="bestphotos-container">
+
+  <!--Week 1-->
+    <div class="bestphotos" id="week1">
+        <h2 class="weeksforphotos">Week 1:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="issac teslaa week 1 photo.jpg" alt="week 1 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Detroit Lions wide receiver Isaac TeSlaa catches a one-handed 13-yard touchdown pass for his first NFL touchdown against the Green Bay Packers.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week1">
+        <h2 class="weeksforphotos">Week 1:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/2dfe3fb/2147483647/strip/true/crop/3519x2346+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F4b%2Fb5%2Fd5efcb53c8508c676818e1308b5b%2Fedff8edbd4ee433bb218914f6b59422d" alt="week 1 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Pittsburgh Steelers running back Jaylen Warren taunts New York Jets linebacker Jamien Sherwood after scoring a touchdown.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 2-->
+    <div class="bestphotos" id="week2">
+        <h2 class="weeksforphotos">Week 2:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="elic ayomanor week 2 photo.jpg" alt="week 2 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Tennessee Titans wide receiver Elic Ayomanor catches a one-handed touchdown pass against the Los Angeles Rams.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week2">
+        <h2 class="weeksforphotos">Week 2:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="james cook week 2 photo.jpg" alt="week 2 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Buffalo Bills running back James Cook dives for the goal line to score a touchdown against the New York Jets.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 3-->
+    <div class="bestphotos">
+        <h2 class="weeksforphotos">Week 3:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/fa8c64f/2147483647/strip/true/crop/6554x4369+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F3c%2F9e%2F7de7fd89be73439ba0747ce7a0c8%2F8ca37a0b849f4bc49efb0bc184805bcd" alt="week 3 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Seattle Seahawks running back Kenneth Walker III hurdles over New Orleans Saints cornerback Kool-Aid McKinstry.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos">
+        <h2 class="weeksforphotos">Week 3:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="amon-ra st brown week 3 photo.jpg" alt="week 3 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Detroit Lions wide receiver Amon-Ra St. Brown celebrates after scoring a touchdown against the Baltimore Ravens.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 4-->
+    <div class="bestphotos" id="week4">
+        <h2 class="weeksforphotos">Week 4:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="marvin harrison week 4 photo.jpg" alt="week 4 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Arizona Cardinals wide reciever Marvin Harrison Jr. catches a touchdown pass on Seattle Seahawks cornerback Devon Witherspoon.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week4">
+        <h2 class="weeksforphotos">Week 4:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/223fe7a/2147483647/strip/true/crop/5589x3735+0+0/resize/1360x909!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fe1%2F0d%2Fdbdd837a76454d0740bc0ab87101%2F819ec6fa5e4d447bb9826d7899332851" alt="week 4 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">New York Giants running back Cam Skattebo does a back flip after scoring a two-point conversion against the Los Angeles Chargers.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 5-->
+    <div class="bestphotos" id="week5">
+        <h2 class="weeksforphotos">Week 5:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/d3b7f79/2147483647/strip/true/crop/3743x2495+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Faf%2Fa7%2F9575cb18a39f4ffc0933ff557aed%2Fe31147163a674bddb8a6005534f4b31b" alt="week 5 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">New York Giants running back Cam Skattebo attempts a stiff arm on New Orleans Saints safety Jonas Sanker.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week5">
+        <h2 class="weeksforphotos">Week 5:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/d36166d/2147483647/strip/true/crop/5518x3679+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fe2%2F43%2F4c09d4887b7229962c04109b209a%2F7985ac427d704cacb2a7873cdf75486b" alt="week 5 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Miami Dolphins wide receiver Jaylen Waddle celebrates after scoring against Carolina Panthers cornerback Mike Jackson.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 6-->
+    <div class="bestphotos" id="week6">
+        <h2 class="weeksforphotos">Week 6:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/d58b8d2/2147483647/strip/true/crop/4605x3070+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F39%2Fa4%2F17f44f206f3076d9c521d8e5a9ca%2Fe746a1f1ce1b4c93949a6f9d13118548" alt="week 6 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Dallas Cowboys wide reciever George Pickens hurdles over Carolina Panthers safety Nick Scott after catching a pass.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week6">
+        <h2 class="weeksforphotos">Week 6:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="jameson williams week 6 photo.jpg" alt="week 6 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Detroit Lions wide reciever Jameson Williams attempts to jump over Kansas City Cheifs cornerback Jaylen Watson.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 7-->
+    <div class="bestphotos" id="week7">
+        <h2 class="weeksforphotos">Week 7:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/84b6bb6/2147483647/strip/true/crop/8146x5431+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Ff8%2Ff4%2F30825cdd13dcb93124781b970554%2F9232e74468e34f3d9492cc309e3a0ead" alt="week 7 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Dallas Cowboys wide receiver George Pickens, wide reciever Ceedee Lamb and teammates pause on the end zone before their game against the Washington Commanders.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week7">
+        <h2 class="weeksforphotos">Week 7:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/62e8dd6/2147483647/strip/true/crop/5263x3509+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F7b%2F34%2F2161a5977e8f03c15a8019012aab%2Fda77a0a5ca1a489c994fd7fc804d7039" alt="week 7 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Seattle Seahawks wide receiver Jaxon Smith-Njigba celebrates his touchdown catch by dunking on the goal post as a referee signals a touchdown against the Houston Texans.</figcaption>
+        </figure>
+    </div>
+
+  <!--Week 8-->
+    <div class="bestphotos" id="week8">
+        <h2 class="weeksforphotos">Week 8:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/27ffaeb/2147483647/strip/true/crop/4590x3060+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fc6%2Fe2%2Feb6617518b26740d09bc71a8b2ad%2F238c6a9b2d554bde8fe9ee10c1f0a442" alt="week 8 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Cincinnati Bengals wide receiver Ja’Marr Chase kneels before a NFL football game against the New York Jets.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week8">
+        <h2 class="weeksforphotos">Week 8:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/5c7e8c3/2147483647/strip/true/crop/5158x3438+0+0/resize/1360x906!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fd9%2Fc8%2F53d11da892ebdb4f422db84a848c%2F636be4d505f64b6a825bee110e6245cc" alt="week 8 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Buffalo Bills running back James Cook III celebrates after scoring a touchdown by doing a handstand against the Carolina Panthers.</figcaption>
+        </figure>
+    </div>
+
+   <!--Week 9-->
+    <div class="bestphotos" id="week9">
+        <h2 class="weeksforphotos">Week 9:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="chase brown week 9 photo.jpg" alt="week 9 photo" class="nflphotos tall-photo"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Cincinnati Bengals running back Chase Brown hurdles over Chicago Bears defensive back Kevin Byard III during a run.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week9">
+        <h2 class="weeksforphotos">Week 9:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="stefon diggs week 9 photo.jpg" alt="week 9 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">New England Patriots wide receiver Stefon Diggs dives for the pylon and scores a touchdown during a game against the Atlanta Falcons.</figcaption>
+        </figure>
+    </div>
+
+   <!--Week 10-->
+    <div class="bestphotos" id="week10">
+        <h2 class="weeksforphotos">Week 10:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="george kittle week 10 photo.jpg" alt="week 10 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">San Francisco 49ers tight end George Kittle dives for the pylon to score a touchdown during a game against the Los Angeles Rams.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week10">
+        <h2 class="weeksforphotos">Week 10:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://dims.apnews.com/dims4/default/60cc98c/2147483647/strip/true/crop/4321x2881+0+0/resize/1360x907!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F99%2F0e%2F384aff2c1c8bd8a92f3870fc3329%2F72708d926b7b425cb7589bd5bf47b079" alt="week 10 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Detroit Lions running back Jahmyr Gibbs celebrates after scoring during the first half of a game against the Washington Commanders.</figcaption>
+        </figure>
+    </div>
+
+   <!--Week 11-->
+    <div class="bestphotos" id="week11">
+        <h2 class="weeksforphotos">Week 11:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="malik washington week 11 photo.jpg" alt="week 11 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Miami Dolphins wide receiver Malik Washington stiff arms Washington Commanders cornerback Jonathan Jones after a catch during a game in Madrid.</figcaption>
+        </figure>
+    </div>
+
+    <div class="bestphotos" id="week11">
+        <h2 class="weeksforphotos">Week 11:</h2>
+        <figure class="photo-click-area" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="darnell washington week 11 photo.jpg" alt="week 11 photo" class="nflphotos"/>
+                <div class="fullscreen-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </div>
+            </div>
+            <figcaption class="nflphotoscaption">Pittsburgh Steelers tight end Darnell Washington hurdles over Cincinnati Bengals safety Geno Stone and cornerback Dax Hill during a game.</figcaption>
+        </figure>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+
+    /* Dropdown Menu */
+    function scrollToWeek() {
+        var select = document.getElementById("week-select");
+        var weekId = select.value;
+        
+        /* Logic to find the element and calculate the scroll position */
+        if (weekId) {
+            var element = document.getElementById(weekId);
+            
+            if (element) {
+                /* Offset to ensure the card isn't hidden behind the top header */
+                const offset = 100; 
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = element.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                /* Execution of the smooth scroll animation */
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }
+
+    // LIGHTBOX SCRIPT
+    function openLightbox(element) {
+        const imgPath = element.querySelector('img').src;
+        const captionText = element.querySelector('.nflphotoscaption').innerText;
+        
+        document.getElementById('lightbox-img').src = imgPath;
+        document.getElementById('lightbox-caption').innerText = captionText;
+        document.getElementById('photo-lightbox').classList.add('active');
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeLightbox() {
+        document.getElementById('photo-lightbox').classList.remove('active');
+        document.body.style.overflow = 'auto'; 
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === "Escape") closeLightbox();
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check memory for the user
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        // If logged in, update the buttons
+        if (user) {
+            if (navBtn) { 
+                navBtn.innerText = "ACCOUNT"; 
+                navBtn.href = "Account.html"; 
+            }
+            if (sideLink) { 
+                sideLink.innerText = "Account"; 
+                sideLink.href = "Account.html"; 
+            }
+        }
+        
+        // --- AUTO-HIGHLIGHT SIDEBAR LINK ---
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+    });
+
+    /* Monitors scroll position to add or remove the 'show' class for the fade effect */
+    window.onscroll = function() {
+        var topBtn = document.getElementById("backToTop");
+        
+        /* If user scrolls more than 300px, add the 'show' class to fade it in */
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            topBtn.classList.add("show");
+        } else {
+            topBtn.classList.remove("show");
+        }
+    };
+
+    /* Handles the smooth climb to the top and resets the week selector */
+    function scrollToTop() {
+        /* Smoothly scrolls the window to the very top coordinates */
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        /* Resets the dropdown menu to the default 'Select Week' option */
+        var select = document.getElementById("week-select");
+        if (select) {
+            select.selectedIndex = 0;
+        }
+    }
+
+
+</script>
+
+<div id="photo-lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+    <span class="close-lightbox">&times;</span>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" alt="Full Screen Photo">
+        <p id="lightbox-caption"></p>
+    </div>
+</div>
+
+<button id="backToTop" onclick="scrollToTop()">
+    <span>&#8593;</span>
+</button>
+
+
+
+</body>
+</html>
+
+
+
+
+
+

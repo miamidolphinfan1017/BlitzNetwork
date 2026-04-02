@@ -1,0 +1,330 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+      <link rel="icon" type="image/jpg" href="logo for website.jpg">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Table specific styles for perfect alignment */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            color: var(--card-text);
+        }
+        th {
+            border-bottom: 2px solid var(--card-border);
+            padding: 10px;
+        }
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        /* Centering the Rank column */
+        .col-rank { text-align: center; width: 80px; }
+        .col-user { text-align: left; padding-left: 15px; }
+        .col-score { text-align: right; }
+
+        /* Enhanced High-Contrast Colors for Top 3 */
+        .rank-1 { color: #FFD700; font-weight: 900; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); } /* Gold */
+        .rank-2 { color: #E0E0E0; font-weight: 800; text-shadow: 0 0 10px rgba(224, 224, 224, 0.4); } /* Silver */
+        .rank-3 { color: #CD7F32; font-weight: 800; text-shadow: 0 0 10px rgba(205, 127, 50, 0.4); } /* Bronze */
+
+        /* Glow and Bold for Ranks 4-25 */
+        .standard-glow { 
+            color: var(--card-text); 
+            font-weight: 700; 
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4); 
+        }
+
+        /* Make sure all table data is easily readable */
+        .leaderboard-table td {
+            font-weight: 600;
+        }
+        
+        /* Centering the Box on the screen */
+        .login-main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .leaderboard-card {
+            width: 450px;
+            max-width: 95%;
+            background: var(--card-bg);
+            color: var(--card-text);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .leaderboard-title {
+            margin-bottom: 3px;
+        }
+
+        .leaderboard-subtitle {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .leaderboard-link {
+            color: var(--card-text);
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-quiz-link {
+            text-decoration: underline;
+            display: inline-block;
+            width: 80%;
+            color: var(--card-text);
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body class="leaderboard-page">
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+<a href="Leaderboard.html" class="nav-active">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+
+    <div class="login-bg"></div>
+
+    <main class="login-main">
+        <div class="login-box leaderboard-card">
+            <h1 class="leaderboard-title">🏆Top 10 Leaders</h1>
+            <p class="leaderboard-subtitle"><em>Local All-Time Greats</em></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-rank">Rank</th>
+                        <th class="col-user">User</th>
+                        <th class="col-score">Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    </tbody>
+                </table>
+
+            <div style="margin-top: 25px;">
+                <a href="Quizzes.html" class="quiz-btn leaderboard-quiz-link">Back to Quizzes</a>
+            </div>
+            
+            <p style="margin-top: 20px;">
+                <a href="index.html" class="leaderboard-link">Back to Home</a>
+            </p>
+        </div>
+    </main>
+
+
+    
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check memory for the user
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        // If logged in, update the buttons
+        if (user) {
+            if (navBtn) { 
+                navBtn.innerText = "ACCOUNT"; 
+                navBtn.href = "Account.html"; 
+            }
+            if (sideLink) { 
+                sideLink.innerText = "Account"; 
+                sideLink.href = "Account.html"; 
+            }
+        }
+        
+        // --- 2. AUTO-HIGHLIGHT SIDEBAR LINK ---
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+    });
+
+
+
+        // 1. Check for a pending score from the quiz
+    const currentUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    const pendingScore = localStorage.getItem('pendingScore');
+    const pendingScoreTotal = localStorage.getItem('pendingScoreTotal');
+    const pendingScoreAccuracy = localStorage.getItem('pendingScoreAccuracy');
+    const pendingScoreAvgDifficulty = localStorage.getItem('pendingScoreAvgDifficulty');
+    const pendingScoreRank = localStorage.getItem('pendingScoreRank');
+
+        if (currentUser && pendingScore) {
+        localStorage.setItem(`BestScore_${currentUser}`, pendingScore);
+
+        let lbData = JSON.parse(localStorage.getItem('nfl_leaderboard')) || [];
+        const profile = JSON.parse(localStorage.getItem(`profile_${currentUser}`) || '{}');
+        const avatar = profile.avatar || '';
+        const displayName = profile.displayName || currentUser;
+        
+        // Added date to keep data consistent
+        lbData.push({ 
+            name: currentUser, 
+            displayName: displayName,
+            avatar: avatar,
+            score: parseInt(pendingScore),
+            total: parseInt(pendingScoreTotal || '25', 10),
+            accuracy: pendingScoreAccuracy ? parseFloat(pendingScoreAccuracy) : null,
+            avgDifficulty: pendingScoreAvgDifficulty ? parseFloat(pendingScoreAvgDifficulty) : null,
+            rankScore: pendingScoreRank ? parseFloat(pendingScoreRank) : null,
+            date: new Date().toLocaleDateString() 
+        });
+        
+        lbData.sort((a, b) => {
+            const aRank = a.rankScore != null ? a.rankScore : ((a.score || 0) / (a.total || 25)) * 100;
+            const bRank = b.rankScore != null ? b.rankScore : ((b.score || 0) / (b.total || 25)) * 100;
+            return bRank - aRank;
+        });
+        localStorage.setItem('nfl_leaderboard', JSON.stringify(lbData.slice(0, 10)));
+
+        localStorage.removeItem('pendingScore');
+        localStorage.removeItem('pendingScoreTotal');
+        localStorage.removeItem('pendingScoreAccuracy');
+        localStorage.removeItem('pendingScoreAvgDifficulty');
+        localStorage.removeItem('pendingScoreRank');
+        alert(`Score of ${pendingScore} saved to your account, ${currentUser}!`);
+        location.reload(); 
+        }
+
+        // 1. Fetch the data
+        let leaderboardData = JSON.parse(localStorage.getItem('nfl_leaderboard')) || [];
+        leaderboardData = leaderboardData.filter(entry => entry.name !== null && entry.name !== "null");
+        leaderboardData.sort((a, b) => {
+            const aRank = a.rankScore != null ? a.rankScore : ((a.score || 0) / (a.total || 25)) * 100;
+            const bRank = b.rankScore != null ? b.rankScore : ((b.score || 0) / (b.total || 25)) * 100;
+            return bRank - aRank;
+        });
+        const tableBody = document.getElementById('leaderboard-body');
+
+        if (leaderboardData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 30px;">No scores recorded yet. Be the first!</td></tr>';
+        } else {
+            // 2. Build rows with centered ranks and brighter medals
+            tableBody.innerHTML = leaderboardData.map((entry, index) => {
+                const rank = index + 1;
+                let rankClass = "";
+                let medal = "";
+
+                if (rank === 1) { 
+                    rankClass = "rank-1"; 
+                    medal = "🥇"; 
+                } else if (rank === 2) { 
+                    rankClass = "rank-2"; 
+                    medal = "🥈"; 
+                } else if (rank === 3) { 
+                    rankClass = "rank-3"; 
+                    medal = "🥉"; 
+                } else {
+                    // Apply the new glow class for ranks 4-10
+                    rankClass = "standard-glow"; 
+                    medal = ""; 
+                }
+
+                const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'><circle cx='40' cy='40' r='40' fill='%23cfcfcf'/><circle cx='40' cy='30' r='14' fill='%23ffffff'/><path d='M16 70c4-14 18-22 24-22s20 8 24 22' fill='%23ffffff'/></svg>";
+                const liveProfile = JSON.parse(localStorage.getItem(`profile_${entry.name}`) || '{}');
+                const avatar = liveProfile.avatar || entry.avatar || DEFAULT_AVATAR;
+                const displayName = liveProfile.displayName || entry.displayName || entry.name || 'Guest';
+                const avatarHtml = avatar ? `<img src="${avatar}" alt="avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:10px;border:2px solid rgba(0,0,0,0.08);">` : '';
+                return `
+                    <tr>
+                        <td class="col-rank ${rankClass}">${medal}${rank}</td>
+                        <td class="col-user ${rankClass}" style="font-weight: 500;"><span style="display:inline-flex;align-items:center;">${avatarHtml}<span>${displayName}</span></span></td>
+                        <td class="col-score" style="font-weight: bold; color: #4CAF50;">${entry.score} / ${entry.total || 25}</td>
+                    </tr>
+                `;
+            }).join('');
+
+      
+        };
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

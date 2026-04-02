@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>Register</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<div class="login-bg"></div>
+
+<main class="login-main">
+    <form class="login-box" id="registerForm">
+        <h1>Create Account</h1>
+
+        <input type="text" id="reg-username" placeholder="Username" required>
+        <input type="email" id="reg-email" placeholder="Email" required>
+        <div style="position:relative;">
+            <input type="password" id="reg-password" placeholder="Password (min 6 chars)" required minlength="6" style="padding-right:44px;">
+            <button type="button" id="toggle-reg-pass" aria-label="Show password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--glass-text);cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;">
+                <span id="reg-eye-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div style="position:relative;">
+            <input type="password" id="reg-confirm" placeholder="Confirm Password" required minlength="6" style="padding-right:44px;">
+            <button type="button" id="toggle-reg-confirm" aria-label="Show password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--glass-text);cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;">
+                <span id="reg-confirm-eye-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <div id="register-error" style="display:none;color:#ff6b6b;margin:8px 0 0;font-weight:600;"></div>
+
+        <div class="remember-row">
+            <input type="checkbox" id="reg-remember">
+            <label for="reg-remember">Remember me</label>
+        </div>
+
+        <button type="submit">Register</button>
+
+        <p class="register-text">
+            Already have an account?
+            <a href="Login.html">Log in</a>
+        </p>
+    </form>
+</main>
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+    // THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        if (user) {
+            if (navBtn) {
+                navBtn.innerText = "ACCOUNT";
+                navBtn.href = "Account.html";
+            }
+            if (sideLink) {
+                sideLink.innerText = "Account";
+                sideLink.href = "Account.html";
+            }
+        }
+    });
+
+    function getRegisteredUsers() {
+        try {
+            return JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        } catch {
+            return {};
+        }
+    }
+
+    function saveRegisteredUsers(users) {
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+
+    const registerForm = document.getElementById('registerForm');
+    const toggleRegPass = document.getElementById('toggle-reg-pass');
+    const toggleRegConfirm = document.getElementById('toggle-reg-confirm');
+    const regEyeIcon = document.getElementById('reg-eye-icon');
+    const regConfirmEyeIcon = document.getElementById('reg-confirm-eye-icon');
+    const eyeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const eyeSlashSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.88 4.07"/><path d="M1 1l22 22"/><path d="M9 9a3 3 0 0 0 4.24 4.24"/></svg>`;
+
+    if (regEyeIcon) regEyeIcon.innerHTML = eyeSvg;
+    if (regConfirmEyeIcon) regConfirmEyeIcon.innerHTML = eyeSvg;
+    if (toggleRegPass) {
+        toggleRegPass.addEventListener('click', () => {
+            const pwd = document.getElementById('reg-password');
+            if (!pwd) return;
+            const showing = pwd.type === 'text';
+            pwd.type = showing ? 'password' : 'text';
+            if (regEyeIcon) {
+                regEyeIcon.innerHTML = showing ? eyeSvg : eyeSlashSvg;
+            }
+        });
+    }
+    if (toggleRegConfirm) {
+        toggleRegConfirm.addEventListener('click', () => {
+            const pwd = document.getElementById('reg-confirm');
+            if (!pwd) return;
+            const showing = pwd.type === 'text';
+            pwd.type = showing ? 'password' : 'text';
+            if (regConfirmEyeIcon) {
+                regConfirmEyeIcon.innerHTML = showing ? eyeSvg : eyeSlashSvg;
+            }
+        });
+    }
+    registerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value.trim();
+        const email = document.getElementById('reg-email').value.trim().toLowerCase();
+        const password = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+        const rememberMe = document.getElementById('reg-remember').checked;
+        const errorBox = document.getElementById('register-error');
+
+        if (password !== confirm) {
+            if (errorBox) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "Passwords do not match.";
+            }
+            return;
+        }
+
+        const users = getRegisteredUsers();
+        if (users[username]) {
+            if (errorBox) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "That username is already taken.";
+            }
+            return;
+        }
+        const emailTaken = Object.values(users).some(u => (u.email || '').toLowerCase() === email);
+        if (emailTaken) {
+            if (errorBox) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "An account with this email already exists.";
+            }
+            return;
+        }
+
+        users[username] = { password: password, email: email, created: Date.now() };
+        saveRegisteredUsers(users);
+
+        if (rememberMe) {
+            localStorage.setItem('currentUser', username);
+        } else {
+            sessionStorage.setItem('currentUser', username);
+        }
+
+        if (errorBox) {
+            errorBox.style.display = "none";
+            errorBox.innerText = "";
+        }
+
+        const destination = localStorage.getItem('redirectAfterLogin') || 'index.html';
+        localStorage.removeItem('redirectAfterLogin');
+        window.location.href = destination;
+    });
+</script>
+
+</body>
+</html>
+
+
+
+

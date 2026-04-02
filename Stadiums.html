@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Stadiums & Travel</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="NFL Stadiums and Travel Info">
+  <meta name="keywords" content="NFL Stadiums, Travel, Hotels, Restaurants, Maps">
+  <meta name="author" content="Riley Cooperman">
+  <meta name="viewport" content="width=device-width, initial scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html" class="nav-active">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<div class="stadiums-wrapper">
+    <header class="stadiums-hero">
+        <h1 class="stadiums-title">Stadiums & Travel Guide</h1>
+        <p class="stadiums-subtitle">Explore the league’s venues, capacity, location, and fan vibes — plus travel tips for game day.</p>
+    </header>
+
+    <section class="stadium-section">
+        <h2>Stadium Showcase</h2>
+        <div id="stadium-grid" class="stadium-grid"></div>
+    </section>
+
+    <section class="travel-section">
+        <h2>Fan Travel Guide</h2>
+        <div class="travel-grid">
+            <div class="travel-card">
+                <h3>Hotels Nearby</h3>
+                <ul id="travel-hotels"></ul>
+            </div>
+            <div class="travel-card">
+                <h3>Restaurants</h3>
+                <ul id="travel-food"></ul>
+            </div>
+            <div class="travel-card">
+                <h3>Transit & Parking</h3>
+                <ul id="travel-transit"></ul>
+            </div>
+            <div class="travel-card">
+                <h3>Game Day Tips</h3>
+                <ul id="travel-tips"></ul>
+            </div>
+            <div class="travel-card map-card">
+                <h3>Stadium Map</h3>
+                <div class="map-placeholder" id="travel-map">
+                    <iframe id="travel-map-iframe" title="Stadium Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <button id="map-fullscreen-btn" class="quiz-btn" style="margin-top:12px;">Fullscreen Map</button>
+                <p class="muted" style="margin-top:10px;" id="travel-map-note">Map preview updates by stadium.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="map-modal" class="map-modal" aria-hidden="true">
+    <div class="map-modal-card">
+        <button class="map-close-btn" id="map-close-btn" aria-label="Close map">×</button>
+        <h3 id="map-modal-title">Stadium Map</h3>
+        <div class="map-modal-frame">
+            <iframe id="travel-map-iframe-large" title="Stadium Map Large" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="map-modal-footer">
+            <a id="open-maps-link" href="#" target="_blank" rel="noopener" class="quiz-btn" style="background:#4CAF50;">Open in Google Maps</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+    // THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        if (user) {
+            if (navBtn) { navBtn.innerText = "ACCOUNT"; navBtn.href = "Account.html"; }
+            if (sideLink) { sideLink.innerText = "Account"; sideLink.href = "Account.html"; }
+        }
+    });
+
+    const stadiums = [
+        { id: "ari", name: "State Farm Stadium", team: "Arizona Cardinals", capacity: "63,400", location: "Glendale, AZ", vibe: "Desert dome, loud, modern" },
+        { id: "atl", name: "Mercedes-Benz Stadium", team: "Atlanta Falcons", capacity: "71,000", location: "Atlanta, GA", vibe: "Futuristic, premium, massive screen" },
+        { id: "bal", name: "M&T Bank Stadium", team: "Baltimore Ravens", capacity: "71,008", location: "Baltimore, MD", vibe: "Purple passion, intense crowd" },
+        { id: "buf", name: "Highmark Stadium", team: "Buffalo Bills", capacity: "71,870", location: "Orchard Park, NY", vibe: "Cold, rowdy, legendary tailgates" },
+        { id: "car", name: "Bank of America Stadium", team: "Carolina Panthers", capacity: "75,412", location: "Charlotte, NC", vibe: "City-center energy, loud" },
+        { id: "chi", name: "Soldier Field", team: "Chicago Bears", capacity: "61,500", location: "Chicago, IL", vibe: "Historic, lakefront, gritty" },
+        { id: "cin", name: "Paycor Stadium", team: "Cincinnati Bengals", capacity: "65,515", location: "Cincinnati, OH", vibe: "Riverfront, rising energy" },
+        { id: "cle", name: "Cleveland Browns Stadium", team: "Cleveland Browns", capacity: "67,431", location: "Cleveland, OH", vibe: "Windy, tough, classic" },
+        { id: "dal", name: "AT&T Stadium", team: "Dallas Cowboys", capacity: "80,000", location: "Arlington, TX", vibe: "Massive, modern, high‑tech" },
+        { id: "den", name: "Empower Field at Mile High", team: "Denver Broncos", capacity: "76,125", location: "Denver, CO", vibe: "High altitude, intense" },
+        { id: "det", name: "Ford Field", team: "Detroit Lions", capacity: "65,000", location: "Detroit, MI", vibe: "Indoor, loud, electric" },
+        { id: "gb", name: "Lambeau Field", team: "Green Bay Packers", capacity: "81,441", location: "Green Bay, WI", vibe: "Historic, frozen, iconic" },
+        { id: "hou", name: "NRG Stadium", team: "Houston Texans", capacity: "72,220", location: "Houston, TX", vibe: "Indoor, huge, lively" },
+        { id: "ind", name: "Lucas Oil Stadium", team: "Indianapolis Colts", capacity: "67,000", location: "Indianapolis, IN", vibe: "Downtown, clean, big‑game" },
+        { id: "jax", name: "EverBank Stadium", team: "Jacksonville Jaguars", capacity: "67,838", location: "Jacksonville, FL", vibe: "Sunny, pool‑deck vibes" },
+        { id: "kc", name: "Arrowhead Stadium", team: "Kansas City Chiefs", capacity: "76,416", location: "Kansas City, MO", vibe: "Elite atmosphere, record noise" },
+        { id: "lv", name: "Allegiant Stadium", team: "Las Vegas Raiders", capacity: "65,000", location: "Las Vegas, NV", vibe: "Vegas glam, intense" },
+        { id: "lac", name: "SoFi Stadium", team: "Los Angeles Chargers", capacity: "70,240", location: "Inglewood, CA", vibe: "Futuristic, premium, bright" },
+        { id: "lar", name: "SoFi Stadium", team: "Los Angeles Rams", capacity: "70,240", location: "Inglewood, CA", vibe: "Futuristic, premium, bright" },
+        { id: "mia", name: "Hard Rock Stadium", team: "Miami Dolphins", capacity: "65,326", location: "Miami Gardens, FL", vibe: "Tropical, loud, sun‑soaked" },
+        { id: "min", name: "U.S. Bank Stadium", team: "Minnesota Vikings", capacity: "66,860", location: "Minneapolis, MN", vibe: "Glass giant, thunderous" },
+        { id: "ne", name: "Gillette Stadium", team: "New England Patriots", capacity: "65,878", location: "Foxborough, MA", vibe: "Classic, cold, packed" },
+        { id: "no", name: "Caesars Superdome", team: "New Orleans Saints", capacity: "73,208", location: "New Orleans, LA", vibe: "Party dome, loud" },
+        { id: "nyg", name: "MetLife Stadium", team: "New York Giants", capacity: "82,500", location: "East Rutherford, NJ", vibe: "Big, high‑energy" },
+        { id: "nyj", name: "MetLife Stadium", team: "New York Jets", capacity: "82,500", location: "East Rutherford, NJ", vibe: "Big, high‑energy" },
+        { id: "phi", name: "Lincoln Financial Field", team: "Philadelphia Eagles", capacity: "67,594", location: "Philadelphia, PA", vibe: "Intense, passionate, electric" },
+        { id: "pit", name: "Acrisure Stadium", team: "Pittsburgh Steelers", capacity: "68,400", location: "Pittsburgh, PA", vibe: "Steel‑town, loud, proud" },
+        { id: "sf", name: "Levi's Stadium", team: "San Francisco 49ers", capacity: "68,500", location: "Santa Clara, CA", vibe: "Sunny, modern, techy" },
+        { id: "sea", name: "Lumen Field", team: "Seattle Seahawks", capacity: "68,740", location: "Seattle, WA", vibe: "Rainy, deafening, elite" },
+        { id: "tb", name: "Raymond James Stadium", team: "Tampa Bay Buccaneers", capacity: "65,890", location: "Tampa, FL", vibe: "Pirate ship, tropical" },
+        { id: "ten", name: "Nissan Stadium", team: "Tennessee Titans", capacity: "69,143", location: "Nashville, TN", vibe: "Riverfront, lively" },
+        { id: "was", name: "Commanders Field", team: "Washington Commanders", capacity: "62,000", location: "Landover, MD", vibe: "Big bowl, classic NFL" }
+    ];
+
+    const travelGuides = {
+        ari: { hotels: ["Renaissance Phoenix Glendale Hotel & Conference Center", "Hampton Inn & Suites Phoenix Glendale-Westgate", "Home2 Suites By Hilton Phoenix Glendale-Westgate", "Aloft Glendale at Westgate", "Holiday Inn Glendale - Stadium & Ent Dist by IHG"], food: ["Yard House", "Kabuki Japanese Restaurant", "Salt Tacos y Tequila", "The Lola", "Thirsty Lion"], transit: ["Rideshare: Gate 1", "Best Lots: Green, Red", "Light Rail: Glendale Ave"], tips: ["Arrive early for Westgate district", "Hydrate — desert heat", "Best photos: west plaza"] },
+        atl: { hotels: ["Signia By Hilton Atlanta Georgia World Congress Center", "Reverb Downtown Atlanta", "Omni Atlanta Hotel at Centennial Park", "Clarion Inn & Suites", "Glenn Hotel, Autograph Collection"], food: ["No Mas! Cantina", "Max's Coal Oven Pizzeria", "By George restaurant and bar", "Der Biergarten", "Aviva by Kameel"], transit: ["MARTA: Vine City", "Rideshare: North Gate", "Best Lots: Orange, Red"], tips: ["Roof is worth seeing", "Screens are massive", "Arrive early"] },
+        bal: { hotels: ["Rachael's Dowry Bed and Breakfast", "Hampton Inn Baltimore-Downtown-Convention Center", "Holiday Inn Express Baltimore At The Stadiums", "Hilton Baltimore Inner Harbor", "Baltimore Marriott Inner Harbor at Camden Yards"], food: ["Sobo Kitchen & Bar", "Phillips Seafood", "Blue Moon Too", "Pratt Street Ale House", "Faidley's Seafood"], transit: ["Light Rail: Camden Yards", "Rideshare: RavensWalk", "Best Lots: A, B"], tips: ["RavensWalk pregame", "Plenty of tailgates", "Wear purple"] },
+        buf: { hotels: ["Comfort Inn & Suites Hamburg", "Holiday Inn Express & Suites Hamburg", "Hampton Inn Buffalo-Hamburg", "Super 8 by Wyndham Hamburg", "Red Roof Inn Buffalo - Hamburg"], food: ["Lucia's on the Lake", "Mulberry Italian Ristorante", "Juicy Burger Bar", "Mason's Grille 52", "Bacchus Wine Bar & Restaurant"], transit: ["Parking: Lots 4-8", "Rideshare: Abbott Rd", "Shuttle: Downtown"], tips: ["Dress warm", "Arrive early for tailgates", "Bring clear bag"] },
+        car: { hotels: ["JW Marriott Charlotte", "The Westin Charlotte", "Embassy Suites by Hilton Charlotte Uptown", "Hilton Charlotte Uptown", "Kimpton Tryon Park Hotel"], food: ["Caroline's Oyster Bar", "Dos Caminos", "Mico Restaurant", "Mimosa Grill", "The Capital Grille"], transit: ["Light Rail: Stonewall", "Rideshare: Mint St", "Best Lots: A, B"], tips: ["Walkable uptown", "Great skyline views", "Arrive 90 mins early"] },
+        chi: { hotels: ["Home2 Suites by Hilton Chicago McCormick Place", "Le Meridien Essex Chicago", "Best Western Grant Park Hotel", "Homewood Suites By Hilton Chicago Downtown South Loop", "Marriott Marquis Chicago"], food: ["Giordano's", "Yolk - South Loop", "Eleven City Diner", "The Chicago Firehouse Restaurant", "Lou Malnati's Pizzeria"], transit: ["CTA: Roosevelt", "Rideshare: 18th St", "Best Lots: Waldron"], tips: ["Lakefront breeze", "Historic vibe", "Arrive early"] },
+        cin: { hotels: ["21c Museum Hotel Cincinnati", "Hampton Inn and Suites Cincinnati - Downtown", "Homewood Suites by Hilton Cincinnati-Downtown", "Holiday Inn Hotel & Suites Cincinnati Downtown", "Curio Collection by Hilton The Cincinnatian Hotel"], food: ["Jeff Ruby's Steakhouse", "Sotto", "Yard House", "Via Vite", "Taste of Belgium - The Banks"], transit: ["Streetcar: The Banks", "Rideshare: Freedom Way", "Best Lots: Central"], tips: ["Riverfront pregame", "Great sunset views", "Arrive early"] },
+        cle: { hotels: ["Hilton Cleveland Downtown", "Aloft Cleveland Downtown", "Cleveland Marriott Downtown at Key Tower", "Westin Cleveland Downtown", "Drury Plaza Hotel Cleveland Downtown"], food: ["Blue Point Grille", "Marble Room Steaks and Raw Bar", "The Burnham Restaurant", "Taza A Lebanese Grill", "Cleveland Chop"], transit: ["RTA: North Coast", "Rideshare: E 9th", "Best Lots: Muni"], tips: ["Windy conditions", "Tailgates are huge", "Arrive early"] },
+        dal: { hotels: ["The Sanford House Inn & Spa", "Four Points by Sheraton Dallas Arlington Entertainment District", "Hyatt Place Dallas/Arlington", "Courtyard by Marriott Dallas Arlington/Entertainment Dist", "Loews Arlington"], food: ["Cut & Bourbon", "Pappadeaux Seafood Kitchen", "Stadium Club", "Babe's Chicken Dinner House", "Lupe's Tex Mex"], transit: ["Rideshare: Randol Mill", "Best Lots: 3, 4, 5", "Shuttle: TRE"], tips: ["Massive video board", "Big crowds", "Arrive early"] },
+        den: { hotels: ["Lumber Baron Inn", "Comfort Suites Near Denver Downtown", "The Maven Hotel at Dairy Block", "Kasa Union Station Denver", "Hotel Indigo Denver Downtown - Union Station"], food: ["Rioja", "The Capital Grille", "Original Brooklyn's", "Ocean Prime", "The Kitchen American Bistro"], transit: ["Light Rail: Empower Field", "Rideshare: Lot J", "Best Lots: C, F"], tips: ["High altitude", "Sunny but cold", "Arrive early"] },
+        det: { hotels: ["The Siren Hotel", "Hilton Garden Inn Detroit Downtown", "Hollywood Casino Hotel at Greektown", "The Atheneum", "Element Detroit At The Metropolitan"], food: ["Wright & Company", "Hudson Cafe", "Dime Store", "Vicente's Cuban Cuisine", "Lafayette Coney Island"], transit: ["QLine: Grand Circus", "Rideshare: Brush St", "Best Lots: E, F"], tips: ["Indoor loudness", "Great downtown bars", "Arrive early"] },
+        gb: { hotels: ["Hampton Inn By Hilton Green Bay Stadium", "Lodge Kohler", "Home2 Suites by Hilton Green Bay", "Hilton Garden Inn Green Bay", "Best Western Green Bay Inn Conference Center"], food: ["1919 Kitchen & Tap", "Hinterland", "Taverne In The Sky", "Kroll's West", "Stadium View Sports Bar"], transit: ["Parking: Lots 1-4", "Rideshare: Ridge Rd", "Shuttle: Downtown"], tips: ["Dress warm", "Historic vibe", "Arrive early"] },
+        hou: { hotels: ["Modern B & B", "The Lancaster Hotel", "The Post Oak Hotel at Uptown Houston", "MainStay Suites Texas Medical Center/Reliant Park", "Drury Inn & Suites Houston Near the Galleria"], food: ["Pappasito's Cantina", "Dimassi's Mediterranean Buffet", "Asahi Sushi", "Pappadeaux Seafood Kitchen", "Captain Benny's Half Shell"], transit: ["METRORail: NRG Park", "Rideshare: Lantern Point", "Best Lots: Blue"], tips: ["Indoor comfort", "Arrive early", "Bring clear bag"] },
+        ind: { hotels: ["Holiday Inn Express & Suites Indianapolis Dtn-Conv Ctr Area", "Tru By Hilton Indianapolis Downtown", "Hampton Inn Indianapolis Downtown Across From Circle Centre", "Omni Severin Hotel", "Crowne Plaza Indianapolis-Dwtn-Union Stn"], food: ["Conner's Kitchen + Bar", "High Velocity", "St. Elmo Steak House", "Cafe Patachou", "Harry & Izzy's"], transit: ["Rideshare: South St", "Best Lots: Gate 10", "Walkable downtown"], tips: ["Roof open/closed", "Great downtown", "Arrive early"] },
+        jax: { hotels: ["Hyatt Regency Jacksonville", "Southbank Hotel by Marriott Jacksonville Riverwalk", "Hampton Inn Jacksonville-Downtown-I-95", "DoubleTree by Hilton Jacksonville Riverfront", "Economy Inn San Marco"], food: ["Russ-Doe's Sandwich Shop", "BB's Restaurant + Bar", "Ruth's Chris Steak House", "Casa Dora Italian Cafe", "D&G Deli and Grill"], transit: ["Rideshare: Gator Bowl Blvd", "Best Lots: X, Y", "Shuttle: Downtown"], tips: ["Sunny heat", "Pool decks", "Arrive early"] },
+        kc: { hotels: ["Extended Stay America Select Suites - Kansas City - Stadium", "Best Western Plus Kansas City Sports Complex Hotel", "Holiday Inn Express & Suites Kansas City Sport Complex Area", "Blue Bird Motel", "Countryside Suites Kansas City Independence I-70E Sports Complex Hotel"], food: ["Craft & Draft", "Casey's Bar", "The Distrikt Biskuit House", "Dixon's Chili Parlor", "Fuego's BBQ Mexican Cantina"], transit: ["Parking: Red Lots", "Rideshare: Gate 6", "Tailgate early"], tips: ["Loudest stadium", "Arrive early", "Wear red"] },
+        lv: { hotels: ["Hilton Vacation Club Polo Towers", "Vdara Hotel & Spa at ARIA", "Planet Hollywood Resort & Casino", "Marriott's Grand Chateau", "Hilton Garden Inn Las Vegas City Center"], food: ["Rí Rá", "Veranda", "Stripsteak Las Vegas", "Border Grill", "Kumi Japanese Restaurant + Bar"], transit: ["Rideshare: Hacienda", "Best Lots: B, C", "Walk from Strip"], tips: ["Desert nights", "Arrive early", "Expect crowds"] },
+        lac: { hotels: ["Best Western Airpark Hotel - LAX Airport LA Stadium", "Economy Inn LAX", "Dream Inn", "Arlo Motel", "Diamond Inn"], food: ["Sweet Red Peach", "Lee's Caribbean Restaurant", "Century Bar & Grill", "Sizzler", "Chu's Garden"], transit: ["Rideshare: Kareem Ct", "Best Lots: Pink, Orange", "Metro: Crenshaw"], tips: ["Huge complex", "Arrive early", "Great photos"] },
+        lar: { hotels: ["Best Western Airpark Hotel - LAX Airport LA Stadium", "Economy Inn LAX", "Dream Inn", "Arlo Motel", "Diamond Inn"], food: ["Sweet Red Peach", "Lee's Caribbean Restaurant", "Century Bar & Grill", "Sizzler", "Chu's Garden"], transit: ["Rideshare: Kareem Ct", "Best Lots: Pink, Orange", "Metro: Crenshaw"], tips: ["Huge complex", "Arrive early", "Great photos"] },
+        mia: { hotels: ["AC Hotel by Marriott Miami Aventura", "SERENA Hotel Aventura Miami, Tapestry Collection by Hilton", "Residence Inn by Marriott Miami Sunny Isles Beach", "Home2 Suites by Hilton Miramar FT. Lauderdale", "HYATT house Fort Lauderdale Airport & Cruise Port"], food: ["1910 Restaurant & Bar Miami Lakes", "Francisca Charcoal Chicken & Meats - Miami Lakes", "Pollo Tropical", "Fresh Catch Fish & Chicken", "Golden Krust"], transit: ["Rideshare: NW 199th", "Best Lots: 30-40", "Shuttle: Downtown"], tips: ["Sun protection", "Arrive early", "Stay hydrated"] },
+        min: { hotels: ["Canopy By Hilton Minneapolis Mill District", "Aloft Minneapolis", "Radisson RED Minneapolis Downtown", "Best Western Plus The Normandy Inn & Suites", "Hyatt Place Minneapolis/Downtown"], food: ["Hell's Kitchen", "The Oceanaire Seafood Room", "Red Cow North Loop", "Fogo de Chao Brazilian Steakhouse", "Kindee Thai Restaurant"], transit: ["Light Rail: US Bank", "Rideshare: 6th St", "Best Lots: A, B"], tips: ["Indoor loudness", "Great skyline", "Arrive early"] },
+        ne: { hotels: ["Hilton Garden Inn Foxborough Patriot Place", "Home2 Suites by Hilton Walpole Foxboro", "Renaissance Boston Patriot Place Hotel", "Hampton Inn & Suites Foxborough/Mansfield", "enVision Hotel & Conference Center Mansfield-Foxboro"], food: ["Tavolino", "Davio's Northern Italian Steakhouse - Foxborough", "Five Guys", "Red Robin Gourmet Burgers & Brews", "CBS Sporting Club"], transit: ["Train: Foxborough", "Rideshare: P10", "Best Lots: 3-5"], tips: ["Cold late season", "Arrive early", "Tailgates big"] },
+        no: { hotels: ["Hyatt Regency New Orleans", "Hyatt House New Orleans / Downtown", "Holiday Inn New Orleans-Downtown Superdome By IHG", "The Troubadour Hotel New Orleans", "Virgin Hotels New Orleans"], food: ["Daisy Mae's Southern Fried Chicken & Breakfast", "Willa Jean", "Juan's Flying Burrito", "Johnny Sanchez", "Olde Nola Cookery"], transit: ["Streetcar: St. Charles", "Rideshare: Gate A", "Best Lots: A, B"], tips: ["Party atmosphere", "Arrive early", "Hydrate"] },
+        nyg: { hotels: ["Renaissance Meadowlands Hotel", "Red Roof Inn PLUS+ Secaucus - Meadowlands - NYC", "Extended Stay America Suites Meadowlands East Rutherford", "Rodeway Inn Meadowlands", "Residence Inn Secaucus Meadowlands"], food: ["Pink", "Yard House", "Redds Restaurant", "House of Que", "Marcus Live! Bar & Grille"], transit: ["Train: Meadowlands", "Rideshare: Lot E", "Best Lots: D, E"], tips: ["Big crowds", "Arrive early", "Layer up"] },
+        nyj: { hotels: ["Renaissance Meadowlands Hotel", "Red Roof Inn PLUS+ Secaucus - Meadowlands - NYC", "Extended Stay America Suites Meadowlands East Rutherford", "Homewood Suites by Hilton East Rutherford - Meadowlands", "SpringHill Suites by Marriott East Rutherford Meadowlands/Carlstadt"], food: ["Pink", "Yard House", "Redds Restaurant", "House of Que", "Marcus Live! Bar & Grille"], transit: ["Train: Meadowlands", "Rideshare: Lot E", "Best Lots: D, E"], tips: ["Big crowds", "Arrive early", "Layer up"] },
+        phi: { hotels: ["Live Casino & Hotel Philadelphia", "Holiday Inn Philadelphia Arpt-Stadium Area By IHG", "Courtyard by Marriott Philadelphia South at The Navy Yard", "Alexander Inn", "Doubletree By Hilton Hotel Philadelphia Center City"], food: ["Victory Beer Hall at Xfinity Live!", "Broad Street Bullies Pub", "Chickie's & Pete's", "Penrose Diner", "Federal Donuts"], transit: ["SEPTA: NRG Station", "Rideshare: Lot A", "Best Lots: M, N"], tips: ["Passionate fans", "Arrive early", "Great tailgates"] },
+        pit: { hotels: ["Hyatt Place Pittsburgh North Shore", "Residence Inn Pittsburgh North Shore", "SpringHill Suites by Marriott Pittsburgh North Shore", "Holiday Inn Express & Suites Pittsburgh North Shore", "Wyndham Grand Pittsburgh"], food: ["Burgatory", "Altius", "Monterey Bay Fish Grotto", "Southern Tier Brewery Pittsburgh", "Hyde Park Prime Steakhouse"], transit: ["T Station: North Shore", "Rideshare: Reedsdale", "Best Lots: Yellow"], tips: ["Great skyline", "Arrive early", "Wear black & gold"] },
+        sf: { hotels: ["Hilton Santa Clara", "Avatar Hotel Santa Clara, Tapestry Collection by Hilton", "Hyatt House San Jose/Silicon Valley", "Embassy Suites by Hilton Santa Clara Silicon Valley", "Radisson Hotel Sunnyvale - Silicon Valley"], food: ["Michael Mina's Tailgate Restaurant", "Chicken Guy!", "Mikayla's Cafe", "Chicken Meets Rice", "La Fontana"], transit: ["VTA: Great America", "Rideshare: Tasman Dr", "Best Lots: Blue"], tips: ["Sunny afternoons", "Arrive early", "Walk the plaza"] },
+        sea: { hotels: ["Embassy Suites by Hilton Seattle Downtown Pioneer Square", "Silver Cloud Hotel - Seattle Stadium", "citizenM Seattle Pioneer Square", "Best Western Plus Pioneer Square Hotel Downtown", "Populus Seattle"], food: ["Il Terrazzo Carmine", "Jimmy's on First", "All Water Seafood & Oyster Bar", "Taylor Shellfish Oyster Bar", "Dough Zone Dumpling House - Seattle International District"], transit: ["Link Light Rail: Stadium", "Rideshare: Occidental", "Best Lots: Union"], tips: ["Loudest crowds", "Rain gear", "Arrive early"] },
+        tb: { hotels: ["Hilton Tampa Airport Westshore", "AC Hotel by Marriott Tampa Airport", "Renaissance Tampa International Plaza Hotel", "Holiday Inn Express & Suites Tampa Stadium - Airport Area By IHG", "Hampton Inn Tampa-International Airport/Westshore"], food: ["Happy Fish Peruvian Fusion Restaurant", "La Teresita Restaurant", "Cooper's Hawk Winery & Restaurant", "The Capital Grille", "Fleming's Prime Steakhouse & Wine Bar"], transit: ["Rideshare: Tampa Bay Blvd", "Best Lots: B, C", "Shuttle: Downtown"], tips: ["Warm weather", "Pirate ship", "Arrive early"] },
+        ten: { hotels: ["The Bel Air Suite Penthouse The Gulch", "Drury Plaza Hotel Nashville Downtown", "The Joseph", "Studio 154 Luxury Hotel", "1 Hotel Nashville"], food: ["Bourbon Street Blues and Boogie Bar", "Another Broken Egg Cafe", "Sun Diner", "The Stillery", "Gannons Nashville"], transit: ["Rideshare: S 1st", "Best Lots: A, B", "Walkable downtown"], tips: ["Live music nearby", "Arrive early", "Great skyline"] },
+        was: { hotels: ["Wood Spring Suites Washington DC East Arena Drive", "Holiday Inn Express I-95 Capitol Beltway - Largo By IHG", "Residence Inn by Marriott Upper Marlboro Joint Base Andrews", "Hampton Inn By Hilton & Suites Glenarden/Washington DC", "Homewood Suites By Hilton Largo Washington Dc"], food: ["Copper Canyon Grill - Glenarden", "The Monocle", "1123 By Chef Tobias", "Agua 301", "Caruso's Grocery - DC"], transit: ["Metro: Morgan Blvd", "Rideshare: Gate E", "Best Lots: Green"], tips: ["Arrive early", "Bring clear bag", "Tailgates outside"] }
+    };
+
+    const grid = document.getElementById("stadium-grid");
+    const hotelsEl = document.getElementById("travel-hotels");
+    const foodEl = document.getElementById("travel-food");
+    const transitEl = document.getElementById("travel-transit");
+    const tipsEl = document.getElementById("travel-tips");
+    const mapEl = document.getElementById("travel-map");
+    const mapFrame = document.getElementById("travel-map-iframe");
+    const mapFrameLarge = document.getElementById("travel-map-iframe-large");
+    const mapModal = document.getElementById("map-modal");
+    const mapClose = document.getElementById("map-close-btn");
+    const mapFullBtn = document.getElementById("map-fullscreen-btn");
+    const mapLink = document.getElementById("open-maps-link");
+    const mapModalTitle = document.getElementById("map-modal-title");
+
+    function getCity(location) {
+        if (!location) return "";
+        const parts = location.split(",");
+        return (parts[0] || "").trim();
+    }
+
+    function fillList(baseList, city, type) {
+        const list = Array.isArray(baseList) ? [...baseList] : [];
+        const fillers = {
+            hotels: [
+                `${city} Downtown Hotel`,
+                `${city} Suites`,
+                `${city} Courtyard`,
+                `${city} Marriott`
+            ],
+            food: [
+                `${city} Grill`,
+                `${city} BBQ`,
+                `${city} Pizza`,
+                `${city} Tacos`
+            ],
+            transit: [
+                `Main Parking Lot`,
+                `Rideshare Drop Zone`,
+                `Public Transit Stop`,
+                `Best Lots: A, B`
+            ],
+            tips: [
+                `Arrive 2 hours early`,
+                `Clear-bag policy enforced`,
+                `Best photo spot: main gate`,
+                `Check weather before kickoff`
+            ]
+        };
+        const pool = fillers[type] || [];
+        let i = 0;
+        while (list.length < 4 && i < pool.length) {
+            list.push(pool[i]);
+            i++;
+        }
+        return list;
+    }
+
+    function toMapLink(text, stadium) {
+        const query = encodeURIComponent(`${text} near ${stadium.name} ${stadium.location}`);
+        return `https://www.google.com/maps/search/?api=1&query=${query}`;
+    }
+
+    function renderTravel(id) {
+        const guide = travelGuides[id];
+        const stadium = stadiums.find(s => s.id === id);
+        if (!guide || !stadium) return;
+        const city = getCity(stadium.location);
+        const hotels = fillList(guide.hotels, city, "hotels");
+        const food = fillList(guide.food, city, "food");
+        const transit = fillList(guide.transit, city, "transit");
+        const tips = fillList(guide.tips, city, "tips");
+
+        hotelsEl.innerHTML = hotels.map(h => `<li><a class="travel-link" href="${toMapLink(h, stadium)}" target="_blank" rel="noopener" title="Open in Google Maps">${h}</a></li>`).join('');
+        foodEl.innerHTML = food.map(f => `<li><a class="travel-link" href="${toMapLink(f, stadium)}" target="_blank" rel="noopener" title="Open in Google Maps">${f}</a></li>`).join('');
+        transitEl.innerHTML = transit.map(t => `<li><a class="travel-link" href="${toMapLink(t, stadium)}" target="_blank" rel="noopener" title="Open in Google Maps">${t}</a></li>`).join('');
+        tipsEl.innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+
+        const query = encodeURIComponent(`${stadium.name} ${stadium.location}`);
+        const embedUrl = `https://www.google.com/maps?q=${query}&output=embed`;
+        const openUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        if (mapFrame) mapFrame.src = embedUrl;
+        if (mapFrameLarge) mapFrameLarge.src = embedUrl;
+        if (mapLink) mapLink.href = openUrl;
+        if (mapModalTitle) mapModalTitle.innerText = stadium.name;
+    }
+
+    if (grid) {
+        grid.innerHTML = stadiums.map(s => `
+            <div class="stadium-card" data-stadium="${s.id}">
+                <div class="stadium-card-header">
+                    <h3>${s.name}</h3>
+                    <span class="stadium-team">${s.team}</span>
+                </div>
+                <div class="stadium-meta">
+                    <div><strong>Capacity:</strong> ${s.capacity}</div>
+                    <div><strong>Location:</strong> ${s.location}</div>
+                </div>
+                <div class="stadium-vibe">${s.vibe}</div>
+            </div>
+        `).join('');
+
+        const cards = grid.querySelectorAll(".stadium-card");
+        cards.forEach(card => {
+            card.addEventListener("click", () => {
+                cards.forEach(c => c.classList.remove("active"));
+                card.classList.add("active");
+                const id = card.getAttribute("data-stadium");
+                renderTravel(id);
+            });
+        });
+
+        // Default to first stadium
+        const first = stadiums[0];
+        if (first) {
+            const firstCard = grid.querySelector(`.stadium-card[data-stadium="${first.id}"]`);
+            if (firstCard) firstCard.classList.add("active");
+            renderTravel(first.id);
+        }
+    }
+
+    if (mapFullBtn && mapModal) {
+        mapFullBtn.addEventListener("click", () => {
+            mapModal.classList.add("open");
+            mapModal.setAttribute("aria-hidden", "false");
+        });
+    }
+    if (mapClose && mapModal) {
+        mapClose.addEventListener("click", () => {
+            mapModal.classList.remove("open");
+            mapModal.setAttribute("aria-hidden", "true");
+        });
+    }
+    if (mapModal) {
+        mapModal.addEventListener("click", (e) => {
+            if (e.target === mapModal) {
+                mapModal.classList.remove("open");
+                mapModal.setAttribute("aria-hidden", "true");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

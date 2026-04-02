@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>NFL Teams</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+    
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html" class="nav-active">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+
+<div class="nflteams-wrapper" id="teams-grid">
+    <div class="search-container">
+        <input type="text" id="teamSearch" placeholder="Search for a team" onkeyup="filterTeams()">
+    </div>
+    
+    </div>
+
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        if (user) {
+            if (navBtn) { navBtn.innerText = "ACCOUNT"; navBtn.href = "Account.html"; }
+            if (sideLink) { sideLink.innerText = "Account"; sideLink.href = "Account.html"; }
+        }
+        
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) { link.classList.add('nav-active'); }
+        });
+    });
+
+    // The "Engine" - Now with official team colors!
+    const teamsList = [
+        { id: "cardinals", name: "Arizona Cardinals", logoId: "ari", color: "#97233F" },
+        { id: "falcons", name: "Atlanta Falcons", logoId: "atl", color: "#A71930" },
+        { id: "ravens", name: "Baltimore Ravens", logoId: "bal", color: "#241773" },
+        { id: "bills", name: "Buffalo Bills", logoId: "buf", color: "#00338D" },
+        { id: "panthers", name: "Carolina Panthers", logoId: "car", color: "#0085CA" },
+        { id: "bears", name: "Chicago Bears", logoId: "chi", color: "#0B162A" },
+        { id: "bengals", name: "Cincinnati Bengals", logoId: "cin", color: "#FB4F14" },
+        { id: "browns", name: "Cleveland Browns", logoId: "cle", color: "#311D00" },
+        { id: "cowboys", name: "Dallas Cowboys", logoId: "dal", color: "#00338D" },
+        { id: "broncos", name: "Denver Broncos", logoId: "den", color: "#FB4F14" },
+        { id: "lions", name: "Detroit Lions", logoId: "det", color: "#0076B6" },
+        { id: "packers", name: "Green Bay Packers", logoId: "gb", color: "#203731" },
+        { id: "texans", name: "Houston Texans", logoId: "hou", color: "#03202F" },
+        { id: "colts", name: "Indianapolis Colts", logoId: "ind", color: "#002C5F" },
+        { id: "jaguars", name: "Jacksonville Jaguars", logoId: "jax", color: "#006778" },
+        { id: "chiefs", name: "Kansas City Chiefs", logoId: "kc", color: "#E31837" },
+        { id: "raiders", name: "Las Vegas Raiders", logoId: "lv", color: "#696969" },
+        { id: "chargers", name: "Los Angeles Chargers", logoId: "lac", color: "#0073CF" },
+        { id: "rams", name: "Los Angeles Rams", logoId: "lar", color: "#003594" },
+        { id: "dolphins", name: "Miami Dolphins", logoId: "mia", color: "#008E97" },
+        { id: "vikings", name: "Minnesota Vikings", logoId: "min", color: "#4F2683" },
+        { id: "patriots", name: "New England Patriots", logoId: "ne", color: "#002244" },
+        { id: "saints", name: "New Orleans Saints", logoId: "no", color: "#D3BC8D" },
+        { id: "giants", name: "New York Giants", logoId: "nyg", color: "#0B2265" },
+        { id: "jets", name: "New York Jets", logoId: "nyj", color: "#125740" },
+        { id: "eagles", name: "Philadelphia Eagles", logoId: "phi", color: "#004C54" },
+        { id: "steelers", name: "Pittsburgh Steelers", logoId: "pit", color: "#FFB612" },
+        { id: "sf49ers", name: "San Francisco 49ers", logoId: "sf", color: "#AA0000" },
+        { id: "seahawks", name: "Seattle Seahawks", logoId: "sea", color: "#002244" },
+        { id: "buccaneers", name: "Tampa Bay Buccaneers", logoId: "tb", color: "#D50A0A" },
+        { id: "titans", name: "Tennessee Titans", logoId: "ten", color: "#0C2340" },
+        { id: "commanders", name: "Washington Commanders", logoId: "wsh", color: "#5A1414" }
+    ];
+
+    const grid = document.getElementById('teams-grid');
+
+    teamsList.forEach(team => {
+        const card = document.createElement('a');
+        card.href = `Team-Details.html?id=${team.id}`;
+        card.className = "team-card";
+        
+        // This line creates the magic: it tells CSS what color to use for this specific card
+        card.style.setProperty('--team-color', team.color);
+    
+        const logoUrl = `https://a.espncdn.com/i/teamlogos/nfl/500/${team.logoId}.png`;
+
+        card.innerHTML = `
+            <h3 style="margin-bottom: 5px;">${team.name}</h3>
+            <div style="height: 120px; display: flex; align-items: center; justify-content: center;">
+                <img src="${logoUrl}" alt="${team.name}" class="team-logo">
+            </div>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">View Details</p>
+        `;
+        grid.appendChild(card);
+    });
+
+    function filterTeams() {
+    // 1. Get what the user typed and make it lowercase
+    const input = document.getElementById('teamSearch').value.toLowerCase();
+    
+    // 2. Get all the team cards
+    const cards = document.getElementsByClassName('team-card');
+
+    // 3. Loop through cards and hide those that don't match
+    for (let i = 0; i < cards.length; i++) {
+        const teamName = cards[i].querySelector('h3').innerText.toLowerCase();
+        
+        if (teamName.includes(input)) {
+            cards[i].style.display = "block"; // Show match
+        } else {
+            cards[i].style.display = "none";  // Hide non-match
+        }
+    }
+}
+
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+

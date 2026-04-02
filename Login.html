@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>Login</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="description" content="American Football Information and Facts">
+<meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
+<meta name="author" content="Riley Cooperman">
+<meta name="viewport" content="width=device-width, initial scale=1.0">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link" class="nav-active">Login</a>
+</div>
+
+  <div class="login-bg"></div>
+
+<main class="login-main">
+    <form class="login-box" id="loginForm">
+        <h1>Login</h1>
+
+        <input type="text" id="username" placeholder="Username or Email" required>
+        <div style="position:relative;">
+            <input type="password" id="password" placeholder="Password" required minlength="6" style="padding-right:44px;">
+            <button type="button" id="toggle-login-pass" aria-label="Show password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--glass-text);cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;">
+                <span id="login-eye-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <div id="login-error" style="display:none;color:#ff6b6b;margin:8px 0 0;font-weight:600;"></div>
+
+        <div class="remember-row">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember me</label>
+        </div>
+
+        <button type="submit">Log In</button>
+
+        <p class="register-text">
+            Don't have an account?
+            <a href="Register.html">Register</a>
+        </p>
+        <p class="register-text" style="margin-top:12px;">
+            <a href="#" id="forgot-password-link">Forgot password?</a>
+        </p>
+    </form>
+</main>
+
+
+
+
+
+
+
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Check if the user is logged in (using your existing logic)
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        if (user) {
+            // 2. Update the Top Right Header Button
+            if (navBtn) {
+                navBtn.innerText = "ACCOUNT";
+                navBtn.href = "Account.html";
+            }
+
+            // 3. Update the Sidebar Link
+            if (sideLink) {
+                sideLink.innerText = "Account";
+                sideLink.href = "Account.html";
+            }
+        }
+    });
+
+    const loginForm = document.getElementById('loginForm');
+
+    // --- AUTO-HIGHLIGHT ACTIVE NAV LINK ---
+    const currentFile = window.location.pathname.split("/").pop();
+    const sideLinks = document.querySelectorAll('.side-nav a');
+
+    sideLinks.forEach(link => {
+        const linkFile = link.getAttribute('href');
+        if (linkFile === currentFile) {
+            link.classList.add('nav-active');
+        }
+    });
+
+    function getRegisteredUsers() {
+        try {
+            return JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        } catch {
+            return {};
+        }
+    }
+
+    const toggleLoginPass = document.getElementById('toggle-login-pass');
+    const loginEyeIcon = document.getElementById('login-eye-icon');
+    const eyeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const eyeSlashSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.88 4.07"/><path d="M1 1l22 22"/><path d="M9 9a3 3 0 0 0 4.24 4.24"/></svg>`;
+
+    if (loginEyeIcon) {
+        loginEyeIcon.innerHTML = eyeSvg;
+    }
+    if (toggleLoginPass) {
+        toggleLoginPass.addEventListener('click', () => {
+            const pwd = document.getElementById('password');
+            if (!pwd) return;
+            const showing = pwd.type === 'text';
+            pwd.type = showing ? 'password' : 'text';
+            if (loginEyeIcon) {
+                loginEyeIcon.innerHTML = showing ? eyeSvg : eyeSlashSvg;
+            }
+        });
+    }
+
+    const forgotLink = document.getElementById('forgot-password-link');
+    if (forgotLink) {
+        forgotLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("Password reset emails require a backend server. If you want this to actually send emails, we’ll need Python/Node. For now, I can add a placeholder reset flow.");
+        });
+    }
+
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('remember').checked;
+        const errorBox = document.getElementById('login-error');
+
+        const users = getRegisteredUsers();
+        const lookupKey = users[username]
+            ? username
+            : Object.keys(users).find(k => (users[k].email || '').toLowerCase() === username.toLowerCase());
+
+        if (!lookupKey) {
+            if (errorBox) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "No account found. Please register first.";
+            }
+            return;
+        }
+        if (users[lookupKey].password !== password) {
+            if (errorBox) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "Incorrect password. Please try again.";
+            }
+            return;
+        }
+
+        if (errorBox) {
+            errorBox.style.display = "none";
+            errorBox.innerText = "";
+        }
+
+        const finalUsername = lookupKey;
+        if (rememberMe) {
+            localStorage.setItem('currentUser', finalUsername);
+        } else {
+            sessionStorage.setItem('currentUser', finalUsername);
+        }
+
+        // --- NEW: Redirect Logic ---
+        const destination = localStorage.getItem('redirectAfterLogin') || 'index.html';
+        localStorage.removeItem('redirectAfterLogin'); 
+        window.location.href = destination;
+    });
+</script>
+
+
+</body> 
+</html>
+
+
+
+
+
+

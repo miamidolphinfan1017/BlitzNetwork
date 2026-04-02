@@ -1,0 +1,1337 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>My Account</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/jpg" href="logo for website.jpg">
+</head>
+<body class="account-page">
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+
+    <div class="login-bg"></div>
+    <main class="login-main">
+        <div class="login-box">
+            <h1>User Profile</h1>
+            
+            <p style="margin-bottom: 20px; font-size: 1.2rem;">
+                Logged in as: <strong id="display-username"></strong>
+            </p>
+
+            <div class="profile-editor" style="margin-bottom:18px; text-align:center;">
+                    <div class="pfp-preview-wrapper">
+                        <img id="avatar-preview" src="" alt="avatar preview" style="width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--card-border);display:none;margin:8px auto;" />
+                        <div class="pfp-overlay"></div>
+                    </div>
+                <div class="profile-editor-controls">
+                    <input type="text" id="display-name-input" placeholder="Display name" style="padding:8px;border-radius:6px;border:1px solid var(--input-border);" />
+                    <button id="save-profile-btn" style="padding:8px 12px;">Save Profile</button>
+                </div>
+                <p id="profile-msg" style="margin-top:8px;min-height:18px;color:var(--muted-text)"></p>
+            </div>
+
+            <div class="account-divider">
+                <h3 style="color: #01961a; margin: 0;">High Score</h3>
+                <p id="display-high-score" style="font-size: 2rem; margin: 10px 0;">0</p>
+            </div>
+
+            <div class="account-actions">
+                <button id="toggle-options-btn" class="favorite-go-btn">More Options</button>
+            </div>
+
+            <div id="account-more-options" class="account-more-options" style="display:none;">
+                <div class="favorite-team-card">
+                    <h3>Favorite Team</h3>
+                    <p id="favorite-team-display" class="favorite-team-display">None selected</p>
+                    <div class="favorite-team-controls">
+                        <select id="favorite-team-select" class="favorite-team-select"></select>
+                        <button id="save-favorite-team" class="favorite-save-btn">Save</button>
+                        <button id="go-favorite-team" class="favorite-go-btn" style="display:none;">Go to Team</button>
+                    </div>
+                </div>
+
+                <div class="account-section-divider"></div>
+                
+                <div style="text-align:center;">
+                    <button id="manage-team-pfps-btn" style="padding:8px 12px;">Manage Team PFPS</button>
+                </div>
+            </div>
+
+            <!-- Team PFP Modal -->
+            <div id="team-pfp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:3000;align-items:center;justify-content:center;padding:20px;">
+                <div style="background:var(--card-bg);color:var(--card-text);max-width:920px;width:100%;border-radius:12px;padding:16px;max-height:90vh;overflow:auto;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <h2 style="margin:0;">Team PFPS</h2>
+                        <button id="team-pfp-close" style="padding:6px 10px;">Close</button>
+                    </div>
+                    <p style="margin-top:6px;color:var(--muted-text);">Scroll the teams, click one to edit its PFP (upload or paste image URL). Images are auto-cropped to square.</p>
+
+                    <div id="team-pfp-list-view">
+                        <div id="team-pfp-list" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;">
+                            <!-- Team items inserted here -->
+                        </div>
+                    </div>
+
+                    <div id="team-pfp-detail-view" style="display:none;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+                            <button id="team-pfp-back" style="padding:6px 10px;">Back</button>
+                            <h3 id="team-pfp-editor-title" style="margin:0;">Edit</h3>
+                        </div>
+                        <div id="team-pfp-editor" style="margin-top:12px;padding:12px;border-top:1px solid var(--card-border);">
+                            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                                    <div class="pfp-preview-wrapper">
+                                        <img id="team-pfp-current" src="" alt="current" style="width:96px;height:96px;border-radius:10px;object-fit:cover;border:1px solid var(--card-border);display:none;" />
+                                        <div class="pfp-overlay"></div>
+                                    </div>
+                                <div style="display:flex;flex-direction:column;gap:8px;">
+                                    <input type="file" id="team-pfp-upload" accept="image/*" />
+                                    <input type="text" id="team-pfp-url" placeholder="Paste image URL and press Load" style="width:320px;padding:8px;border-radius:6px;border:1px solid var(--input-border);" />
+                                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                        <button id="team-pfp-load-url">Load URL</button>
+                                        <button id="team-pfp-save">Save PFP</button>
+                                        <button id="team-pfp-use">Use for My PFP</button>
+                                        <button id="team-pfp-remove" style="background:#d9534f;color:white;">Remove</button>
+                                    </div>
+                                    <p id="team-pfp-msg" style="min-height:18px;color:var(--muted-text)"></p>
+                                </div>
+                            </div>
+                            <p class="muted" style="margin:12px 0 6px;">Team Library</p>
+                            <div id="team-pfp-library" class="pfp-grid"></div>
+                        </div>
+                    </div>
+
+                    <div id="pfp-cropper" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);z-index:4000;align-items:center;justify-content:center;padding:20px;">
+                        <div style="background:var(--card-bg);color:var(--card-text);padding:16px;border-radius:14px;max-width:520px;width:100%;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;">
+                                <strong>Crop PFP</strong>
+                                <button id="pfp-crop-close" style="padding:6px 10px;">Close</button>
+                            </div>
+                            <div id="pfp-crop-box" style="width:300px;height:300px;border-radius:12px;overflow:hidden;margin:14px auto;position:relative;border:1px solid var(--card-border);background:#111;touch-action:none;cursor:grab;">
+                                <img id="pfp-crop-img" src="" alt="crop" style="position:absolute;top:0;left:0;will-change:transform;user-select:none;pointer-events:none;transform-origin:top left;" />
+                                <div id="pfp-crop-mask" style="position:absolute;inset:0;pointer-events:none;">
+                                    <div style="position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 9999px rgba(0,0,0,0.5);border:2px solid rgba(255,255,255,0.7);margin:18px;"></div>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+                                <span style="font-size:0.9rem;">Zoom</span>
+                                <input id="pfp-crop-zoom" type="range" min="0.5" max="2.5" step="0.01" value="1" style="width:220px;">
+                            </div>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+                                <button id="pfp-crop-done">Done</button>
+                                <button id="pfp-crop-save-pfp">Save as PFP</button>
+                                <button id="pfp-crop-save-team">Save as Team PFP</button>
+                            </div>
+                            <p id="pfp-crop-msg" class="muted" style="min-height:18px;margin-top:10px;text-align:center;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="logout-btn" class="favorite-save-btn">Log Out</button>
+            
+            <p class="register-text" style="margin-top: 20px; text-align:center;">
+                <a href="index.html">Back to Home</a>
+            </p>
+        </div>
+    </main>
+
+    <div id="admin-panel" class="admin-card" style="display: none;">
+    <h2>ADMIN COMMAND</h2>
+    <p class="admin-subtitle">Authorized personnel only. Actions are permanent!</p>
+    <div class="admin-btn-group">
+        <button onclick="clearAllFeeds()" class="btn-danger">Wipe All Fan Feeds</button>
+        <button onclick="clearAllLeaderboards()" class="btn-danger">Reset Global Scores</button>
+        <button onclick="clearAllPolls()" class="btn-danger">Reset All Fan Polls</button>
+        <button onclick="clearGameLeaderboards()" class="btn-danger">Reset Games Leaderboards</button>
+    </div>
+    <p id="admin-status-msg" style="margin-top: 15px; min-height: 20px;"></p>
+    </div>
+
+
+
+
+<script>
+    // HAMBURGER MENU SCRIPT
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+
+// THEME TOGGLE SCRIPT
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check memory for the user
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        // If logged in, update the buttons
+        if (user) {
+            if (navBtn) { 
+                navBtn.innerText = "ACCOUNT"; 
+                navBtn.href = "Account.html"; 
+            }
+            if (sideLink) { 
+                sideLink.innerText = "Account"; 
+                sideLink.href = "Account.html"; 
+            }
+        }
+        
+        // --- 2. AUTO-HIGHLIGHT SIDEBAR LINK ---
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        const sideLinks = document.querySelectorAll('.side-nav a');
+
+        sideLinks.forEach(link => {
+            if (link.getAttribute('href') === currentFile) {
+                link.classList.add('nav-active');
+            }
+        });
+
+        // More Options toggle (compact view)
+        const toggleBtn = document.getElementById('toggle-options-btn');
+        const optionsPanel = document.getElementById('account-more-options');
+        if (toggleBtn && optionsPanel) {
+            toggleBtn.addEventListener('click', () => {
+                const isOpen = optionsPanel.style.display === 'block';
+                optionsPanel.style.display = isOpen ? 'none' : 'block';
+                toggleBtn.textContent = isOpen ? 'More Options' : 'Hide Options';
+            });
+        }
+    });
+
+
+        // 1. Show the username
+        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+
+        // Fix the navbar text on this page
+            const navButton = document.getElementById('nav-login-btn');
+        if (user && navButton) {
+            navButton.innerText = "Profile";
+            navButton.href = "Account.html";
+            
+            // If we are actually on the account page, make sure it gets the underline
+            if (window.location.pathname.includes("Account.html")) {
+                navButton.classList.add('nav-active');
+            }
+        }
+        
+        if (!user) {
+            // If someone tries to visit this page without logging in, send them away
+            window.location.href = 'Login.html';
+        } else {
+
+        // Favorite Team Picker
+        const teams = [
+            "Arizona Cardinals","Atlanta Falcons","Baltimore Ravens","Buffalo Bills","Carolina Panthers","Chicago Bears",
+            "Cincinnati Bengals","Cleveland Browns","Dallas Cowboys","Denver Broncos","Detroit Lions","Green Bay Packers",
+            "Houston Texans","Indianapolis Colts","Jacksonville Jaguars","Kansas City Chiefs","Las Vegas Raiders",
+            "Los Angeles Chargers","Los Angeles Rams","Miami Dolphins","Minnesota Vikings","New England Patriots",
+            "New Orleans Saints","New York Giants","New York Jets","Philadelphia Eagles","Pittsburgh Steelers",
+            "San Francisco 49ers","Seattle Seahawks","Tampa Bay Buccaneers","Tennessee Titans","Washington Commanders"
+        ];
+
+                const teamIdByName = {
+            "Arizona Cardinals":"cardinals",
+            "Atlanta Falcons":"falcons",
+            "Baltimore Ravens":"ravens",
+            "Buffalo Bills":"bills",
+            "Carolina Panthers":"panthers",
+            "Chicago Bears":"bears",
+            "Cincinnati Bengals":"bengals",
+            "Cleveland Browns":"browns",
+            "Dallas Cowboys":"cowboys",
+            "Denver Broncos":"broncos",
+            "Detroit Lions":"lions",
+            "Green Bay Packers":"packers",
+            "Houston Texans":"texans",
+            "Indianapolis Colts":"colts",
+            "Jacksonville Jaguars":"jaguars",
+            "Kansas City Chiefs":"chiefs",
+            "Las Vegas Raiders":"raiders",
+            "Los Angeles Chargers":"chargers",
+            "Los Angeles Rams":"rams",
+            "Miami Dolphins":"dolphins",
+            "Minnesota Vikings":"vikings",
+            "New England Patriots":"patriots",
+            "New Orleans Saints":"saints",
+            "New York Giants":"giants",
+            "New York Jets":"jets",
+            "Philadelphia Eagles":"eagles",
+            "Pittsburgh Steelers":"steelers",
+            "San Francisco 49ers":"sf49ers",
+            "Seattle Seahawks":"seahawks",
+            "Tampa Bay Buccaneers":"buccaneers",
+            "Tennessee Titans":"titans",
+            "Washington Commanders":"commanders"
+        };
+        const favKey = `favoriteTeam_${user}`;
+        const favIdKey = `favoriteTeamId_${user}`;
+        const favGoBtn = document.getElementById("go-favorite-team");
+        const favSelect = document.getElementById("favorite-team-select");
+        const favDisplay = document.getElementById("favorite-team-display");
+        const favSaveBtn = document.getElementById("save-favorite-team");
+
+        if (favSelect && favDisplay && favSaveBtn) {
+            favSelect.innerHTML = "";
+            teams.forEach(name => {
+                const opt = document.createElement("option");
+                opt.value = name;
+                opt.textContent = name;
+                favSelect.appendChild(opt);
+            });
+
+            const savedFav = localStorage.getItem(favKey);
+            const savedFavId = localStorage.getItem(favIdKey);
+            if (savedFav) {
+                favSelect.value = savedFav;
+                favDisplay.textContent = savedFav;
+            }
+            if (favGoBtn) {
+                favGoBtn.disabled = !savedFavId;
+                favGoBtn.style.display = savedFavId ? "inline-flex" : "none";
+            }
+            favSaveBtn.style.display = savedFavId ? "none" : "inline-flex";
+
+            favSaveBtn.addEventListener("click", () => {
+                const chosen = favSelect.value;
+                const chosenId = teamIdByName[chosen] || "";
+                localStorage.setItem(favKey, chosen);
+                localStorage.setItem(favIdKey, chosenId);
+                favDisplay.textContent = chosen || "None selected";
+                if (favGoBtn) {
+                    favGoBtn.disabled = !chosenId;
+                    favGoBtn.style.display = chosenId ? "inline-flex" : "none";
+                }
+                favSaveBtn.style.display = chosenId ? "none" : "inline-flex";
+                if (user) {
+                    const profileKey = `profile_${user}`;
+                    const p = JSON.parse(localStorage.getItem(profileKey) || '{}');
+                    p.favoriteTeam = chosen || '';
+                    p.favoriteTeamId = chosenId || '';
+                    localStorage.setItem(profileKey, JSON.stringify(p));
+                }
+            });
+
+            favSelect.addEventListener("change", () => {
+                favSaveBtn.style.display = "inline-flex";
+                if (favGoBtn) favGoBtn.style.display = "none";
+            });
+
+            if (favGoBtn) {
+                favGoBtn.addEventListener("click", () => {
+                    const id = localStorage.getItem(favIdKey);
+                    if (id) window.location.href = `Team-Details.html?id=${id}`;
+                });
+            }
+        }
+        document.querySelector('h1').innerText = "My Account";
+        const prof = JSON.parse(localStorage.getItem(`profile_${user}`) || '{}');
+        document.getElementById('display-username').innerText = prof.displayName || user;
+
+        // ADMIN CHECK: Replace 'Riley' with your actual username
+        const adminPanel = document.getElementById('admin-panel');
+        if (user === 'Riley' && adminPanel) {
+            adminPanel.style.display = 'block';
+        }
+
+        // MATCHING THE KEY FROM YOUR QUIZ CODE
+        const scoreKey = `BestScore_${user}`;
+
+        // Pull the score
+        const savedScore = localStorage.getItem(scoreKey);
+        const scoreElement = document.getElementById('display-high-score');
+
+        if (savedScore !== null) {
+            // Your quiz saves the raw number (like 8), but displays it as 8 / 25
+            scoreElement.innerText = savedScore + " / 25";
+        } else {
+            scoreElement.innerText = "0 / 25";
+        }
+    }
+
+        // 2. The Logout "Brain"
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            // Remove the name from memory
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            // Send them back to the login page or home
+            window.location.href = 'Login.html';
+        });
+
+        // ---------- Profile helpers (avatar, display name, favorite team) ----------
+        function getProfile(user) {
+            if (!user) return {};
+            try { return JSON.parse(localStorage.getItem(`profile_${user}`) || '{}'); } catch (e) { return {}; }
+        }
+
+        function saveProfile(user, profileObj) {
+            if (!user) return;
+            localStorage.setItem(`profile_${user}`, JSON.stringify(profileObj || {}));
+        }
+
+        // Wire up avatar input and profile save UI
+        (function wireProfileUI(){
+            const avatarInput = document.getElementById('avatar-input');
+            const avatarPreview = document.getElementById('avatar-preview');
+            const displayInput = document.getElementById('display-name-input');
+            const saveBtn = document.getElementById('save-profile-btn');
+            const msg = document.getElementById('profile-msg');
+
+            function showAvatar(src){
+                if (!src) { avatarPreview.style.display = 'none'; avatarPreview.src = ''; return; }
+                avatarPreview.src = src; avatarPreview.style.display = 'block';
+            }
+
+            // Load existing profile into UI
+            if (user) {
+                const p = getProfile(user);
+                displayInput.value = p.displayName || user;
+                if (p.avatar) showAvatar(p.avatar);
+                // If favorite team stored in profile, reflect it
+                if (p.favoriteTeam) {
+                    try { favSelect.value = p.favoriteTeam; favDisplay.textContent = p.favoriteTeam; } catch(e){}
+                }
+            }
+
+            if (avatarInput) {
+                    avatarInput.addEventListener('change', (e) => {
+                        const file = e.target.files && e.target.files[0];
+                        if (!file) return;
+
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            const src = ev.target.result;
+
+                            showAvatar(src); // your existing function
+
+                            const avatarPreview = document.getElementById('avatar-preview');
+                            if (avatarPreview) {
+                                avatarPreview.src = src;
+                                avatarPreview.style.display = 'block';
+                            }
+
+                            msg.innerText = 'Preview ready - click Save or Crop.';
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    if (!user) { msg.innerText = 'You must be logged in to save a profile.'; return; }
+                    const p = getProfile(user);
+                    p.displayName = displayInput.value || user;
+                    p.avatar = (document.getElementById('avatar-preview').src || '') || p.avatar || '';
+                    // Also ensure favourite team is kept in profile
+                    p.favoriteTeam = localStorage.getItem(favKey) || p.favoriteTeam || '';
+                    p.favoriteTeamId = localStorage.getItem(favIdKey) || p.favoriteTeamId || '';
+                    saveProfile(user, p);
+                    const displayEl = document.getElementById('display-username');
+                    if (displayEl) displayEl.innerText = p.displayName || user;
+                    msg.style.color = '#2ecc71';
+                    msg.innerText = 'Profile saved.';
+                    setTimeout(()=> msg.innerText = '', 2500);
+                });
+            }
+        })();
+
+        // ---------- Team PFP manager (persist per-team avatars) ----------
+        const TEAM_PFP_LIBRARY = {
+            dolphins: [
+                "PFPS/dolphins1.jpg",
+                "PFPS/dolphins2.jpg",
+                "PFPS/dolphins3.jpg",
+                "PFPS/dolphins4.jpg",
+                "PFPS/dolphins5.jpg",
+                "PFPS/dolphins6.jpg",
+            ],
+            bills: [
+                "PFPS/bills1.jpg",
+                "PFPS/bills2.jpg",
+                "PFPS/bills3.jpg",
+                "PFPS/bills4.jpg",
+                "PFPS/bills5.jpg",
+                "PFPS/bills6.jpg",
+            ],
+            patriots: [
+                "PFPS/patriots1.jpg",
+                "PFPS/patriots2.jpg",
+                "PFPS/patriots3.jpg",
+                "PFPS/patriots4.jpg",
+                "PFPS/patriots5.jpg",
+                "PFPS/patriots6.jpg",
+            ],
+            jets: [
+                "PFPS/jets1.jpg",
+                "PFPS/jets2.jpg",
+                "PFPS/jets3.jpg",
+                "PFPS/jets4.jpg",
+                "PFPS/jets5.jpg",
+                "PFPS/jets6.jpg",
+            ],
+            ravens: [
+                "PFPS/ravens1.jpg",
+                "PFPS/ravens2.jpg",
+                "PFPS/ravens3.jpg",
+                "PFPS/ravens4.jpg",
+                "PFPS/ravens5.jpg",
+                "PFPS/ravens6.jpg",
+            ],
+            bengals: [
+                "PFPS/bengals1.jpg",
+                "PFPS/bengals2.jpg",
+                "PFPS/bengals3.jpg",
+                "PFPS/bengals4.jpg",
+                "PFPS/bengals5.jpg",
+                "PFPS/bengals6.jpg",
+            ],
+            steelers: [
+                "PFPS/steelers1.jpg",
+                "PFPS/steelers2.jpg",
+                "PFPS/steelers3.jpg",
+                "PFPS/steelers4.jpg",
+                "PFPS/steelers5.jpg",
+                "PFPS/steelers6.jpg",
+            ],
+            browns: [
+                "PFPS/browns1.jpg",
+                "PFPS/browns2.jpg",
+                "PFPS/browns3.jpg",
+                "PFPS/browns4.jpg",
+                "PFPS/browns5.jpg",
+                "PFPS/browns6.jpg",
+            ],
+            texans: [
+                "PFPS/texans1.jpg",
+                "PFPS/texans2.jpg",
+                "PFPS/texans3.jpg",
+                "PFPS/texans4.jpg",
+                "PFPS/texans5.jpg",
+                "PFPS/texans6.jpg",
+            ],
+            colts: [
+                "PFPS/colts1.jpg",
+                "PFPS/colts2.jpg",
+                "PFPS/colts3.jpg",
+                "PFPS/colts4.jpg",
+                "PFPS/colts5.jpg",
+                "PFPS/colts6.jpg",
+            ],
+            titans: [
+                "PFPS/titans1.jpg",
+                "PFPS/titans2.jpg",
+                "PFPS/titans3.jpg",
+                "PFPS/titans4.jpg",
+                "PFPS/titans5.jpg",
+                "PFPS/titans6.jpg",
+            ],
+            jaguars: [
+                "PFPS/jaguar1.jpg",
+                "PFPS/jaguar2.jpg",
+                "PFPS/jaguar3.jpg",
+                "PFPS/jaguar4.jpg",
+                "PFPS/jaguar5.jpg",
+                "PFPS/jaguar6.jpg",
+            ],
+            chiefs: [
+                "PFPS/chiefs1.jpg",
+                "PFPS/chiefs2.jpg",
+                "PFPS/chiefs3.jpg",
+                "PFPS/chiefs4.jpg",
+                "PFPS/chiefs5.jpg",
+                "PFPS/chiefs6.jpg",
+            ],
+            chargers: [
+                "PFPS/chargers1.jpg",
+                "PFPS/chargers2.jpg",
+                "PFPS/chargers3.jpg",
+                "PFPS/chargers4.jpg",
+                "PFPS/chargers5.jpg",
+                "PFPS/chargers6.jpg",
+            ],
+            broncos: [
+                "PFPS/broncos1.jpg",
+                "PFPS/broncos2.jpg",
+                "PFPS/broncos3.jpg",
+                "PFPS/broncos4.jpg",
+                "PFPS/broncos5.jpg",
+                "PFPS/broncos6.jpg",
+            ],
+            raiders: [
+                "PFPS/raiders1.jpg",
+                "PFPS/raiders2.jpg",
+                "PFPS/raiders3.jpg",
+                "PFPS/raiders4.jpg",
+                "PFPS/raiders5.jpg",
+                "PFPS/raiders6.jpg",
+            ],
+            eagles: [
+                "https://i.pinimg.com/736x/7f/fe/2d/7ffe2dd6af3cafe3f04b570611445039.jpg",
+                "https://i.pinimg.com/1200x/09/a4/f8/09a4f8dccde4c4dc819e7b3193eea1d9.jpg",
+                "https://i.pinimg.com/1200x/25/06/6d/25066d47395c4015ae640e7b5cb54710.jpg",
+                "https://i.pinimg.com/736x/3e/95/ac/3e95acef134c7571b185ef706247df5b.jpg",
+                "https://i.pinimg.com/736x/20/c4/d4/20c4d4dc64ba4d4c2db1bf1e73b8498a.jpg",
+                "https://i.pinimg.com/736x/26/44/74/26447483436a638e8450b562d286b4d8.jpg",
+            ],
+            cowboys: [
+                "https://i.pinimg.com/736x/ed/c8/ad/edc8ad56275a463990af789bc0d1184e.jpg",
+                "https://i.pinimg.com/736x/e7/24/7f/e7247f4af3b660b309da1be0f457eb6a.jpg",
+                "https://i.pinimg.com/736x/a4/12/dd/a412dd313574d8663e677b3d288777a7.jpg",
+                "https://i.pinimg.com/1200x/c4/15/b3/c415b3445536fdc01e9bac7ee3e57430.jpg",
+                "https://i.pinimg.com/1200x/6c/06/cb/6c06cb26f71ea4d97b8b6a6558795131.jpg",
+                "https://i.pinimg.com/1200x/e0/d2/ec/e0d2ec261d19d8be06c53b77d55131f6.jpg",
+            ],
+            commanders: [
+                "https://i.pinimg.com/736x/98/b7/f6/98b7f6bef512e54954c213b096f2929f.jpg",
+                "https://i.pinimg.com/736x/1b/0d/b6/1b0db6e3de6332dcd95776d45828a748.jpg",
+                "https://i.pinimg.com/1200x/2b/96/d7/2b96d710fcbed50f330481d2199de9b3.jpg",
+                "https://i.pinimg.com/736x/7e/64/7c/7e647c5392be4e1798ab38b3d756142e.jpg",
+                "https://i.pinimg.com/736x/6d/02/6a/6d026ac594e2e2d999669e89fcaaa724.jpg",
+                "https://i.pinimg.com/1200x/a7/b2/2e/a7b22e744a5856a328647db1985b2076.jpg",
+            ],
+            giants: [
+                "https://i.pinimg.com/736x/af/0c/6b/af0c6b347caec878dde8e816200f574d.jpg",
+                "https://i.pinimg.com/736x/44/1d/cf/441dcf5357e135f8bbc8b79dd8fcb86e.jpg",
+                "https://i.pinimg.com/736x/f1/43/c7/f143c79caafa86d754c681a095c7a4e7.jpg",
+                "https://i.pinimg.com/736x/49/70/29/4970299020d096e1c59f53899b84ae4a.jpg",
+                "https://static.clubs.nfl.com/image/upload/t_editorial_landscape_12_desktop/giants/uymzt3clrlcajzxudpbk",
+                "https://i.pinimg.com/1200x/9c/f5/c3/9cf5c320724dbf9053f4661e5179320e.jpg",
+            ],
+            lions: [
+                "https://i.pinimg.com/1200x/f2/fd/ef/f2fdef6a939f247cbbac07a74e7f93bf.jpg",
+                "https://i.pinimg.com/736x/c2/05/93/c205933e9c92e47422edf8192d1582e3.jpg",
+                "https://i.pinimg.com/736x/c0/a4/97/c0a497873afd48ca84af399133c99eab.jpg",
+                "https://i.pinimg.com/736x/98/af/c8/98afc8c6777c3050121ed05ed9199b81.jpg",
+                "https://i.pinimg.com/1200x/67/1e/e1/671ee161738ad7e75b49ecce62cc794f.jpg",
+                "https://i.pinimg.com/736x/42/10/eb/4210eb0c5e3b2fa6d4674292c222e3c9.jpg",
+            ],
+            packers: [
+                "https://i.pinimg.com/1200x/eb/ce/be/ebcebe40f0bfc788276772ffbffb084a.jpg",
+                "https://i.pinimg.com/1200x/97/ee/8a/97ee8a52eb3a079a41e1da5398ca4af0.jpg",
+                "https://i.pinimg.com/1200x/ad/a1/37/ada137eeece0c553de5549ef4046c311.jpg",
+                "https://i.pinimg.com/1200x/e4/76/36/e47636244f11c41ee0911c435f734616.jpg",
+                "https://i.pinimg.com/736x/51/23/c7/5123c74b892c4ee2270a3d4b55925cf5.jpg",
+                "https://i.pinimg.com/1200x/55/44/57/5544571d78b6e7c74111fa2222cc5778.jpg",
+            ],
+            bears: [
+                "https://i.pinimg.com/1200x/05/61/47/056147258d907160b0ce3b7e8605eaaa.jpg",
+                "https://i.pinimg.com/1200x/6a/4e/b6/6a4eb60c0ee5c9a2089d3aca21fa38fb.jpg",
+                "https://i.pinimg.com/1200x/54/02/c8/5402c83d5d0e37d2077b79ea0ba7fb1e.jpg",
+                "https://i.pinimg.com/1200x/25/3b/da/253bda18d5cef76d47defa1353f3fa51.jpg",
+                "https://i.pinimg.com/1200x/cf/d6/0f/cfd60ffa08bed396aa26ddabdc7f0d6d.jpg",
+                "https://i.pinimg.com/1200x/05/c8/a5/05c8a5dcc1933c693d6c7922c18d9b1d.jpg",
+            ],
+            vikings: [
+                "https://i.pinimg.com/1200x/91/ec/0e/91ec0e1a7c2defe163e8d229a9784198.jpg",
+                "https://i.pinimg.com/1200x/b7/ea/8f/b7ea8f9be8269977657f43a3ae3c37e8.jpg",
+                "https://i.pinimg.com/736x/89/40/57/894057b457681ddabae1b61f9b59ba3a.jpg",
+                "https://i.pinimg.com/736x/90/bb/cb/90bbcbaa10a7367387bc13bcb4cc82ae.jpg",
+                "https://i.pinimg.com/1200x/e4/d3/18/e4d318bb691200185aa7be37a72234a9.jpg",
+                "https://i.pinimg.com/736x/2d/94/1b/2d941b1ee1f1d90d37e8fc0d2dd8c00a.jpg",
+            ],
+            rams: [
+                "https://i.pinimg.com/1200x/34/a8/2d/34a82d74360ff50e0e4050b33fcb2454.jpg",
+                "https://i.pinimg.com/1200x/3f/fd/df/3ffddf6fa52a20110ffe144e06538203.jpg",
+                "https://i.pinimg.com/736x/d8/b4/d5/d8b4d58028f8cc8ed1f07e1734e911d4.jpg",
+                "https://i.pinimg.com/1200x/11/4e/8a/114e8a04297e8391e5dcdefac42180f9.jpg",
+                "https://i.pinimg.com/1200x/7d/fc/de/7dfcdee8362c189d9a4459e2967fb2a5.jpg",
+                "https://i.pinimg.com/1200x/57/2f/8b/572f8bef4836d3d16bf96ff617efc3ca.jpg",
+            ],
+            seahawks: [
+                "https://i.pinimg.com/736x/61/b3/99/61b399ddeda573dd90c15f62a72b39ce.jpg",
+                "https://i.pinimg.com/736x/a0/68/e0/a068e01fc52db7b599b788a0b51b3b8c.jpg",
+                "https://i.pinimg.com/1200x/9a/af/95/9aaf95c17fddf2228a749f09253fd473.jpg",
+                "https://i.pinimg.com/1200x/d3/a7/90/d3a7909df99f0f6209626e1bb82c2eb1.jpg",
+                "https://i.pinimg.com/736x/32/58/c1/3258c132828ad305481fff1372aa64e8.jpg",
+                "https://i.pinimg.com/736x/65/5a/0f/655a0fa1193bda5f2b548362d1bd964d.jpg",
+            ],
+            sf49ers: [
+                "https://i.pinimg.com/1200x/e6/15/7c/e6157cc4fc8e73b030415c45f309105e.jpg",
+                "https://i.pinimg.com/736x/79/b7/7b/79b77bdb7c29ce2adc08a9b35b47ca23.jpg",
+                "https://i.pinimg.com/736x/2d/23/c7/2d23c7cc1823af6ef12321b46d129e9d.jpg",
+                "https://i.pinimg.com/736x/ab/4e/be/ab4ebe682b2300bea68dfa522812677a.jpg",
+                "https://i.pinimg.com/1200x/47/27/ae/4727ae55f93ae613d0517fec18b19059.jpg",
+                "https://i.pinimg.com/736x/0d/eb/68/0deb683988a6fd3843e56a7a17d6e823.jpg",
+            ],
+            cardinals: [
+                "https://i.pinimg.com/736x/c5/9e/cc/c59eccca96fc29fee94401cb7a3ca655.jpg",
+                "https://i.pinimg.com/736x/c3/ce/54/c3ce5407db75babe7a968ca8328650f5.jpg",
+                "https://i.pinimg.com/736x/d1/20/ee/d120eed0ad6203d032f7f42e2562bc41.jpg",
+                "https://i.pinimg.com/736x/73/9e/d1/739ed1609ae10b445b4455581e25e445.jpg",
+                "https://i.pinimg.com/736x/2e/65/e4/2e65e4f846401193d1c24837eb4b6aec.jpg",
+                "https://i.pinimg.com/736x/31/6e/30/316e3017e0c4fec153d6a6ec1b72aca0.jpg",
+            ],
+            buccaneers: [
+                "https://i.pinimg.com/736x/4b/52/d0/4b52d0122ce8c947c56a62ae5acc532f.jpg",
+                "https://i.pinimg.com/736x/f4/38/fc/f438fcad417fb5722b1e7788a1981617.jpg",
+                "https://i.pinimg.com/1200x/51/c3/db/51c3db31e53e12ee2edc715f2593fd51.jpg",
+                "https://i.pinimg.com/1200x/8b/c1/7d/8bc17d3d301dce849cab03f32c9fe724.jpg",
+                "https://i.pinimg.com/1200x/7d/2f/2d/7d2f2d00ac490308609e1de53661ebe2.jpg",
+                "https://i.pinimg.com/1200x/51/dd/0f/51dd0ff637ac1544f260606a4a6085f5.jpg",
+            ],
+            saints: [
+                "https://i.pinimg.com/1200x/36/30/ae/3630aea7e290cc47f5de09f04fcbbd46.jpg",
+                "https://i.pinimg.com/736x/38/d7/a6/38d7a6902e3714158dbd59de47441b6d.jpg",
+                "https://i.pinimg.com/1200x/37/83/4c/37834ce88e3d701dc6aee42e34dde0a2.jpg",
+                "https://i.pinimg.com/736x/da/19/f9/da19f94f0d3a5de034fc998df989d1ce.jpg",
+                "https://i.pinimg.com/1200x/cb/f7/cc/cbf7cc2bfafaca8a8fc0b92702f549aa.jpg",
+                "https://i.pinimg.com/1200x/13/3c/77/133c7780a90a13a3aeaf997a79cdfc4f.jpg",
+            ],
+            panthers: [
+                "https://i.pinimg.com/736x/67/d2/c2/67d2c26132343c13f5f7d0dc546227c7.jpg",
+                "https://i.pinimg.com/736x/f5/f5/5f/f5f55f3f17f7ffaa9763472c3a58bf80.jpg",
+                "https://i.pinimg.com/736x/8e/c6/12/8ec612f21bd91a644ea9d7f171b91f17.jpg",
+                "https://i.pinimg.com/736x/32/9e/0c/329e0ccef417bf862e34b8da367af305.jpg",
+                "https://i.pinimg.com/736x/aa/c5/52/aac55297bc5383fcc872f8d871947dbc.jpg",
+                "https://i.pinimg.com/736x/1c/ea/60/1cea609ae82fe88488e086a28ee294ba.jpg",
+            ],
+            falcons: [
+                "https://i.pinimg.com/1200x/1c/f9/fe/1cf9fe27460dc2f0dd6f906b6159c41a.jpg",
+                "https://i.pinimg.com/736x/5d/d8/5f/5dd85f9cf4e04361551401a18110df98.jpg",
+                "https://i.pinimg.com/736x/63/69/52/636952ef6bde173a2dbc5ab4c1539cc6.jpg",
+                "https://i.pinimg.com/1200x/e3/93/5b/e3935b661e742fc32f2736b9e3226a73.jpg",
+                "https://i.pinimg.com/1200x/f9/98/46/f99846a4c8b558f95a6fb82e1fd026e4.jpg",
+                "https://i.pinimg.com/1200x/67/17/bc/6717bc02e64386825aed28e12e54808d.jpg",
+            ],
+        };
+
+        (function teamPfpManager(){
+            const teamPfpsKey = 'team_pfps';
+            const teamList = [
+                "Arizona Cardinals","Atlanta Falcons","Baltimore Ravens","Buffalo Bills","Carolina Panthers","Chicago Bears",
+                "Cincinnati Bengals","Cleveland Browns","Dallas Cowboys","Denver Broncos","Detroit Lions","Green Bay Packers",
+                "Houston Texans","Indianapolis Colts","Jacksonville Jaguars","Kansas City Chiefs","Las Vegas Raiders",
+                "Los Angeles Chargers","Los Angeles Rams","Miami Dolphins","Minnesota Vikings","New England Patriots",
+                "New Orleans Saints","New York Giants","New York Jets","Philadelphia Eagles","Pittsburgh Steelers",
+                "San Francisco 49ers","Seattle Seahawks","Tampa Bay Buccaneers","Tennessee Titans","Washington Commanders"
+            ];
+            const teamMap = {
+                "Arizona Cardinals":"cardinals",
+                "Atlanta Falcons":"falcons",
+                "Baltimore Ravens":"ravens",
+                "Buffalo Bills":"bills",
+                "Carolina Panthers":"panthers",
+                "Chicago Bears":"bears",
+                "Cincinnati Bengals":"bengals",
+                "Cleveland Browns":"browns",
+                "Dallas Cowboys":"cowboys",
+                "Denver Broncos":"broncos",
+                "Detroit Lions":"lions",
+                "Green Bay Packers":"packers",
+                "Houston Texans":"texans",
+                "Indianapolis Colts":"colts",
+                "Jacksonville Jaguars":"jaguars",
+                "Kansas City Chiefs":"chiefs",
+                "Las Vegas Raiders":"raiders",
+                "Los Angeles Chargers":"chargers",
+                "Los Angeles Rams":"rams",
+                "Miami Dolphins":"dolphins",
+                "Minnesota Vikings":"vikings",
+                "New England Patriots":"patriots",
+                "New Orleans Saints":"saints",
+                "New York Giants":"giants",
+                "New York Jets":"jets",
+                "Philadelphia Eagles":"eagles",
+                "Pittsburgh Steelers":"steelers",
+                "San Francisco 49ers":"sf49ers",
+                "Seattle Seahawks":"seahawks",
+                "Tampa Bay Buccaneers":"buccaneers",
+                "Tennessee Titans":"titans",
+                "Washington Commanders":"commanders"
+            };
+            function loadTeamPfps(){
+                try { return JSON.parse(localStorage.getItem(teamPfpsKey) || '{}'); } catch(e){ return {}; }
+            }
+            function saveTeamPfps(obj){ localStorage.setItem(teamPfpsKey, JSON.stringify(obj || {})); }
+
+            const manageBtn = document.getElementById('manage-team-pfps-btn');
+            const modal = document.getElementById('team-pfp-modal');
+            const closeBtn = document.getElementById('team-pfp-close');
+            const listEl = document.getElementById('team-pfp-list');
+            const listView = document.getElementById('team-pfp-list-view');
+            const detailView = document.getElementById('team-pfp-detail-view');
+            const editor = document.getElementById('team-pfp-editor');
+            const editorTitle = document.getElementById('team-pfp-editor-title');
+            const currentImg = document.getElementById('team-pfp-current');
+            const uploadInput = document.getElementById('team-pfp-upload');
+            const urlInput = document.getElementById('team-pfp-url');
+            const loadUrlBtn = document.getElementById('team-pfp-load-url');
+            const saveBtn = document.getElementById('team-pfp-save');
+            const useBtn = document.getElementById('team-pfp-use');
+            const removeBtn = document.getElementById('team-pfp-remove');
+            const msg = document.getElementById('team-pfp-msg');
+            const libraryEl = document.getElementById('team-pfp-library');
+            const backBtn = document.getElementById('team-pfp-back');
+
+            const cropper = document.getElementById('pfp-cropper');
+            const cropImg = document.getElementById('pfp-crop-img');
+            const cropBox = document.getElementById('pfp-crop-box');
+            const cropDone = document.getElementById('pfp-crop-done');
+            const cropSavePfp = document.getElementById('pfp-crop-save-pfp');
+            const cropSaveTeam = document.getElementById('pfp-crop-save-team');
+            const cropClose = document.getElementById('pfp-crop-close');
+            const cropMsg = document.getElementById('pfp-crop-msg');
+            const cropZoom = document.getElementById('pfp-crop-zoom');
+
+            let editingId = null;
+
+            function openModal(){
+                renderList();
+                modal.style.display = 'flex';
+                if (detailView) detailView.style.display = 'none';
+                if (listView) listView.style.display = 'block';
+                msg.innerText = '';
+            }
+
+            function renderLibrary(teamId){
+                if (!libraryEl) return;
+                const list = TEAM_PFP_LIBRARY[teamId] || [];
+                libraryEl.innerHTML = '';
+                if (!list.length) {
+                    libraryEl.innerHTML = '<div class="muted">No PFPs yet. Add links in TEAM_PFP_LIBRARY.</div>';
+                    return;
+                }
+                list.forEach(url => {
+                    const btn = document.createElement('button');
+                    btn.className = 'pfp-tile';
+                    btn.style.backgroundImage = `url(${url})`;
+                    btn.addEventListener('click', ()=>{
+                        openCropperFromSource(url);
+                    });
+                    libraryEl.appendChild(btn);
+                });
+            }
+            function closeModal(){ modal.style.display = 'none'; editingId = null; }
+
+            function renderList(){
+                const data = loadTeamPfps();
+                listEl.innerHTML = '';
+                // Use teams array if available; fallback to teamList
+                const source = (typeof teams !== 'undefined' && teams && teams.length) ? teams : teamList;
+                source.forEach(name => {
+                    const id = (typeof teamIdByName !== 'undefined' && teamIdByName[name]) || teamMap[name] || name.replace(/\s+/g,'').toLowerCase();
+                    const thumb = data[id] || '';
+                    const card = document.createElement('button');
+                    card.style.width = '136px';
+                    card.style.height = '136px';
+                    card.style.borderRadius = '8px';
+                    card.style.border = '1px solid var(--card-border)';
+                    card.style.background = thumb ? `url(${thumb}) center/cover no-repeat` : 'linear-gradient(180deg,#eee,#ddd)';
+                    card.style.display = 'flex';
+                    card.style.flexDirection = 'column';
+                    card.style.alignItems = 'center';
+                    card.style.justifyContent = 'flex-end';
+                    card.style.padding = '8px';
+                    card.style.cursor = 'pointer';
+                    card.title = name;
+                    const label = document.createElement('div');
+                    label.style.width = '100%';
+                    label.style.background = 'rgba(0,0,0,0.35)';
+                    label.style.color = 'white';
+                    label.style.fontSize = '12px';
+                    label.style.padding = '6px';
+                    label.style.borderRadius = '0 0 8px 8px';
+                    label.style.textAlign = 'center';
+                    label.innerText = name;
+                    card.appendChild(label);
+                    card.addEventListener('click', ()=> openEditorFor(id, name));
+                    listEl.appendChild(card);
+                });
+            }
+
+            function openEditorFor(id, name){
+                editingId = id;
+                editorTitle.innerText = `Edit ${name}`;
+                const data = loadTeamPfps();
+                const img = data[id] || '';
+                if (img) { currentImg.src = img; currentImg.style.display = 'block'; } 
+                else { currentImg.style.display = 'none'; }                
+                if (useBtn) useBtn.disabled = !img;
+                urlInput.value = '';
+                uploadInput.value = '';
+                if (listView) listView.style.display = 'none';
+                if (detailView) detailView.style.display = 'block';
+                msg.innerText = '';
+                renderLibrary(id);
+            }
+
+            // crop image to centered square and resize
+            function cropImageToSquare(img, size, cb){
+                const canvas = document.createElement('canvas');
+                const s = parseInt(size,10) || 160;
+                canvas.width = s; canvas.height = s;
+                const ctx = canvas.getContext('2d');
+                const iw = img.width, ih = img.height;
+                const min = Math.min(iw, ih);
+                const sx = (iw - min)/2, sy = (ih - min)/2;
+                try{
+                    ctx.drawImage(img, sx, sy, min, min, 0, 0, s, s);
+                    cb(canvas.toDataURL('image/jpeg', 0.9));
+                } catch(e){ cb(null); }
+            }
+
+            function loadImageFromUrl(url, cb){
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = ()=> cb(img);
+                img.onerror = ()=> cb(null);
+                img.src = url;
+            }
+
+            async function toDataUrlFromSrc(src){
+                try{
+                    const res = await fetch(src, { mode: 'cors' });
+                    if (!res.ok) return null;
+                    const blob = await res.blob();
+                    const dataUrl = await new Promise((resolve, reject)=>{
+                        const r = new FileReader();
+                        r.onload = ()=> resolve(r.result);
+                        r.onerror = reject;
+                        r.readAsDataURL(blob);
+                    });
+                    const img = await new Promise((resolve, reject)=>{
+                        const im = new Image();
+                        im.onload = ()=> resolve(im);
+                        im.onerror = reject;
+                        im.src = dataUrl;
+                    });
+                    const max = 2000;
+                    const iw = img.naturalWidth || img.width;
+                    const ih = img.naturalHeight || img.height;
+                    const scale = Math.min(1, max / Math.max(iw, ih));
+                    const cw = Math.round(iw * scale);
+                    const ch = Math.round(ih * scale);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = cw; canvas.height = ch;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, cw, ch);
+                    return canvas.toDataURL('image/jpeg', 0.95);
+                } catch (e){
+                    return null;
+                }
+            }
+
+            async function openCropperFromSource(src){
+                msg.style.color = '';
+                msg.innerText = 'Loading image...';
+                const dataUrl = await toDataUrlFromSrc(src);
+                if (!dataUrl) {
+                    msg.innerText = 'Image failed to load (CORS blocked). Try another image or upload a file.';
+                    return;
+                }
+                msg.innerText = '';
+                setCropImage(dataUrl);
+                cropper.style.display = 'flex';
+            }
+
+            function applyCropTransform(){
+                const box = cropBox.getBoundingClientRect();
+                const bw = box.width, bh = box.height;
+                const iw = cropImg.naturalWidth || cropImg.width;
+                const ih = cropImg.naturalHeight || cropImg.height;
+                const base = parseFloat(cropImg.dataset.base || '1');
+                const zoom = parseFloat(cropImg.dataset.zoom || '1');
+                const scale = base * zoom;
+                cropImg.dataset.scale = String(scale);
+                const w = iw * scale;
+                const h = ih * scale;
+                cropImg.dataset.w = String(w);
+                cropImg.dataset.h = String(h);
+                let x = parseFloat(cropImg.dataset.x || '0');
+                let y = parseFloat(cropImg.dataset.y || '0');
+                let minX, maxX, minY, maxY;
+                const slackX = bw * 0.2;
+                const slackY = bh * 0.2;
+                if (w <= bw) { minX = -slackX; maxX = (bw - w) + slackX; }
+                else { minX = bw - w; maxX = 0; }
+                if (h <= bh) { minY = -slackY; maxY = (bh - h) + slackY; }
+                else { minY = bh - h; maxY = 0; }
+                x = clamp(x, minX, maxX);
+                y = clamp(y, minY, maxY);
+                cropImg.dataset.x = String(x);
+                cropImg.dataset.y = String(y);
+                cropImg.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            }
+
+            function setCropImage(src){
+                if (!src) return;
+                cropImg.src = src;
+                cropImg.onload = () => {
+                    const box = cropBox.getBoundingClientRect();
+                    const bw = box.width, bh = box.height;
+                    const iw = cropImg.naturalWidth || cropImg.width;
+                    const ih = cropImg.naturalHeight || cropImg.height;
+                    const base = Math.min(bw / iw, bh / ih);
+                    cropImg.dataset.base = String(base);
+                    if (cropZoom) cropZoom.value = '1';
+                    cropImg.dataset.zoom = '1';
+                    const w = iw * base;
+                    const h = ih * base;
+                    const x = (bw - w) / 2;
+                    const y = (bh - h) / 2;
+                    cropImg.dataset.x = String(x);
+                    cropImg.dataset.y = String(y);
+                    applyCropTransform();
+                };
+            }
+
+            function clamp(val, min, max){ return Math.min(max, Math.max(min, val)); }
+
+            function startDrag(e){
+                e.preventDefault();
+                if (!cropImg.dataset.w) return;
+                const box = cropBox.getBoundingClientRect();
+                const bw = box.width, bh = box.height;
+                const w = parseFloat(cropImg.dataset.w);
+                const h = parseFloat(cropImg.dataset.h);
+                let startX = (e.touches ? e.touches[0].clientX : e.clientX);
+                let startY = (e.touches ? e.touches[0].clientY : e.clientY);
+                let origX = parseFloat(cropImg.dataset.x);
+                let origY = parseFloat(cropImg.dataset.y);
+
+                function move(ev){
+                    const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX);
+                    const cy = (ev.touches ? ev.touches[0].clientY : ev.clientY);
+                    let nx = origX + (cx - startX);
+                    let ny = origY + (cy - startY);
+                    let minX, maxX, minY, maxY;
+                    const slackX = bw * 0.2;
+                    const slackY = bh * 0.2;
+                    if (w <= bw) { minX = -slackX; maxX = (bw - w) + slackX; }
+                    else { minX = bw - w; maxX = 0; }
+                    if (h <= bh) { minY = -slackY; maxY = (bh - h) + slackY; }
+                    else { minY = bh - h; maxY = 0; }
+                    nx = clamp(nx, minX, maxX);
+                    ny = clamp(ny, minY, maxY);
+                    cropImg.dataset.x = String(nx);
+                    cropImg.dataset.y = String(ny);
+                    const scale = parseFloat(cropImg.dataset.scale || '1');
+                    cropImg.style.transform = `translate(${nx}px, ${ny}px) scale(${scale})`;
+                }
+                function up(){
+                    document.removeEventListener('mousemove', move);
+                    document.removeEventListener('mouseup', up);
+                    document.removeEventListener('touchmove', move);
+                    document.removeEventListener('touchend', up);
+                }
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', up);
+                document.addEventListener('touchmove', move, { passive: false });
+                document.addEventListener('touchend', up);
+            }
+
+            uploadInput.addEventListener('change', (e)=>{
+                const f = e.target.files && e.target.files[0];
+                if (!f || !editingId) return;
+                const r = new FileReader();
+                r.onload = function(ev){
+                    const src = ev.target.result;
+                    openCropperFromSource(src);
+                    urlInput.value = '';
+                };
+                r.readAsDataURL(f);
+            });
+
+            loadUrlBtn.addEventListener('click', ()=>{
+                const url = urlInput.value && urlInput.value.trim();
+                if (!url || !editingId) {
+                    msg.innerText = 'Enter URL and select a team.';
+                    return;
+                }
+                openCropperFromSource(url);
+            });
+
+            saveBtn.addEventListener('click', ()=>{
+                if (!editingId) return;
+                const pfp = currentImg.src || '';
+                const data = loadTeamPfps();
+                if (!pfp) { msg.innerText = 'No image selected to save.'; return; }
+                data[editingId] = pfp;
+                saveTeamPfps(data);
+                msg.style.color = '#2ecc71'; msg.innerText = 'Saved.';
+                renderList();
+            });
+
+            if (useBtn) {
+                useBtn.addEventListener('click', ()=>{
+                    const pfp = currentImg.src || '';
+                    if (!pfp) { msg.innerText = 'No image selected.'; return; }
+                    const p = getProfile(user);
+                    p.avatar = pfp;
+                    saveProfile(user, p);
+                    const avatarPreview = document.getElementById('avatar-preview');
+                    if (avatarPreview) { avatarPreview.src = pfp; avatarPreview.style.display = 'block'; }
+                    const displayEl = document.getElementById('display-username');
+                    if (displayEl) displayEl.innerText = p.displayName || user;
+                    msg.style.color = '#2ecc71';
+                    msg.innerText = 'Set as your profile PFP.';
+                });
+            }
+
+            if (backBtn) {
+                backBtn.addEventListener('click', ()=>{
+                    if (detailView) detailView.style.display = 'none';
+                    if (listView) listView.style.display = 'block';
+                });
+            }
+
+            if (cropClose) cropClose.addEventListener('click', ()=>{ cropper.style.display = 'none'; });
+            if (cropBox) {
+                cropBox.addEventListener('mousedown', startDrag);
+                cropBox.addEventListener('touchstart', startDrag, { passive: false });
+            }
+            if (cropZoom) {
+                cropZoom.addEventListener('input', ()=>{
+                    cropImg.dataset.zoom = cropZoom.value;
+                    applyCropTransform();
+                });
+            }
+
+            function exportCropped(){
+                const box = cropBox.getBoundingClientRect();
+                const bw = box.width, bh = box.height;
+                const iw = cropImg.naturalWidth || cropImg.width;
+                const ih = cropImg.naturalHeight || cropImg.height;
+                const scale = parseFloat(cropImg.dataset.scale || '1');
+                const x = parseFloat(cropImg.dataset.x || '0');
+                const y = parseFloat(cropImg.dataset.y || '0');
+                const canvas = document.createElement('canvas');
+                const out = 160;
+                canvas.width = out; canvas.height = out;
+                const ctx = canvas.getContext('2d');
+                try{
+                    const sx = (0 - x) / scale;
+                    const sy = (0 - y) / scale;
+                    const sw = bw / scale;
+                    const sh = bh / scale;
+                    ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, out, out);
+                    return canvas.toDataURL('image/jpeg', 0.9);
+                } catch (e){
+                    return null;
+                }
+            }
+
+            if (cropDone) {
+                cropDone.addEventListener('click', ()=>{
+                    const dataUrl = exportCropped();
+                    if (!dataUrl) { cropMsg.innerText = 'Could not crop this image.'; return; }
+                    currentImg.src = dataUrl; currentImg.style.display = 'block';
+                    cropper.style.display = 'none';
+                    msg.innerText = 'Cropped - click Save.';
+                });
+            }
+
+            if (cropSavePfp) {
+                cropSavePfp.addEventListener('click', ()=>{
+                    const dataUrl = exportCropped();
+                    if (!dataUrl) { cropMsg.innerText = 'Could not crop this image.'; return; }
+                    const finalSrc = dataUrl;
+                    const p = getProfile(user);
+                    p.avatar = finalSrc;
+                    saveProfile(user, p);
+                    const avatarPreview = document.getElementById('avatar-preview');
+                    if (avatarPreview) { avatarPreview.src = finalSrc; avatarPreview.style.display = 'block'; }
+                    cropMsg.innerText = 'Saved as PFP.';
+                    cropper.style.display = 'none';
+                });
+            }
+
+            if (cropSaveTeam) {
+                cropSaveTeam.addEventListener('click', ()=>{
+                    const dataUrl = exportCropped();
+                    if (!dataUrl || !editingId) { cropMsg.innerText = 'Could not crop this image.'; return; }
+                    const finalSrc = dataUrl;
+                    const data = loadTeamPfps();
+                    data[editingId] = finalSrc;
+                    saveTeamPfps(data);
+                    renderList();
+                    cropMsg.innerText = 'Saved to team.';
+                    cropper.style.display = 'none';
+                });
+            }
+
+            removeBtn.addEventListener('click', ()=>{
+                if (!editingId) return;
+                const data = loadTeamPfps();
+                if (data[editingId]) delete data[editingId];
+                saveTeamPfps(data);
+                currentImg.src = ''; currentImg.style.display = 'none';
+                msg.style.color = '#d9534f'; msg.innerText = 'Removed.';
+                renderList();
+            });
+
+            manageBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+
+            // click outside modal to close
+            modal.addEventListener('click', (e)=>{ if (e.target === modal) closeModal(); });
+        })();
+
+
+        /* ADMIN COMMAND CENTER FUNCTIONS */
+        function clearAllFeeds() {
+    if (confirm("ðŸš¨ NUCLEAR OPTION: Delete EVERY post from EVERY team page?")) {
+        let count = 0;
+        Object.keys(localStorage).forEach(key => {
+            // Your screenshot shows keys like 'posts_cardinals'
+            if (key.startsWith('posts_')) {
+                localStorage.removeItem(key);
+                count++;
+            }
+        });
+        
+        const msg = document.getElementById('admin-status-msg');
+        msg.style.color = "#2ecc71";
+        msg.innerText = `Success: ${count} team feeds wiped.`;
+        setTimeout(() => location.reload(), 2000);
+    }
+}
+
+    function clearAllLeaderboards() {
+        if (confirm("ðŸš¨ RESET ALL: Wipe the NFL Leaderboard and all survey results?")) {
+            let count = 0;
+            Object.keys(localStorage).forEach(key => {
+                // Targets 'nfl_leaderboard' and anything ending in '_survey_results'
+                if (key === 'nfl_leaderboard' || key.endsWith('_survey_results')) {
+                    localStorage.removeItem(key);
+                    count++;
+                }
+            });
+
+            const msg = document.getElementById('admin-status-msg');
+            msg.style.color = "#2ecc71";
+            msg.innerText = `Success: ${count} records deleted.`;
+            setTimeout(() => location.reload(), 2000);
+        }
+    }
+
+    function clearAllPolls() {
+        if (confirm("🚨 RESET ALL: Wipe all fan poll results?")) {
+            let count = 0;
+            Object.keys(localStorage).forEach(key => {
+                // Targets 'poll_<team_id>'
+                if (key.startsWith('poll_')) {
+                    localStorage.removeItem(key);
+                    count++;
+                }
+            });
+
+            const msg = document.getElementById('admin-status-msg');
+            msg.style.color = "#2ecc71";
+            msg.innerText = `Success: ${count} fan polls deleted.`;
+            setTimeout(() => location.reload(), 2000);
+        }
+    }
+
+    function clearGameLeaderboards() {
+        if (confirm("🚨 RESET GAMES: Clear all Games Hub scores and votes?")) {
+            let count = 0;
+            Object.keys(localStorage).forEach(key => {
+                if (key === "prediction_leaderboard" || key === "startsit_leaderboard" || key === "statline_leaderboard" || key === "logo_leaderboard" || key === "stadium_leaderboard" || key === "trivia_leaderboard" || key === "draft_leaderboard" || key === "fantasy_leaderboard" || key === "timeline_leaderboard" || key === "geo_leaderboard" || key.startsWith("poll_") || key.startsWith("poll_voted_") || key === "bracket_picks") {
+                    localStorage.removeItem(key);
+                    count++;
+                }
+            });
+
+            const msg = document.getElementById('admin-status-msg');
+            msg.style.color = "#2ecc71";
+            msg.innerText = `Success: ${count} game leaderboard items cleared.`;
+            setTimeout(() => location.reload(), 2000);
+        }
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
