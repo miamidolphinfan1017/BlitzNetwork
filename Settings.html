@@ -1,0 +1,996 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Settings</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="Website Settings">
+  <meta name="keywords" content="Settings, Account, Appearance, Privacy">
+  <meta name="author" content="Riley Cooperman">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  <style>
+    .settings-page-shell {
+      min-height: calc(100vh - 70px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 16px 24px;
+      font-size: var(--settings-text-size, 16px);
+    }
+
+    .settings-page-root {
+      width: min(920px, 98vw);
+      background: rgba(18, 18, 18, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+      padding: 18px;
+      color: #f4f4f4;
+      overflow: hidden;
+    }
+
+    .settings-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .settings-page-title {
+      margin: 0;
+      font-family: "Fugaz One", system-ui;
+      letter-spacing: 1px;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+    }
+
+    .settings-toast {
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      background: rgba(31, 166, 84, 0.22);
+      border: 1px solid rgba(31, 166, 84, 0.45);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .settings-toast.settings-toast-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .settings-main-menu {
+      display: grid;
+      gap: 10px;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .settings-main-menu.settings-menu-hidden {
+      opacity: 0;
+      transform: translateX(-18px);
+      pointer-events: none;
+      display: none;
+    }
+
+    .settings-category-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      color: inherit;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .settings-category-button:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-red);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 14px rgba(204, 0, 0, 0.25);
+    }
+
+    .settings-category-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .settings-category-title {
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .settings-category-sub {
+      opacity: 0.8;
+      font-size: 0.85rem;
+    }
+
+    .settings-section-panel {
+      display: none;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .settings-section-panel.settings-panel-visible {
+      display: block;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .settings-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .settings-back-button {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      color: inherit;
+      padding: 8px 11px;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+
+    .settings-back-button:hover {
+      background: rgba(204, 0, 0, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .settings-section-title {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .settings-card {
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .settings-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .settings-label {
+      font-weight: 700;
+      font-size: 0.92rem;
+      opacity: 0.95;
+    }
+
+    .settings-input,
+    .settings-select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.23);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.24);
+      color: #f8f8f8;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .settings-input:focus,
+    .settings-select:focus {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.23);
+    }
+
+    .settings-button {
+      border: 1px solid var(--accent-red);
+      background: linear-gradient(145deg, rgba(204, 0, 0, 0.95), rgba(147, 0, 0, 0.95));
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.2s ease;
+      width: fit-content;
+    }
+
+    .settings-button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+      box-shadow: 0 9px 20px rgba(204, 0, 0, 0.35);
+    }
+
+    .settings-msg {
+      min-height: 1.1rem;
+      font-size: 0.85rem;
+      color: #6aff96;
+      font-weight: 700;
+    }
+
+    .settings-theme-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .settings-theme-option {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.25s ease;
+    }
+    .settings-theme-option.settings-theme-custom {
+      border-radius: 10px;
+      width: auto;
+      min-width: 86px;
+      height: 34px;
+      padding: 0 10px;
+      color: #fff;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .settings-theme-option:hover {
+      transform: scale(1.08);
+      border-color: #fff;
+    }
+    .settings-theme-red { background: #cc0000; }
+    .settings-theme-blue { background: #1f69d7; }
+    .settings-theme-green { background: #1fa654; }
+    .settings-theme-purple { background: #7d3ccf; }
+    .settings-theme-orange { background: #db7700; }
+    .settings-theme-teal { background: #0fa3a3; }
+    .settings-theme-pink { background: #d63d8f; }
+    .settings-theme-gold { background: #cf9f0a; }
+
+    .settings-theme-option.settings-theme-selected {
+      border-color: #fff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+    }
+
+    .settings-switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .settings-toggle {
+      width: 52px;
+      height: 29px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .settings-toggle::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.25s ease;
+    }
+
+    .settings-toggle.settings-toggle-on {
+      background: rgba(41, 187, 97, 0.75);
+      border-color: rgba(41, 187, 97, 0.95);
+    }
+
+    .settings-toggle.settings-toggle-on::after {
+      transform: translateX(23px);
+    }
+
+    .settings-preview-box {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+    }
+
+    .settings-pfp-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .settings-pfp-preview {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .settings-inline-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .settings-danger {
+      border-color: #ff6b6b;
+      background: linear-gradient(145deg, rgba(172, 36, 36, 0.98), rgba(136, 15, 15, 0.98));
+    }
+
+    .settings-storage-box {
+      font-weight: 700;
+      color: #ffd3d3;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    @media (max-width: 680px) {
+      .settings-page-shell {
+        padding-top: 16px;
+      }
+
+      .settings-page-root {
+        padding: 14px;
+      }
+
+      .settings-category-button {
+        padding: 12px;
+      }
+    }
+  </style>
+  <script src="theme-sync.js"></script>
+</head>
+<body class="settings-page-screen">
+<header class="main-header">
+  <div class="header-left">
+    <div class="menu-btn" onclick="settingsToggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="Login.html" class="nav-login-link" id="settings-nav-login-btn">LOGIN</a>
+  </div>
+</header>
+
+<div id="settings-side-menu" class="side-nav">
+  <a href="javascript:void(0)" class="closebtn" onclick="settingsToggleMenu()">&times;</a>
+  <a href="index.html">Home</a>
+  <a href="NFL Website.html">NFL Website</a>
+  <a href="NFL Teams.html">NFL Teams</a>
+  <a href="Stadiums.html">Stadiums</a>
+  <a href="Surveys.html">Surveys</a>
+  <a href="Quizzes.html">Quizzes</a>
+  <a href="Games.html">Games</a>
+  <a href="Schedule.html">Schedule</a>
+  <a href="Leaderboard.html">Leaderboard</a>
+  <a href="Photos.html">Photos</a>
+  <a href="Settings.html" class="nav-active">Settings</a>
+  <a href="Login.html" id="settings-side-login-link">Login</a>
+</div>
+
+<main class="settings-page-shell">
+  <section class="settings-page-root" id="settings-page-root">
+    <header class="settings-page-header">
+      <h1 class="settings-page-title">Settings</h1>
+      <div class="settings-toast" id="settings-toast">Saved</div>
+    </header>
+
+    <section class="settings-main-menu" id="settings-main-menu">
+      <button class="settings-category-button" data-settings-target="settings-account-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Account Settings</span>
+          <span class="settings-category-sub">Username and identity</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-appearance-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Appearance</span>
+          <span class="settings-category-sub">Theme and colors</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-text-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Text & Accessibility</span>
+          <span class="settings-category-sub">Size and readability</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-pfp-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Profile & PFP</span>
+          <span class="settings-category-sub">Avatar management</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-notifications-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Notifications</span>
+          <span class="settings-category-sub">Posts, replies, mentions</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-preferences-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">App Preferences</span>
+          <span class="settings-category-sub">Autosave and motion</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-data-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Data & Storage</span>
+          <span class="settings-category-sub">Cache and reset</span>
+        </span>
+      </button>
+      <button class="settings-category-button" data-settings-target="settings-privacy-section">
+        <span class="settings-category-label">
+          <span class="settings-category-title">Privacy</span>
+          <span class="settings-category-sub">Visibility and usage</span>
+        </span>
+      </button>
+    </section>
+
+    <section id="settings-account-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Account Settings</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-row">
+          <label class="settings-label" for="settings-username-input">Display Username</label>
+          <input id="settings-username-input" class="settings-input" type="text" maxlength="32" placeholder="Enter username">
+        </div>
+        <button id="settings-save-username-btn" class="settings-button">Save Username</button>
+        <div id="settings-username-msg" class="settings-msg"></div>
+        <button id="settings-go-login-btn" class="settings-button" style="display:none;">Go to Login</button>
+      </div>
+    </section>
+
+    <section id="settings-appearance-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Appearance</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-switch-row">
+          <span>Dark Mode</span>
+          <button id="settings-theme-toggle" class="settings-toggle" aria-label="Toggle dark mode"></button>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">Color Theme</span>
+          <div id="settings-color-picker" class="settings-theme-palette">
+            <button class="settings-theme-option settings-theme-red" data-theme-color="red" title="Red"></button>
+            <button class="settings-theme-option settings-theme-blue" data-theme-color="blue" title="Blue"></button>
+            <button class="settings-theme-option settings-theme-green" data-theme-color="green" title="Green"></button>
+            <button class="settings-theme-option settings-theme-purple" data-theme-color="purple" title="Purple"></button>
+            <button class="settings-theme-option settings-theme-orange" data-theme-color="orange" title="Orange"></button>
+            <button class="settings-theme-option settings-theme-teal" data-theme-color="teal" title="Teal"></button>
+            <button class="settings-theme-option settings-theme-pink" data-theme-color="pink" title="Pink"></button>
+            <button class="settings-theme-option settings-theme-gold" data-theme-color="gold" title="Gold"></button>
+            <button class="settings-theme-option settings-theme-custom" id="settings-custom-color-btn" title="Choose custom color">Custom</button>
+            <button class="settings-theme-option settings-theme-custom" id="settings-eyedropper-btn" title="Pick from screen">Eyedropper</button>
+          </div>
+          <input id="settings-custom-color-input" type="color" value="#cc0000" class="settings-input">
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-text-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Text & Accessibility</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-row">
+          <label class="settings-label" for="settings-text-slider">Text Size</label>
+          <input id="settings-text-slider" type="range" min="14" max="22" value="16">
+        </div>
+        <div id="settings-text-preview" class="settings-preview-box">Preview text size update in real time.</div>
+        <div class="settings-switch-row">
+          <span>Bold Text</span>
+          <button id="settings-bold-toggle" class="settings-toggle" aria-label="Toggle bold text"></button>
+        </div>
+        <div class="settings-switch-row">
+          <span>High Contrast Mode</span>
+          <button id="settings-accessibility-toggle" class="settings-toggle" aria-label="Toggle high contrast"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-pfp-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Profile & PFP</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-pfp-wrap">
+          <img id="settings-pfp-preview" class="settings-pfp-preview" alt="Profile picture preview" src="logo for website.jpg">
+          <div>
+            <div class="settings-label">Current Profile Picture</div>
+            <div class="settings-category-sub">Use your account tools to crop or pick team avatars.</div>
+          </div>
+        </div>
+        <div class="settings-inline-buttons">
+          <button id="settings-open-pfp-manager-btn" class="settings-button">Open PFP Manager</button>
+          <button id="settings-remove-pfp-btn" class="settings-button settings-danger">Remove PFP</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-notifications-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Notifications</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-switch-row">
+          <span class="settings-toggle-item">New Posts</span>
+          <button id="settings-notif-posts" class="settings-toggle"></button>
+        </div>
+        <div class="settings-switch-row">
+          <span class="settings-toggle-item">Replies</span>
+          <button id="settings-notif-replies" class="settings-toggle"></button>
+        </div>
+        <div class="settings-switch-row">
+          <span class="settings-toggle-item">Mentions</span>
+          <button id="settings-notif-mentions" class="settings-toggle"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-preferences-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">App Preferences</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-switch-row">
+          <span>Auto Save</span>
+          <button id="settings-pref-autosave" class="settings-toggle"></button>
+        </div>
+        <div class="settings-switch-row">
+          <span>Animations</span>
+          <button id="settings-pref-animations" class="settings-toggle"></button>
+        </div>
+        <div class="settings-switch-row">
+          <span>Reduce Motion</span>
+          <button id="settings-pref-reducemotion" class="settings-toggle"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-data-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Data & Storage</h2>
+      </header>
+      <div class="settings-card">
+        <div id="settings-storage-info" class="settings-storage-box">Storage: calculating...</div>
+        <div class="settings-inline-buttons">
+          <button id="settings-clear-cache-btn" class="settings-button settings-danger">Clear Cache</button>
+          <button id="settings-reset-btn" class="settings-button settings-danger">Reset Settings</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-privacy-section" class="settings-section-panel">
+      <header class="settings-section-header">
+        <button class="settings-back-button" data-settings-back>Back</button>
+        <h2 class="settings-section-title">Privacy</h2>
+      </header>
+      <div class="settings-card">
+        <div class="settings-switch-row">
+          <span id="settings-privacy-toggle">Profile Visibility</span>
+          <button id="settings-privacy-toggle-btn" class="settings-toggle"></button>
+        </div>
+        <div class="settings-preview-box">Data usage: local device storage only. No external account sync enabled.</div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<script>
+  function settingsToggleMenu() {
+    const settingsMenu = document.getElementById("settings-side-menu");
+    if (settingsMenu.style.width === "280px") settingsMenu.style.width = "0";
+    else settingsMenu.style.width = "280px";
+  }
+
+  const settingsUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser") || "Guest";
+  const settingsProfileKey = `profile_${settingsUser}`;
+  const settingsDefaults = {
+    username: settingsUser,
+    theme: localStorage.getItem("theme") || "light-mode",
+    color_theme: "red",
+    text_size: 16,
+    notifications: { posts: true, replies: true, mentions: true },
+    preferences: { autosave: true, animations: true, reduce_motion: false, bold_text: false, high_contrast: false },
+    privacy: { profile_visible: true }
+  };
+
+  function settingsGetValue(key, fallback) {
+    const fromStorage = localStorage.getItem(key);
+    if (fromStorage === null) return fallback;
+    try { return JSON.parse(fromStorage); } catch (_) { return fromStorage; }
+  }
+
+  function settingsSetValue(key, value) {
+    localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
+  }
+
+  function settingsLoadAll() {
+    return {
+      username: settingsGetValue("user_settings.username", settingsDefaults.username),
+      theme: settingsGetValue("user_settings.theme", settingsDefaults.theme),
+      color_theme: settingsGetValue("user_settings.color_theme", settingsDefaults.color_theme),
+      text_size: settingsGetValue("user_settings.text_size", settingsDefaults.text_size),
+      notifications: settingsGetValue("user_settings.notifications", settingsDefaults.notifications),
+      preferences: settingsGetValue("user_settings.preferences", settingsDefaults.preferences),
+      privacy: settingsGetValue("user_settings.privacy", settingsDefaults.privacy)
+    };
+  }
+
+  function settingsSaveAll(payload) {
+    settingsSetValue("user_settings.username", payload.username);
+    settingsSetValue("user_settings.theme", payload.theme);
+    settingsSetValue("user_settings.color_theme", payload.color_theme);
+    settingsSetValue("user_settings.text_size", payload.text_size);
+    settingsSetValue("user_settings.notifications", payload.notifications);
+    settingsSetValue("user_settings.preferences", payload.preferences);
+    settingsSetValue("user_settings.privacy", payload.privacy);
+  }
+
+  function settingsToast(text) {
+    const toast = document.getElementById("settings-toast");
+    toast.textContent = text;
+    toast.classList.add("settings-toast-visible");
+    setTimeout(() => toast.classList.remove("settings-toast-visible"), 1200);
+  }
+
+  function settingsSetToggleState(buttonId, onState) {
+    const button = document.getElementById(buttonId);
+    if (!button) return;
+    button.classList.toggle("settings-toggle-on", !!onState);
+  }
+
+  function settingsApplyThemeMode(themeMode) {
+    const settingsRoot = document.documentElement;
+    settingsRoot.classList.remove("light-mode", "dark-mode");
+    settingsRoot.classList.add(themeMode);
+    localStorage.setItem("theme", themeMode);
+  }
+
+  function settingsApplyAccent(themeColor) {
+    const colorMap = {
+      red: "#cc0000",
+      blue: "#1f69d7",
+      green: "#1fa654",
+      purple: "#7d3ccf",
+      orange: "#db7700",
+      teal: "#0fa3a3",
+      pink: "#d63d8f",
+      gold: "#cf9f0a"
+    };
+    const customColor = localStorage.getItem("user_settings.custom_color") || "#cc0000";
+    const next = themeColor === "custom" ? customColor : (colorMap[themeColor] || colorMap.red);
+    document.documentElement.style.setProperty("--accent-red", next);
+    localStorage.setItem("settings_accent", next);
+    const input = document.getElementById("settings-custom-color-input");
+    if (input) input.value = next;
+    document.querySelectorAll(".settings-theme-option").forEach(node => {
+      node.classList.toggle("settings-theme-selected", node.getAttribute("data-theme-color") === themeColor);
+    });
+  }
+
+  function settingsApplyTextSize(pxSize) {
+    document.documentElement.style.setProperty("--settings-text-size", `${pxSize}px`);
+    const preview = document.getElementById("settings-text-preview");
+    if (preview) preview.textContent = `Preview text size update in real time. (${pxSize}px)`;
+  }
+
+  function settingsApplyPreferences(prefObj) {
+    const rootEl = document.getElementById("settings-page-root");
+    if (!rootEl) return;
+    rootEl.style.transition = prefObj.reduce_motion ? "none" : "all 0.25s ease";
+    rootEl.style.fontWeight = prefObj.bold_text ? "700" : "400";
+    if (prefObj.high_contrast) {
+      rootEl.style.filter = "contrast(1.15) saturate(1.05)";
+    } else {
+      rootEl.style.filter = "none";
+    }
+  }
+
+  function settingsSectionOpen(sectionId) {
+    document.getElementById("settings-main-menu").classList.add("settings-menu-hidden");
+    document.querySelectorAll(".settings-section-panel").forEach(panel => panel.classList.remove("settings-panel-visible"));
+    const target = document.getElementById(sectionId);
+    if (target) target.classList.add("settings-panel-visible");
+  }
+
+  function settingsSectionBack() {
+    document.querySelectorAll(".settings-section-panel").forEach(panel => panel.classList.remove("settings-panel-visible"));
+    document.getElementById("settings-main-menu").classList.remove("settings-menu-hidden");
+  }
+
+  function settingsUpdateStorageInfo() {
+    let bytes = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i) || "";
+      const val = localStorage.getItem(key) || "";
+      bytes += key.length + val.length;
+    }
+    const kb = (bytes / 1024).toFixed(2);
+    document.getElementById("settings-storage-info").textContent = `Storage in use: ${kb} KB (${localStorage.length} keys)`;
+  }
+
+  function settingsSyncNavLoginState() {
+    const navBtn = document.getElementById("settings-nav-login-btn");
+    const sideBtn = document.getElementById("settings-side-login-link");
+    const loggedInUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+    if (loggedInUser) {
+      navBtn.innerText = "ACCOUNT";
+      navBtn.href = "Account.html";
+      sideBtn.innerText = "Account";
+      sideBtn.href = "Account.html";
+    }
+  }
+
+  function settingsInit() {
+    settingsSyncNavLoginState();
+    const data = settingsLoadAll();
+
+    const usernameInput = document.getElementById("settings-username-input");
+    usernameInput.value = data.username || settingsUser;
+    settingsApplyThemeMode(data.theme);
+    settingsApplyAccent(data.color_theme);
+    settingsApplyTextSize(data.text_size);
+    settingsApplyPreferences(data.preferences);
+
+    document.getElementById("settings-text-slider").value = data.text_size;
+    settingsSetToggleState("settings-theme-toggle", data.theme === "dark-mode");
+    settingsSetToggleState("settings-bold-toggle", data.preferences.bold_text);
+    settingsSetToggleState("settings-accessibility-toggle", data.preferences.high_contrast);
+    settingsSetToggleState("settings-notif-posts", data.notifications.posts);
+    settingsSetToggleState("settings-notif-replies", data.notifications.replies);
+    settingsSetToggleState("settings-notif-mentions", data.notifications.mentions);
+    settingsSetToggleState("settings-pref-autosave", data.preferences.autosave);
+    settingsSetToggleState("settings-pref-animations", data.preferences.animations);
+    settingsSetToggleState("settings-pref-reducemotion", data.preferences.reduce_motion);
+    settingsSetToggleState("settings-privacy-toggle-btn", data.privacy.profile_visible);
+
+    const profile = JSON.parse(localStorage.getItem(settingsProfileKey) || "{}");
+    document.getElementById("settings-pfp-preview").src = profile.avatar || "logo for website.jpg";
+    settingsUpdateStorageInfo();
+
+    document.querySelectorAll("[data-settings-target]").forEach(btn => {
+      btn.addEventListener("click", () => settingsSectionOpen(btn.getAttribute("data-settings-target")));
+    });
+    document.querySelectorAll("[data-settings-back]").forEach(btn => btn.addEventListener("click", settingsSectionBack));
+
+    document.getElementById("settings-save-username-btn").addEventListener("click", () => {
+      const loggedInUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+      const usernameMsg = document.getElementById("settings-username-msg");
+      const goLoginBtn = document.getElementById("settings-go-login-btn");
+
+      if (!loggedInUser) {
+        usernameMsg.textContent = "Please login first to change your username.";
+        usernameMsg.style.color = "#ff9b9b";
+        goLoginBtn.style.display = "inline-block";
+        return;
+      }
+
+      const nextName = usernameInput.value.trim();
+      if (!nextName) return;
+      const current = settingsLoadAll();
+      current.username = nextName;
+      settingsSaveAll(current);
+      const profileObj = JSON.parse(localStorage.getItem(settingsProfileKey) || "{}");
+      profileObj.displayName = nextName;
+      localStorage.setItem(settingsProfileKey, JSON.stringify(profileObj));
+      usernameMsg.textContent = "Username updated.";
+      usernameMsg.style.color = "#6aff96";
+      goLoginBtn.style.display = "none";
+      settingsToast("Username saved");
+    });
+
+    document.getElementById("settings-go-login-btn").addEventListener("click", () => {
+      localStorage.setItem("redirectAfterLogin", "Settings.html");
+      window.location.href = "Login.html";
+    });
+
+    document.getElementById("settings-theme-toggle").addEventListener("click", () => {
+      const current = settingsLoadAll();
+      current.theme = current.theme === "dark-mode" ? "light-mode" : "dark-mode";
+      settingsApplyThemeMode(current.theme);
+      settingsSetToggleState("settings-theme-toggle", current.theme === "dark-mode");
+      settingsSaveAll(current);
+      settingsToast("Theme updated");
+    });
+
+    document.querySelectorAll(".settings-theme-option").forEach(optionBtn => {
+      optionBtn.addEventListener("click", () => {
+        const themeColor = optionBtn.getAttribute("data-theme-color");
+        if (!themeColor) return;
+        const current = settingsLoadAll();
+        current.color_theme = themeColor;
+        settingsApplyAccent(current.color_theme);
+        settingsSaveAll(current);
+        settingsToast("Color updated");
+      });
+    });
+
+    const customColorInput = document.getElementById("settings-custom-color-input");
+    const customColorBtn = document.getElementById("settings-custom-color-btn");
+    customColorInput.addEventListener("input", () => {
+      localStorage.setItem("user_settings.custom_color", customColorInput.value);
+      const current = settingsLoadAll();
+      current.color_theme = "custom";
+      settingsApplyAccent("custom");
+      settingsSaveAll(current);
+    });
+    customColorBtn.addEventListener("click", () => customColorInput.click());
+
+    const eyeDropperBtn = document.getElementById("settings-eyedropper-btn");
+    eyeDropperBtn.addEventListener("click", async () => {
+      if (!window.EyeDropper) {
+        settingsToast("Eyedropper not supported");
+        return;
+      }
+      try {
+        const picker = new EyeDropper();
+        const result = await picker.open();
+        if (!result || !result.sRGBHex) return;
+        localStorage.setItem("user_settings.custom_color", result.sRGBHex);
+        const current = settingsLoadAll();
+        current.color_theme = "custom";
+        settingsApplyAccent("custom");
+        settingsSaveAll(current);
+        settingsToast("Color picked");
+      } catch (_) {}
+    });
+
+    document.getElementById("settings-text-slider").addEventListener("input", (eventObj) => {
+      const current = settingsLoadAll();
+      current.text_size = parseInt(eventObj.target.value, 10);
+      settingsApplyTextSize(current.text_size);
+      settingsSaveAll(current);
+    });
+
+    document.getElementById("settings-bold-toggle").addEventListener("click", () => {
+      const current = settingsLoadAll();
+      current.preferences.bold_text = !current.preferences.bold_text;
+      settingsApplyPreferences(current.preferences);
+      settingsSetToggleState("settings-bold-toggle", current.preferences.bold_text);
+      settingsSaveAll(current);
+      settingsToast("Text preference updated");
+    });
+
+    document.getElementById("settings-accessibility-toggle").addEventListener("click", () => {
+      const current = settingsLoadAll();
+      current.preferences.high_contrast = !current.preferences.high_contrast;
+      settingsApplyPreferences(current.preferences);
+      settingsSetToggleState("settings-accessibility-toggle", current.preferences.high_contrast);
+      settingsSaveAll(current);
+      settingsToast("Accessibility updated");
+    });
+
+    document.getElementById("settings-open-pfp-manager-btn").addEventListener("click", () => {
+      window.location.href = "Account.html";
+    });
+
+    document.getElementById("settings-remove-pfp-btn").addEventListener("click", () => {
+      const profileObj = JSON.parse(localStorage.getItem(settingsProfileKey) || "{}");
+      profileObj.avatar = "";
+      localStorage.setItem(settingsProfileKey, JSON.stringify(profileObj));
+      document.getElementById("settings-pfp-preview").src = "logo for website.jpg";
+      settingsToast("PFP removed");
+    });
+
+    function settingsToggleNotification(notifKey, buttonId) {
+      const current = settingsLoadAll();
+      current.notifications[notifKey] = !current.notifications[notifKey];
+      settingsSetToggleState(buttonId, current.notifications[notifKey]);
+      settingsSaveAll(current);
+      settingsToast("Notifications updated");
+    }
+
+    document.getElementById("settings-notif-posts").addEventListener("click", () => settingsToggleNotification("posts", "settings-notif-posts"));
+    document.getElementById("settings-notif-replies").addEventListener("click", () => settingsToggleNotification("replies", "settings-notif-replies"));
+    document.getElementById("settings-notif-mentions").addEventListener("click", () => settingsToggleNotification("mentions", "settings-notif-mentions"));
+
+    function settingsTogglePref(prefKey, buttonId) {
+      const current = settingsLoadAll();
+      current.preferences[prefKey] = !current.preferences[prefKey];
+      settingsSetToggleState(buttonId, current.preferences[prefKey]);
+      settingsApplyPreferences(current.preferences);
+      settingsSaveAll(current);
+      settingsToast("Preference updated");
+    }
+
+    document.getElementById("settings-pref-autosave").addEventListener("click", () => settingsTogglePref("autosave", "settings-pref-autosave"));
+    document.getElementById("settings-pref-animations").addEventListener("click", () => settingsTogglePref("animations", "settings-pref-animations"));
+    document.getElementById("settings-pref-reducemotion").addEventListener("click", () => settingsTogglePref("reduce_motion", "settings-pref-reducemotion"));
+
+    document.getElementById("settings-clear-cache-btn").addEventListener("click", () => {
+      const allowedPrefixList = ["user_settings.", "profile_", "theme", "settings_accent", "currentUser"];
+      const removeKeyList = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+        const keep = allowedPrefixList.some(prefix => key.startsWith(prefix));
+        if (!keep) removeKeyList.push(key);
+      }
+      removeKeyList.forEach(key => localStorage.removeItem(key));
+      settingsUpdateStorageInfo();
+      settingsToast("Cache cleared");
+    });
+
+    document.getElementById("settings-reset-btn").addEventListener("click", () => {
+      localStorage.removeItem("user_settings.username");
+      localStorage.removeItem("user_settings.theme");
+      localStorage.removeItem("user_settings.color_theme");
+      localStorage.removeItem("user_settings.text_size");
+      localStorage.removeItem("user_settings.notifications");
+      localStorage.removeItem("user_settings.preferences");
+      localStorage.removeItem("user_settings.privacy");
+      const resetState = settingsLoadAll();
+      settingsApplyThemeMode(resetState.theme);
+      settingsApplyAccent(resetState.color_theme);
+      settingsApplyTextSize(resetState.text_size);
+      settingsApplyPreferences(resetState.preferences);
+      settingsSetToggleState("settings-theme-toggle", resetState.theme === "dark-mode");
+      settingsSetToggleState("settings-bold-toggle", resetState.preferences.bold_text);
+      settingsSetToggleState("settings-accessibility-toggle", resetState.preferences.high_contrast);
+      settingsSetToggleState("settings-notif-posts", resetState.notifications.posts);
+      settingsSetToggleState("settings-notif-replies", resetState.notifications.replies);
+      settingsSetToggleState("settings-notif-mentions", resetState.notifications.mentions);
+      settingsSetToggleState("settings-pref-autosave", resetState.preferences.autosave);
+      settingsSetToggleState("settings-pref-animations", resetState.preferences.animations);
+      settingsSetToggleState("settings-pref-reducemotion", resetState.preferences.reduce_motion);
+      settingsSetToggleState("settings-privacy-toggle-btn", resetState.privacy.profile_visible);
+      document.getElementById("settings-text-slider").value = resetState.text_size;
+      document.getElementById("settings-username-input").value = resetState.username;
+      settingsUpdateStorageInfo();
+      settingsToast("Settings reset");
+    });
+
+    document.getElementById("settings-privacy-toggle-btn").addEventListener("click", () => {
+      const current = settingsLoadAll();
+      current.privacy.profile_visible = !current.privacy.profile_visible;
+      settingsSetToggleState("settings-privacy-toggle-btn", current.privacy.profile_visible);
+      settingsSaveAll(current);
+      settingsToast("Privacy updated");
+    });
+  }
+
+  settingsInit();
+</script>
+</body>
+</html>
+
+

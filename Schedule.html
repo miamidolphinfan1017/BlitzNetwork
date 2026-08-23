@@ -1,0 +1,442 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>NFL Season Schedule</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="NFL Season Schedule Calendar">
+  <meta name="keywords" content="NFL, Schedule, Calendar, Games">
+  <meta name="author" content="Riley Cooperman">
+  <meta name="viewport" content="width=device-width, initial scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  <script src="theme-sync.js"></script>
+</head>
+<body class="schedule-page">
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button id="themeToggle" onclick="toggleTheme()">Dark</button>
+        <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+    </div>
+</header>
+
+<div id="side-menu" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="NFL Website.html">NFL Website</a>
+    <a href="NFL Teams.html">NFL Teams</a>
+    <a href="Stadiums.html">Stadiums</a>
+    <a href="Surveys.html">Surveys</a>
+    <a href="Quizzes.html">Quizzes</a>
+    <a href="Games.html">Games</a>
+    <a href="Schedule.html" class="nav-active">Schedule</a>
+    <a href="Leaderboard.html">Leaderboard</a>
+    <a href="Photos.html">Photos</a>
+    <a href="Settings.html">Settings</a>
+    <a href="Login.html" id="side-login-link">Login</a>
+</div>
+
+<main class="schedule-wrapper">
+    <header class="schedule-hero">
+        <h1>Season Schedule</h1>
+        <p class="muted">Calendar view with clickable game details, month controls, and team filters.</p>
+    </header>
+
+    <section class="schedule-controls">
+        <div class="schedule-nav">
+            <button id="prev-month-btn" class="schedule-month-btn">Previous</button>
+            <button id="current-month-label" class="schedule-month-label" type="button" aria-expanded="false">Month Year</button>
+            <button id="next-month-btn" class="schedule-month-btn">Next</button>
+        </div>
+        <div class="schedule-actions">
+            <button id="today-btn" class="schedule-today-btn">Today</button>
+            <select id="team-filter" class="schedule-select">
+                <option value="all">All Teams</option>
+            </select>
+        </div>
+    </section>
+
+    <section id="month-picker" class="month-picker" aria-hidden="true">
+        <div class="month-picker-header">
+            <button id="picker-year-prev" class="month-year-btn" type="button">-</button>
+            <span id="picker-year-label"></span>
+            <button id="picker-year-next" class="month-year-btn" type="button">+</button>
+        </div>
+        <div id="picker-month-grid" class="month-grid"></div>
+    </section>
+
+    <section class="schedule-calendar">
+        <div class="calendar-weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div id="calendar-grid" class="calendar-grid"></div>
+    </section>
+</main>
+
+<div id="schedule-modal" class="schedule-modal" aria-hidden="true">
+    <div class="schedule-modal-card">
+        <button id="schedule-modal-close" class="schedule-modal-close" aria-label="Close details">x</button>
+        <h3 id="modal-matchup">Away @ Home</h3>
+        <div class="schedule-modal-logos">
+            <div class="schedule-logo-group">
+                <img id="modal-away-logo" alt="Away team logo">
+                <p id="modal-away-team">Away Team</p>
+            </div>
+            <div class="schedule-at">@</div>
+            <div class="schedule-logo-group">
+                <img id="modal-home-logo" alt="Home team logo">
+                <p id="modal-home-team">Home Team</p>
+            </div>
+        </div>
+        <div class="schedule-modal-details">
+            <p><strong>Date:</strong> <span id="modal-date"></span></p>
+            <p><strong>Time / Status:</strong> <span id="modal-time"></span></p>
+            <p><strong>Score:</strong> <span id="modal-score"></span></p>
+            <p><strong>Venue:</strong> <span id="modal-venue"></span></p>
+            <p><strong>Records:</strong> <span id="modal-records"></span></p>
+        </div>
+        <a id="modal-highlights" class="small-btn schedule-highlights-link" href="#" target="_blank" rel="noopener" style="display:none;">Watch Highlights</a>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        var menu = document.getElementById("side-menu");
+        if (menu.style.width === "280px") {
+            menu.style.width = "0";
+        } else {
+            menu.style.width = "280px";
+        }
+    }
+
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        root.classList.remove("light-mode", "dark-mode");
+        root.classList.add(theme);
+        localStorage.setItem("theme", theme);
+
+        if (themeBtn) {
+            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
+        }
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
+
+    function toggleTheme() {
+        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
+        applyTheme(nextTheme);
+    }
+
+    const games = [
+        { date: "2026-09-09", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:20 PM ET", status: "upcoming", score: "", venue: "Lincoln Financial Field", records: "DAL 0-0 | PHI 0-0" },
+        { date: "2026-09-13", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Highmark Stadium", records: "MIA 0-0 | BUF 0-0" },
+        { date: "2026-09-13", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:25 PM ET", status: "upcoming", score: "", venue: "Arrowhead Stadium", records: "DEN 0-0 | KC 0-0" },
+        { date: "2026-09-14", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:15 PM ET", status: "upcoming", score: "", venue: "MetLife Stadium", records: "NE 0-0 | NYJ 0-0" },
+        { date: "2026-09-20", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "M&T Bank Stadium", records: "CIN 1-0 | BAL 0-1" },
+        { date: "2026-09-20", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:05 PM ET", status: "upcoming", score: "", venue: "Levi's Stadium", records: "SEA 1-0 | SF 1-0" },
+        { date: "2026-09-27", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:20 PM ET", status: "upcoming", score: "", venue: "Lambeau Field", records: "MIN 1-1 | GB 2-0" },
+        { date: "2026-10-04", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Nissan Stadium", records: "HOU 2-1 | TEN 1-2" },
+        { date: "2026-10-04", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Ford Field", records: "CHI 1-2 | DET 2-1" },
+        { date: "2026-10-11", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:25 PM ET", status: "upcoming", score: "", venue: "SoFi Stadium", records: "LV 2-2 | LAC 2-2" },
+        { date: "2026-10-18", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Caesars Superdome", records: "ATL 3-2 | NO 2-3" },
+        { date: "2026-10-25", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:20 PM ET", status: "upcoming", score: "", venue: "Acrisure Stadium", records: "CLE 2-4 | PIT 4-2" },
+        { date: "2026-11-01", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Raymond James Stadium", records: "CAR 2-5 | TB 5-2" },
+        { date: "2026-11-08", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Lucas Oil Stadium", records: "JAX 4-3 | IND 3-4" },
+        { date: "2026-11-15", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:25 PM ET", status: "upcoming", score: "", venue: "SoFi Stadium", records: "ARI 3-6 | LAR 6-3" },
+        { date: "2026-11-22", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Commanders Field", records: "NYG 3-7 | WAS 6-4" },
+        { date: "2026-11-26", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:30 PM ET", status: "upcoming", score: "", venue: "AT&T Stadium", records: "DET 7-3 | DAL 7-3" },
+        { date: "2026-12-06", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Hard Rock Stadium", records: "NYJ 6-5 | MIA 7-4" },
+        { date: "2026-12-13", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:25 PM ET", status: "upcoming", score: "", venue: "Lumen Field", records: "SF 8-4 | SEA 8-4" },
+        { date: "2026-12-20", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:20 PM ET", status: "upcoming", score: "", venue: "Arrowhead Stadium", records: "BUF 9-4 | KC 10-3" },
+        { date: "2026-12-27", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:20 PM ET", status: "live", score: "17-14 (Q3 09:41)", venue: "Lincoln Financial Field", records: "WAS 9-6 | PHI 10-5" },
+        { date: "2027-01-03", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "FINAL", status: "final", score: "24-20", venue: "U.S. Bank Stadium", records: "GB 11-6 | MIN 12-5", highlights: "https://www.youtube.com/results?search_query=Packers+Vikings+highlights" },
+        { date: "2027-01-10", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "FINAL", status: "final", score: "27-16", venue: "M&T Bank Stadium", records: "PIT 10-7 | BAL 12-5", highlights: "https://www.youtube.com/results?search_query=Steelers+Ravens+wild+card+highlights" },
+        { date: "2027-01-17", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "FINAL", status: "final", score: "31-28", venue: "Arrowhead Stadium", records: "CIN 11-6 | KC 13-4", highlights: "https://www.youtube.com/results?search_query=Bengals+Chiefs+playoff+highlights" },
+        { date: "2027-01-31", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "6:30 PM ET", status: "upcoming", score: "", venue: "Super Bowl LXI - Mercedes-Benz Stadium", records: "KC 13-4 | PHI 12-5" }
+    ];
+
+    // Until official release, force every game field to TBD placeholders.
+    games.forEach(function(game) {
+        game.home = "TBD";
+        game.away = "TBD";
+        game.homeId = "";
+        game.awayId = "";
+        game.time = "TBD";
+        game.status = "upcoming";
+        game.score = "TBD";
+        game.venue = "TBD";
+        game.records = "TBD";
+        delete game.highlights;
+    });
+
+    const monthLabel = document.getElementById("current-month-label");
+    const monthPicker = document.getElementById("month-picker");
+    const pickerYearLabel = document.getElementById("picker-year-label");
+    const pickerMonthGrid = document.getElementById("picker-month-grid");
+    const calendarGrid = document.getElementById("calendar-grid");
+    const teamFilter = document.getElementById("team-filter");
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let pickerYear = new Date().getFullYear();
+
+    const today = new Date();
+    let displayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    function formatDate(dateText) {
+        const d = new Date(dateText + "T12:00:00");
+        return d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    }
+
+    function openGameModal(game) {
+        document.getElementById("modal-matchup").textContent = game.away + " @ " + game.home;
+        document.getElementById("modal-away-team").textContent = game.away;
+        document.getElementById("modal-home-team").textContent = game.home;
+        document.getElementById("modal-date").textContent = formatDate(game.date);
+        document.getElementById("modal-time").textContent = game.time;
+        document.getElementById("modal-score").textContent = game.score || "Not final";
+        document.getElementById("modal-venue").textContent = game.venue || "TBD";
+        document.getElementById("modal-records").textContent = game.records || "N/A";
+
+        const awayLogoSrc = game.awayId ? ("https://a.espncdn.com/i/teamlogos/nfl/500/" + game.awayId + ".png") : "logo for website.jpg";
+        const homeLogoSrc = game.homeId ? ("https://a.espncdn.com/i/teamlogos/nfl/500/" + game.homeId + ".png") : "logo for website.jpg";
+        document.getElementById("modal-away-logo").src = awayLogoSrc;
+        document.getElementById("modal-home-logo").src = homeLogoSrc;
+
+        const highlights = document.getElementById("modal-highlights");
+        if (game.highlights) {
+            highlights.href = game.highlights;
+            highlights.style.display = "inline-flex";
+        } else {
+            highlights.style.display = "none";
+        }
+
+        const modal = document.getElementById("schedule-modal");
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    }
+
+    function closeGameModal() {
+        const modal = document.getElementById("schedule-modal");
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    }
+
+    function getFilteredGames() {
+        const selected = teamFilter.value;
+        if (!selected || selected === "all") return games;
+        return games.filter(g => g.homeId === selected || g.awayId === selected);
+    }
+
+    function buildTeamFilter() {
+        const teams = {};
+        games.forEach(game => {
+            teams[game.homeId] = game.home;
+            teams[game.awayId] = game.away;
+        });
+
+        Object.keys(teams).sort((a, b) => teams[a].localeCompare(teams[b])).forEach(id => {
+            const opt = document.createElement("option");
+            opt.value = id;
+            opt.textContent = teams[id];
+            teamFilter.appendChild(opt);
+        });
+
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+        if (user) {
+            const favId = localStorage.getItem("favoriteTeamId_" + user);
+            if (favId && teams[favId]) {
+                teamFilter.value = favId;
+            }
+        }
+    }
+
+    function renderCalendar() {
+        const visibleGames = getFilteredGames();
+        const year = displayMonth.getFullYear();
+        const month = displayMonth.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        monthLabel.textContent = displayMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+        calendarGrid.innerHTML = "";
+
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.className = "calendar-day empty";
+            calendarGrid.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cell = document.createElement("div");
+            cell.className = "calendar-day";
+            const dateKey = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+
+            if (
+                today.getFullYear() === year &&
+                today.getMonth() === month &&
+                today.getDate() === day
+            ) {
+                cell.classList.add("today");
+            }
+
+            const dayNumber = document.createElement("div");
+            dayNumber.className = "calendar-day-number";
+            dayNumber.textContent = day;
+            cell.appendChild(dayNumber);
+
+            const gamesForDay = visibleGames.filter(game => game.date === dateKey);
+            gamesForDay.forEach(game => {
+                const card = document.createElement("button");
+                card.type = "button";
+                card.className = "calendar-game " + game.status;
+                const awayLabel = game.awayId ? game.awayId.toUpperCase() : game.away;
+                const homeLabel = game.homeId ? game.homeId.toUpperCase() : game.home;
+                card.innerHTML = `
+                    <span class="game-matchup">${awayLabel} @ ${homeLabel}</span>
+                    <span class="game-time">${game.status === "final" ? "FINAL " + game.score : game.time}</span>
+                `;
+                card.addEventListener("click", () => openGameModal(game));
+                cell.appendChild(card);
+            });
+
+            calendarGrid.appendChild(cell);
+        }
+    }
+
+    function animateMonthChange(direction) {
+        const exitClass = direction === "next" ? "month-exit-left" : "month-exit-right";
+        const enterClass = direction === "next" ? "month-enter-right" : "month-enter-left";
+        calendarGrid.classList.remove("month-exit-left", "month-exit-right", "month-enter-left", "month-enter-right");
+        calendarGrid.classList.add(exitClass);
+
+        setTimeout(function() {
+            renderCalendar();
+            calendarGrid.classList.remove(exitClass);
+            calendarGrid.classList.add(enterClass);
+            setTimeout(function() {
+                calendarGrid.classList.remove(enterClass);
+            }, 240);
+        }, 180);
+    }
+
+    function renderMonthPicker() {
+        pickerYearLabel.textContent = pickerYear;
+        pickerMonthGrid.innerHTML = "";
+
+        monthNames.forEach((name, index) => {
+            const monthBtn = document.createElement("button");
+            monthBtn.type = "button";
+            monthBtn.className = "month-cell-btn";
+            monthBtn.textContent = name;
+
+            if (displayMonth.getFullYear() === pickerYear && displayMonth.getMonth() === index) {
+                monthBtn.classList.add("active");
+            }
+
+            monthBtn.addEventListener("click", function() {
+                const direction = (pickerYear > displayMonth.getFullYear() || (pickerYear === displayMonth.getFullYear() && index >= displayMonth.getMonth())) ? "next" : "prev";
+                displayMonth = new Date(pickerYear, index, 1);
+                animateMonthChange(direction);
+                closeMonthPicker();
+            });
+            pickerMonthGrid.appendChild(monthBtn);
+        });
+    }
+
+    function openMonthPicker() {
+        pickerYear = displayMonth.getFullYear();
+        renderMonthPicker();
+        monthPicker.classList.add("open");
+        monthPicker.setAttribute("aria-hidden", "false");
+        monthLabel.setAttribute("aria-expanded", "true");
+    }
+
+    function closeMonthPicker() {
+        monthPicker.classList.remove("open");
+        monthPicker.setAttribute("aria-hidden", "true");
+        monthLabel.setAttribute("aria-expanded", "false");
+    }
+
+    document.getElementById("prev-month-btn").addEventListener("click", function() {
+        displayMonth = new Date(displayMonth.getFullYear(), displayMonth.getMonth() - 1, 1);
+        animateMonthChange("prev");
+    });
+
+    document.getElementById("next-month-btn").addEventListener("click", function() {
+        displayMonth = new Date(displayMonth.getFullYear(), displayMonth.getMonth() + 1, 1);
+        animateMonthChange("next");
+    });
+
+    document.getElementById("today-btn").addEventListener("click", function() {
+        displayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        renderCalendar();
+        closeMonthPicker();
+    });
+
+    teamFilter.addEventListener("change", renderCalendar);
+    monthLabel.addEventListener("click", function() {
+        if (monthPicker.classList.contains("open")) {
+            closeMonthPicker();
+        } else {
+            openMonthPicker();
+        }
+    });
+    document.getElementById("picker-year-prev").addEventListener("click", function() {
+        pickerYear--;
+        renderMonthPicker();
+    });
+    document.getElementById("picker-year-next").addEventListener("click", function() {
+        pickerYear++;
+        renderMonthPicker();
+    });
+    document.addEventListener("click", function(e) {
+        if (!monthPicker.contains(e.target) && e.target !== monthLabel) {
+            closeMonthPicker();
+        }
+    });
+
+    document.getElementById("schedule-modal-close").addEventListener("click", closeGameModal);
+    document.getElementById("schedule-modal").addEventListener("click", function(e) {
+        if (e.target.id === "schedule-modal") closeGameModal();
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+        const navBtn = document.getElementById("nav-login-btn");
+        const sideLink = document.getElementById("side-login-link");
+
+        if (user) {
+            if (navBtn) { navBtn.innerText = "ACCOUNT"; navBtn.href = "Account.html"; }
+            if (sideLink) { sideLink.innerText = "Account"; sideLink.href = "Account.html"; }
+        }
+
+        buildTeamFilter();
+        renderCalendar();
+    });
+</script>
+
+</body>
+</html>
+
+
