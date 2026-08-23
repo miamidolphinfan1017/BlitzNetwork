@@ -10,6 +10,7 @@
 
 html, body {
     scrollbar-color: var(--accent-red) transparent;
+    scrollbar-width: thin;
 }
 
 * {
@@ -17,8 +18,8 @@ html, body {
 }
 
 *::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
 }
 
 *::-webkit-scrollbar-track {
@@ -28,8 +29,11 @@ html, body {
 *::-webkit-scrollbar-thumb {
     background-color: var(--accent-red);
     border-radius: 999px;
-    border: none;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
+*::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+*::-webkit-scrollbar-corner { background: transparent; }
 /* Softer light overlay for the leaderboard to reduce glare */
 .leaderboard-page {
     --bg-overlay: rgba(255,255,255,0.6);
@@ -380,7 +384,7 @@ font-size: 30px;
     padding: 12px 20px;
     font-size: 16px;
     border-radius: 25px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid color-mix(in srgb, var(--accent-red) 48%, transparent);
     background-color: rgba(0, 0, 0, 0.3); 
     color: white;
     outline: none;
@@ -388,9 +392,9 @@ font-size: 30px;
 }
 
 #teamSearch:focus {
-    border-color: #cc0000; /* Blitz Red */
+    border-color: var(--accent-red);
     background-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 10px rgba(204, 0, 0, 0.5);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--accent-red) 58%, transparent), 0 0 22px color-mix(in srgb, var(--accent-red) 24%, transparent);
 }
 
 #teamSearch::placeholder {
@@ -799,6 +803,53 @@ html:not(.dark-mode) .quiz-back-btn {
 @media (max-width: 600px) {
     .legacy-grid { grid-template-columns: 1fr; }
 }
+
+/* Stadium destination + connected community experience */
+.section-eyebrow { color: var(--accent-red); font-size: .75rem; font-weight: 800; letter-spacing: .16em; margin: 0 0 10px; }
+.stadiums-hero-upgrade { max-width: 900px; margin-inline: auto; padding: 36px; border: 1px solid color-mix(in srgb, var(--accent-red) 30%, var(--card-border)); border-radius: 24px; background: linear-gradient(135deg, color-mix(in srgb, var(--accent-red) 14%, transparent), transparent 55%), var(--card-bg); box-shadow: 0 24px 55px rgba(0,0,0,.18); animation: venueEnter .6s ease both; }
+.stadium-card-compact { overflow: hidden; min-height: 185px; }
+.stadium-card-compact::before { content: "VIEW STADIUM GUIDE ↗"; position: absolute; right: 14px; bottom: 13px; font-size: .66rem; font-weight: 800; letter-spacing: .08em; opacity: 0; transform: translateY(8px); transition: .25s ease; }
+.stadium-card-compact:hover::before { opacity: 1; transform: translateY(0); }
+.family-main { min-height: calc(100vh - 70px); height: auto; padding: 42px 20px; margin: 0; align-items: flex-start; }
+.family-shell { width: min(760px, 100%); max-width: 760px; padding: 28px; border: 1px solid color-mix(in srgb, var(--accent-red) 28%, var(--card-border)); border-radius: 24px; background: linear-gradient(145deg, color-mix(in srgb, var(--accent-red) 10%, transparent), transparent 42%), var(--glass-bg); animation: venueEnter .5s ease both; }
+.family-hero { text-align: center; margin: 0 auto 24px; max-width: 570px; }
+.family-hero h1 { margin: 0 0 8px; font-family: "Fugaz One", system-ui; font-size: clamp(2rem, 5vw, 3.2rem); }
+.family-hero p:not(.section-eyebrow) { color: var(--muted-text); line-height: 1.55; }
+.family-icon { display: inline-grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--accent-red); border-radius: 13px; color: var(--accent-red); font-size: 1.4rem; margin-bottom: 10px; box-shadow: 0 0 18px color-mix(in srgb, var(--accent-red) 28%, transparent); }
+.family-links { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+.family-links a { color: var(--card-text); font-size: .85rem; font-weight: 700; text-decoration: none; padding: 7px 11px; border: 1px solid var(--card-border); border-radius: 999px; transition: .2s ease; }
+.family-links a:hover { border-color: var(--accent-red); color: var(--accent-red); transform: translateY(-2px); }
+.family-shell .info-section { border: 1px solid var(--card-border); border-radius: 16px; background: color-mix(in srgb, var(--card-bg) 80%, transparent); }
+.family-shell .quiz-btn, .family-shell .survey-btn { border-radius: 12px; min-height: 46px; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.family-shell .quiz-btn:hover, .family-shell .survey-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px color-mix(in srgb, var(--accent-red) 25%, transparent); }
+.family-shell .quiz-btn.active { outline: 2px solid var(--accent-red); outline-offset: 3px; box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-red) 18%, transparent); }
+.survey-shell { max-width: 720px !important; }
+.survey-shell #multi-step-survey { padding: 20px; border: 1px solid var(--card-border); border-radius: 18px; }
+.survey-option { padding: 12px 14px; margin: 9px 0; border: 1px solid var(--card-border); border-radius: 11px; transition: .2s ease; }
+.survey-option:hover { border-color: var(--accent-red); background: color-mix(in srgb, var(--accent-red) 8%, transparent); }
+.leaderboard-shell { max-width: 780px; }
+.leaderboard-shell .leaderboard-table-wrap { border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; }
+
+.stadium-detail-page { min-height: 100vh; color: var(--page-surface-text); }
+.stadium-detail { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 70px; }
+.stadium-detail-hero { min-height: 510px; position: relative; display: flex; align-items: end; overflow: hidden; border-radius: 28px; isolation: isolate; background: #101010; box-shadow: 0 24px 65px rgba(0,0,0,.34); animation: venueEnter .7s ease both; }
+.stadium-detail-hero img { position: absolute; inset: 0; width: 100%; height: 118%; object-fit: cover; transform: translateY(var(--stadium-shift, 0)) scale(1.04); transition: transform .1s linear; z-index: -2; }
+.stadium-detail-hero::after { content:""; position:absolute; inset:0; background: linear-gradient(0deg, rgba(0,0,0,.88), rgba(0,0,0,.16) 65%, rgba(0,0,0,.1)); z-index:-1; }
+.stadium-hero-copy { padding: clamp(26px, 5vw, 54px); color:#fff; max-width: 760px; }
+.stadium-hero-copy h1 { font-family:"Fugaz One",system-ui; font-size:clamp(2.4rem, 6vw, 5rem); line-height:1.02; margin:0 0 12px; }
+.stadium-hero-copy p { font-size:1.05rem; margin:0; opacity:.92; }
+.stadium-kicker { display:inline-block; padding:7px 10px; background:var(--accent-red); border-radius:999px; font-size:.74rem; font-weight:800; letter-spacing:.08em; margin-bottom:14px; }
+.stadium-stat-strip, .stadium-guide-grid, .stadium-facts-grid { display:grid; gap:16px; }
+.stadium-stat-strip { grid-template-columns: repeat(4, 1fr); margin: -32px 26px 36px; position:relative; z-index:2; }
+.stadium-stat, .stadium-panel, .guide-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px; padding:20px; box-shadow:0 12px 28px rgba(0,0,0,.14); }
+.stadium-stat span, .fact-label { display:block; color:var(--muted-text); font-size:.76rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; margin-bottom:8px; }.stadium-stat strong { font-size:1.08rem; }
+.stadium-section-title { margin:48px 0 16px; font-family:"Fugaz One",system-ui; font-size:2rem; }.stadium-copy { line-height:1.75; color:var(--muted-text); }
+.stadium-facts-grid { grid-template-columns:repeat(3, 1fr); }.fact-card { padding:19px; border-left:3px solid var(--accent-red); }
+.guide-card { transition:.22s ease; }.guide-card:hover { transform:translateY(-4px); border-color:var(--accent-red); }.guide-card h3 { margin:0 0 10px; }.guide-card ul { padding-left:18px; margin:0; line-height:1.7; color:var(--muted-text); }
+.stadium-guide-grid { grid-template-columns:repeat(2, 1fr); }.stadium-weather { display:flex; align-items:center; justify-content:space-between; gap:18px; }.weather-reading { color:var(--accent-red); font-size:2.3rem; font-weight:800; }.weather-note { color:var(--muted-text); }
+.stadium-back-link { color:var(--page-surface-text); text-decoration:none; display:inline-flex; margin:0 0 18px; font-weight:700; }.stadium-back-link:hover { color:var(--accent-red); }
+@keyframes venueEnter { from { opacity:0; transform:translateY(16px) scale(.985); } to { opacity:1; transform:none; } }
+@media (max-width: 720px) { .stadium-detail { width:min(100% - 24px, 1180px); padding-top:16px; }.stadium-detail-hero { min-height:430px; border-radius:20px; }.stadium-stat-strip { grid-template-columns:repeat(2,1fr); margin:-20px 12px 28px; }.stadium-facts-grid,.stadium-guide-grid { grid-template-columns:1fr; }.stadium-stat,.stadium-panel,.guide-card { padding:16px; }.family-main{padding:22px 12px}.family-shell{padding:18px}.survey-shell #multi-step-survey{padding:14px;} }
 
 /* Stadium Card Specifics */
 .stadium-header h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--card-text); }

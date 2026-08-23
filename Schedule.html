@@ -50,7 +50,7 @@
 <main class="schedule-wrapper">
     <header class="schedule-hero">
         <h1>Season Schedule</h1>
-        <p class="muted">Calendar view with clickable game details, month controls, and team filters.</p>
+        <p class="muted">Live NFL schedule with clickable game details, month controls, and team filters.</p>
     </header>
 
     <section class="schedule-controls">
@@ -147,7 +147,7 @@
         applyTheme(nextTheme);
     }
 
-    const games = [
+    let games = [
         { date: "2026-09-09", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "8:20 PM ET", status: "upcoming", score: "", venue: "Lincoln Financial Field", records: "DAL 0-0 | PHI 0-0" },
         { date: "2026-09-13", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "1:00 PM ET", status: "upcoming", score: "", venue: "Highmark Stadium", records: "MIA 0-0 | BUF 0-0" },
         { date: "2026-09-13", home: "TBD", away: "TBD", homeId: "", awayId: "", time: "4:25 PM ET", status: "upcoming", score: "", venue: "Arrowhead Stadium", records: "DEN 0-0 | KC 0-0" },
@@ -434,6 +434,48 @@
         buildTeamFilter();
         renderCalendar();
     });
+
+    // The calendar is populated from ESPN's current scoreboard feed. This keeps the
+    // page from shipping placeholder matchups when a new season is published.
+    async function loadLiveSchedule() {
+        try {
+            const season = new Date().getFullYear();
+            const response = await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${season}0901-${season + 1}0220`);
+            if (!response.ok) throw new Error("Schedule unavailable");
+            const payload = await response.json();
+            const events = payload.events || [];
+            if (!events.length) throw new Error("No games returned");
+            games = events.map(event => {
+                const competition = event.competitions && event.competitions[0] || {};
+                const teams = competition.competitors || [];
+                const home = teams.find(t => t.homeAway === "home") || {};
+                const away = teams.find(t => t.homeAway === "away") || {};
+                const status = competition.status || event.status || {};
+                const state = status.type && status.type.state || "pre";
+                const start = new Date(event.date);
+                return {
+                    date: start.toISOString().slice(0, 10),
+                    home: home.team && home.team.displayName || "TBD", away: away.team && away.team.displayName || "TBD",
+                    homeId: home.team && home.team.abbreviation && home.team.abbreviation.toLowerCase() || "", awayId: away.team && away.team.abbreviation && away.team.abbreviation.toLowerCase() || "",
+                    time: status.type && status.type.shortDetail || start.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit", timeZoneName:"short"}),
+                    status: state === "post" ? "final" : state === "in" ? "live" : "upcoming",
+                    score: state === "pre" ? "" : `${away.score || 0}-${home.score || 0}`,
+                    venue: competition.venue && competition.venue.fullName || "TBD",
+                    records: [away.records && away.records[0] && away.records[0].summary, home.records && home.records[0] && home.records[0].summary].filter(Boolean).join(" | ") || "—"
+                };
+            });
+            teamFilter.innerHTML = '<option value="all">All Teams</option>';
+            buildTeamFilter();
+            const first = games.sort((a,b) => a.date.localeCompare(b.date))[0];
+            if (first) displayMonth = new Date(first.date + "T12:00:00");
+            renderCalendar();
+        } catch (error) {
+            document.querySelector(".schedule-hero .muted").textContent = "Live schedule is temporarily unavailable. Please check back shortly.";
+            games = [];
+            renderCalendar();
+        }
+    }
+    window.addEventListener("DOMContentLoaded", loadLiveSchedule);
 </script>
 
 </body>

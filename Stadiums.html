@@ -48,9 +48,10 @@
 </div>
 
 <div class="stadiums-wrapper">
-    <header class="stadiums-hero">
+    <header class="stadiums-hero stadiums-hero-upgrade">
+        <p class="section-eyebrow">NFL VENUE ATLAS</p>
         <h1 class="stadiums-title">Stadiums & Travel Guide</h1>
-        <p class="stadiums-subtitle">Explore the league’s venues, capacity, location, and fan vibes — plus travel tips for game day.</p>
+        <p class="stadiums-subtitle">Explore every NFL home, then open a complete game-day guide with venue facts, local tips, and live weather.</p>
     </header>
 
     <section class="stadium-section">
@@ -368,6 +369,7 @@
                 <div class="stadium-card-center">
                     <h3>${s.name}</h3>
                     <span class="stadium-team">${s.team}</span>
+                    <div class="stadium-meta">${s.location} · ${s.capacity} seats</div>
                 </div>
             </div>
         `).join('');
@@ -376,7 +378,7 @@
         cards.forEach(card => {
             card.addEventListener("click", () => {
                 const id = card.getAttribute("data-stadium");
-                openStadiumModal(id);
+                window.location.href = `Stadium-details.html?team=${encodeURIComponent(id)}`;
             });
         });
     }
