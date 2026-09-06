@@ -9,8 +9,9 @@
 }
 
 html, body {
-    scrollbar-color: var(--accent-red) transparent;
+    scrollbar-color: var(--accent-red) var(--scroll-track);
     scrollbar-width: thin;
+    overflow-x: hidden;
 }
 
 * {
@@ -23,17 +24,16 @@ html, body {
 }
 
 *::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--scroll-track);
 }
 
 *::-webkit-scrollbar-thumb {
     background-color: var(--accent-red);
-    border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    border-radius: 0;
+    border: none;
 }
 *::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
-*::-webkit-scrollbar-corner { background: transparent; }
+*::-webkit-scrollbar-corner { background: var(--accent-red); }
 /* Softer light overlay for the leaderboard to reduce glare */
 .leaderboard-page {
     --bg-overlay: rgba(255,255,255,0.6);
@@ -80,7 +80,8 @@ html.dark-mode .leaderboard-page {
         --glass-bg: rgba(255,255,255,0.65);
         --glass-text: #111;
     /* LOGIN OVERLAY */
-        --login-overlay: rgba(255,255,255,0.45);
+    --login-overlay: rgba(255,255,255,0.45);
+    --scroll-track: rgba(255,255,255,0.72);
 }
 
 html.dark-mode{
@@ -116,6 +117,7 @@ html.dark-mode{
     --glass-text: #fff;
 
     --login-overlay: rgba(0,0,0,0.55);
+    --scroll-track: rgba(8,8,8,0.72);
 }
 
 html.dark-mode #team-title{
@@ -850,6 +852,12 @@ html:not(.dark-mode) .quiz-back-btn {
 .stadium-back-link { color:var(--page-surface-text); text-decoration:none; display:inline-flex; margin:0 0 18px; font-weight:700; }.stadium-back-link:hover { color:var(--accent-red); }
 @keyframes venueEnter { from { opacity:0; transform:translateY(16px) scale(.985); } to { opacity:1; transform:none; } }
 @media (max-width: 720px) { .stadium-detail { width:min(100% - 24px, 1180px); padding-top:16px; }.stadium-detail-hero { min-height:430px; border-radius:20px; }.stadium-stat-strip { grid-template-columns:repeat(2,1fr); margin:-20px 12px 28px; }.stadium-facts-grid,.stadium-guide-grid { grid-template-columns:1fr; }.stadium-stat,.stadium-panel,.guide-card { padding:16px; }.family-main{padding:22px 12px}.family-shell{padding:18px}.survey-shell #multi-step-survey{padding:14px;} }
+
+/* Page-level blurred scenery keeps feature pages immersive without affecting content. */
+.stadiums-wrapper, .photos-wrapper, .schedule-wrapper, .stadium-detail-page { position: relative; isolation: isolate; }
+.stadiums-wrapper::before, .photos-wrapper::before, .schedule-wrapper::before, .stadium-detail-page::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), url("https://cdn.prod.website-files.com/68128b54b74e9cd5b80095c9/681e6066e13b77e50d698dbd_637fc6150119df45a37cce23_cover1.jpeg") center / cover no-repeat; filter: blur(14px); transform: scale(1.06); opacity: .86; }
+.stadiums-wrapper, .photos-wrapper, .schedule-wrapper { background-color: color-mix(in srgb, var(--page-surface) 82%, transparent); backdrop-filter: blur(7px); }
+.stadium-detail-page::before { position: fixed; }
 
 /* Stadium Card Specifics */
 .stadium-header h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--card-text); }
@@ -4710,6 +4718,27 @@ html.dark-mode .calendar-day.empty {
     padding: 8px 10px;
   }
 }
+
+/* Kept last so page-specific legacy surfaces remain translucent over the blur. */
+.stadiums-wrapper, .photos-wrapper, .schedule-wrapper {
+  background-color: color-mix(in srgb, var(--page-surface) 82%, transparent);
+  backdrop-filter: blur(7px);
+}
+
+/* A moving vertical accent thumb; no horizontal page scrollbar or permanent filled track. */
+*::-webkit-scrollbar:horizontal { display: none; height: 0; }
+*::-webkit-scrollbar-corner { background: transparent; }
+
+/* One consistent, full-page blurred background for the requested feature pages. */
+.stadiums-page, .photos-page, .schedule-page, .stadium-detail-page { background: transparent; isolation: isolate; }
+.stadiums-page::before, .photos-page::before, .schedule-page::before, .stadium-detail-page::before { content: ""; position: fixed; inset: -8px; z-index: 0; background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), url("https://cdn.prod.website-files.com/68128b54b74e9cd5b80095c9/681e6066e13b77e50d698dbd_637fc6150119df45a37cce23_cover1.jpeg") center / cover no-repeat; filter: blur(10px); transform: scale(1.01); }
+.stadiums-page > .stadiums-wrapper, .photos-page > .photos-wrapper, .schedule-page > .schedule-wrapper, .stadium-detail-page > .stadium-detail { position: relative; z-index: 1; }
+.stadiums-wrapper::before, .photos-wrapper::before, .schedule-wrapper::before { display: none; }
+.stadiums-wrapper, .photos-wrapper, .schedule-wrapper { background-color: color-mix(in srgb, var(--page-surface) 90%, transparent); backdrop-filter: none; }
+
+/* Pin the shared navigation to the viewport instead of letting it move with page content. */
+body { padding-top: 70px; }
+.main-header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
 
 
 
