@@ -10,17 +10,18 @@
 <meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
 <meta name="author" content="Riley Cooperman">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="theme-sync.js"></script>
+    <script src="theme-sync.js"></script>
+    <script src="team-sites.js"></script>
 </head>
 <body>
 
 <header class="main-header">
     <div class="header-left">
-        <div class="menu-btn" onclick="toggleMenu()">
+        <button class="menu-btn" type="button" aria-label="Open navigation menu" aria-controls="side-menu" aria-expanded="false" onclick="toggleMenu()">
             <span></span>
             <span></span>
             <span></span>
-        </div>
+        </button>
     </div>
 
 
@@ -54,14 +55,27 @@
     <div class="hero-content">
         <div id="logo-container"></div> 
         <h1 id="team-title">Loading...</h1>
+        <p id="team-identity" class="team-identity">Loading team identity...</p>
+        <div class="team-hero-meta" aria-label="Team details">
+            <span id="team-abbreviation">--</span>
+            <span id="team-conference">--</span>
+            <span id="team-division">--</span>
+            <span id="team-hero-record">Record pending</span>
+        </div>
     </div>
 </div>
 
 <main class="details-container">
     <div class="details-card" id="team-content">
+        <section class="team-stat-strip" aria-label="Team snapshot">
+            <div class="team-stat"><strong id="team-record">--</strong><span>Record</span></div>
+            <div class="team-stat"><strong id="team-trophies">--</strong><span>Super Bowls</span></div>
+            <div class="team-stat"><strong id="team-founded">--</strong><span>Founded</span></div>
+        </section>
+
         <div class="info-section">
             <h2>Team Information</h2>
-            <p id="team-desc"></p>
+            <p id="team-desc" class="team-description"></p>
         </div>
         
         <div class="info-section stadium-card">
@@ -94,14 +108,18 @@
             </div>
         </div>
         
-        <div class="info-section season-section">
-                <h2>Season Record</h2>
-            <div id="season-record"></div>
+        <div class="info-section next-game-section">
+            <h2>NEXT GAME</h2>
+            <div id="next-game" class="next-game-card"></div>
         </div>
 
-        <div class="info-section next-game-card">
-                    <h2>Next Game</h2>
-                <div id="next-game"></div>
+        <div class="info-section previous-game-section">
+            <h2>PREVIOUS GAME</h2>
+            <div id="previous-game" class="previous-game-card"></div>
+        </div>
+
+        <div class="info-section countdown-section">
+            <h2>COUNTDOWN TO NEXT GAME</h2>
             <div id="countdown-timer"></div>
         </div>
 
@@ -232,6 +250,27 @@
 </div>
 </main>
 
+<div id="team-game-modal" class="team-game-modal" aria-hidden="true">
+    <div class="team-game-modal-card" role="dialog" aria-modal="true" aria-labelledby="team-game-modal-title">
+        <button id="team-game-modal-close" class="team-game-modal-close" type="button" aria-label="Close game details">&times;</button>
+        <p id="team-game-modal-week" class="team-game-modal-eyebrow">GAME DETAILS</p>
+        <h2 id="team-game-modal-title">Away @ Home</h2>
+        <p id="team-game-modal-date" class="team-game-modal-date"></p>
+        <div class="team-game-modal-matchup">
+            <div><img id="team-game-away-logo" alt="Away team logo"><strong id="team-game-away"></strong></div>
+            <span>@</span>
+            <div><img id="team-game-home-logo" alt="Home team logo"><strong id="team-game-home"></strong></div>
+        </div>
+        <div class="team-game-modal-details">
+            <p><strong>Status</strong><span id="team-game-status"></span></p>
+            <p><strong>Venue</strong><span id="team-game-venue"></span></p>
+            <p><strong>Location</strong><span id="team-game-location"></span></p>
+            <p><strong>Broadcast</strong><span id="team-game-broadcast"></span></p>
+        </div>
+        <a id="team-game-tickets" class="team-game-tickets" href="#" target="_blank" rel="noopener" hidden>BUY TICKETS <span aria-hidden="true">↗</span></a>
+    </div>
+</div>
+
 <div id="bio-modal" class="bio-modal" onclick="this.style.display='none'">
     <div class="bio-content" onclick="event.stopPropagation()">
         <span class="close-bio" onclick="document.getElementById('bio-modal').style.display='none'">&times;</span>
@@ -255,13 +294,18 @@ const teamId = urlParams.get('id') || "bills";
 let factIndex = 0;
 
     // HAMBURGER MENU SCRIPT
-    function toggleMenu() {
-        var menu = document.getElementById("side-menu");
-        if (menu.style.width === "280px") {
-            menu.style.width = "0";
-        } else {
-            menu.style.width = "280px";
-        }
+    function toggleMenu(forceOpen) {
+        const menu = document.getElementById("side-menu");
+        const menuButton = document.querySelector(".menu-btn");
+        if (!menu) return;
+
+        const shouldOpen = typeof forceOpen === "boolean"
+            ? forceOpen
+            : menu.getBoundingClientRect().width === 0;
+        menu.style.width = shouldOpen ? "min(280px, 85vw)" : "0";
+        menuButton?.setAttribute("aria-expanded", String(shouldOpen));
+        menuButton?.setAttribute("aria-label", shouldOpen ? "Close navigation menu" : "Open navigation menu");
+        document.body.classList.toggle("menu-open", shouldOpen);
     }
 
 
@@ -597,10 +641,21 @@ const teamData = {
             desc: "Home of the '12th Man,' the loudest fans in the NFL." 
         }
 };
+
+const teamStructure = {
+    bills: { abbr: "BUF", conference: "AFC", division: "East", founded: 1960 }, dolphins: { abbr: "MIA", conference: "AFC", division: "East", founded: 1966 }, patriots: { abbr: "NE", conference: "AFC", division: "East", founded: 1959 }, jets: { abbr: "NYJ", conference: "AFC", division: "East", founded: 1960 },
+    ravens: { abbr: "BAL", conference: "AFC", division: "North", founded: 1996 }, bengals: { abbr: "CIN", conference: "AFC", division: "North", founded: 1968 }, browns: { abbr: "CLE", conference: "AFC", division: "North", founded: 1946 }, steelers: { abbr: "PIT", conference: "AFC", division: "North", founded: 1933 },
+    texans: { abbr: "HOU", conference: "AFC", division: "South", founded: 2002 }, colts: { abbr: "IND", conference: "AFC", division: "South", founded: 1953 }, jaguars: { abbr: "JAX", conference: "AFC", division: "South", founded: 1995 }, titans: { abbr: "TEN", conference: "AFC", division: "South", founded: 1960 },
+    broncos: { abbr: "DEN", conference: "AFC", division: "West", founded: 1960 }, chiefs: { abbr: "KC", conference: "AFC", division: "West", founded: 1960 }, raiders: { abbr: "LV", conference: "AFC", division: "West", founded: 1960 }, chargers: { abbr: "LAC", conference: "AFC", division: "West", founded: 1960 },
+    cowboys: { abbr: "DAL", conference: "NFC", division: "East", founded: 1960 }, giants: { abbr: "NYG", conference: "NFC", division: "East", founded: 1925 }, eagles: { abbr: "PHI", conference: "NFC", division: "East", founded: 1933 }, commanders: { abbr: "WAS", conference: "NFC", division: "East", founded: 1932 },
+    bears: { abbr: "CHI", conference: "NFC", division: "North", founded: 1920 }, lions: { abbr: "DET", conference: "NFC", division: "North", founded: 1930 }, packers: { abbr: "GB", conference: "NFC", division: "North", founded: 1919 }, vikings: { abbr: "MIN", conference: "NFC", division: "North", founded: 1961 },
+    falcons: { abbr: "ATL", conference: "NFC", division: "South", founded: 1966 }, panthers: { abbr: "CAR", conference: "NFC", division: "South", founded: 1995 }, saints: { abbr: "NO", conference: "NFC", division: "South", founded: 1967 }, buccaneers: { abbr: "TB", conference: "NFC", division: "South", founded: 1976 },
+    cardinals: { abbr: "ARI", conference: "NFC", division: "West", founded: 1898 }, rams: { abbr: "LAR", conference: "NFC", division: "West", founded: 1936 }, sf49ers: { abbr: "SF", conference: "NFC", division: "West", founded: 1946 }, seahawks: { abbr: "SEA", conference: "NFC", division: "West", founded: 1976 }
+};
 // status: regular | postseason | offseason
 
     const espnIds = {
-        "bills": 2, "dolphins": 15, "patriots": 19, "jets": 20,
+        "bills": 2, "dolphins": 15, "patriots": 17, "jets": 20,
         "ravens": 33, "bengals": 4, "browns": 5, "steelers": 23,
         "texans": 34, "colts": 11, "jaguars": 30, "titans": 10,
         "broncos": 7, "chiefs": 12, "raiders": 13, "chargers": 24,
@@ -678,29 +733,146 @@ const teamData = {
         }
     }
 
+    let teamCountdownInterval = null;
+
+    function getTeamEventLink(event, relation) {
+        const competition = event.competitions && event.competitions[0] || {};
+        const links = [].concat(
+            event.links || [],
+            competition.links || [],
+            (competition.tickets || []).flatMap(ticket => ticket.links || [])
+        );
+        const link = links.find(item => (item.rel || []).some(value => value.toLowerCase() === relation));
+        return link && link.href ? link.href : "";
+    }
+
+    function getTeamEventLogo(competitor) {
+        const team = competitor && competitor.team || {};
+        return team.logo || (team.abbreviation ? `https://a.espncdn.com/i/teamlogos/nfl/500/${team.abbreviation.toLowerCase()}.png` : "nfl logo.jfif");
+    }
+
+    function normalizeTeamGame(event, teamAbbr) {
+        const competition = event.competitions && event.competitions[0] || {};
+        const competitors = competition.competitors || [];
+        const home = competitors.find(item => item.homeAway === "home") || {};
+        const away = competitors.find(item => item.homeAway === "away") || {};
+        const status = competition.status || event.status || {};
+        const state = status.type && status.type.state || "pre";
+        const venue = competition.venue || {};
+        const address = venue.address || {};
+        const broadcasts = (competition.broadcasts || []).flatMap(item => item.names || []).filter(Boolean);
+        const kickoff = new Date(event.date);
+
+        return {
+            event,
+            kickoff,
+            away: away.team && away.team.displayName || "TBD",
+            home: home.team && home.team.displayName || "TBD",
+            awayScore: away.score || "-",
+            homeScore: home.score || "-",
+            awayLogo: getTeamEventLogo(away),
+            homeLogo: getTeamEventLogo(home),
+            time: status.type && status.type.shortDetail || kickoff.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+            status: state === "post" ? "FINAL" : state === "in" ? "LIVE" : "UPCOMING",
+            venue: venue.fullName || "Unavailable",
+            location: [address.city, address.state].filter(Boolean).join(", ") || "Unavailable",
+            week: competition.week && competition.week.number ? `WEEK ${competition.week.number}` : "NFL GAME",
+            broadcast: broadcasts.join(", ") || "Unavailable",
+            ticketUrl: getSeatGeekDestination()
+        };
+    }
+
+    function parseRecord(summary) {
+        const parts = String(summary || "").match(/(\d+)[-–](\d+)(?:[-–](\d+))?/);
+        return parts ? { wins: parts[1], losses: parts[2], record: parts[0] } : { wins: "--", losses: "--", record: summary || "--" };
+    }
+
+    function renderPreviousGame(event, teamAbbr) {
+        const container = document.getElementById("previous-game");
+        if (!container) return;
+        if (!event) {
+            container.innerHTML = '<p class="muted">No completed game is available yet.</p>';
+            return;
+        }
+
+        const game = normalizeTeamGame(event, teamAbbr);
+        const date = game.kickoff.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric", timeZone: "America/New_York" });
+        container.innerHTML = `
+            <button type="button" class="previous-game-link" aria-label="View details for ${game.away} at ${game.home}">
+                <span class="previous-game-topline">${game.week} <span>FINAL</span></span>
+                <span class="previous-game-matchup">
+                    <span><img src="${game.awayLogo}" alt="${game.away} logo">${game.away}</span>
+                    <b>${game.awayScore} - ${game.homeScore}</b>
+                    <span><img src="${game.homeLogo}" alt="${game.home} logo">${game.home}</span>
+                </span>
+                <span class="previous-game-meta">${date} · ${game.venue}</span>
+                <span class="team-next-game-hint">View game details <span aria-hidden="true">→</span></span>
+            </button>
+        `;
+        container.querySelector(".previous-game-link")?.addEventListener("click", () => openTeamGameModal(game));
+    }
+
+    function openTeamGameModal(game) {
+        const modal = document.getElementById("team-game-modal");
+        if (!modal || !game) return;
+        document.getElementById("team-game-modal-week").textContent = game.week;
+        document.getElementById("team-game-modal-title").textContent = `${game.away} @ ${game.home}`;
+        document.getElementById("team-game-modal-date").textContent = `${game.kickoff.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" })} · ${game.time}`;
+        document.getElementById("team-game-away").textContent = game.away;
+        document.getElementById("team-game-home").textContent = game.home;
+        document.getElementById("team-game-away-logo").src = game.awayLogo;
+        document.getElementById("team-game-home-logo").src = game.homeLogo;
+        document.getElementById("team-game-status").textContent = game.status;
+        document.getElementById("team-game-venue").textContent = game.venue;
+        document.getElementById("team-game-location").textContent = game.location;
+        document.getElementById("team-game-broadcast").textContent = game.broadcast;
+
+        const tickets = document.getElementById("team-game-tickets");
+        tickets.hidden = !game.ticketUrl;
+        tickets.href = game.ticketUrl || "#";
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    }
+
+    function closeTeamGameModal() {
+        const modal = document.getElementById("team-game-modal");
+        if (!modal) return;
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    }
+
     function startCountdown(gameDate) {
         const countdownEl = document.getElementById("countdown-timer");
         if (!countdownEl) return;
+        const kickoff = new Date(gameDate);
+        if (Number.isNaN(kickoff.getTime())) {
+            countdownEl.innerHTML = '<p class="muted">Kickoff time unavailable.</p>';
+            return;
+        }
 
         function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = new Date(gameDate).getTime() - now;
+            const distance = kickoff.getTime() - Date.now();
 
             if (distance <= 0) {
-                countdownEl.innerHTML = "<p><strong>Game Time!</strong></p>";
+                countdownEl.innerHTML = "<div class=\"countdown-live\"><span>GAME TIME</span></div>";
+                if (teamCountdownInterval) clearInterval(teamCountdownInterval);
                 return;
             }
 
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((distance / (1000 * 60)) % 60);
+            const seconds = Math.floor((distance / 1000) % 60);
 
-            countdownEl.innerHTML =
-                `<p><strong>Starts In:</strong> ${days}d ${hours}h ${minutes}m</p>`;
+            const unit = (value, label) => `<span><strong>${String(value).padStart(2, "0")}</strong><small>${label}</small></span>`;
+            countdownEl.innerHTML = `<p class="countdown-label"></p><div class="countdown-units">${unit(days, "DAYS")}<b>:</b>${unit(hours, "HOURS")}<b>:</b>${unit(minutes, "MINUTES")}<b>:</b>${unit(seconds, "SECONDS")}</div>`;
         }
 
         updateCountdown();
-        setInterval(updateCountdown, 60000);
+        if (teamCountdownInterval) clearInterval(teamCountdownInterval);
+        teamCountdownInterval = setInterval(updateCountdown, 1000);
     }
 
 let currentPlayerIndex = 0;
@@ -1437,8 +1609,10 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     if (!teamData[teamId]) return;
     const team = teamData[teamId];
+    const structure = teamStructure[teamId] || {};
     const history = teamHistory[teamId];
     const teamAbbr = logoIdMap[teamId];
+    document.title = `${team.name} | Team Details`;
     renderTimeline(teamId);
 
     // Fetch live roster and show spotlight player
@@ -1452,10 +1626,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     const logoId = logoIdMap[teamId] || teamId; 
     const logoUrl = `https://a.espncdn.com/i/teamlogos/nfl/500/${logoId}.png`;
     const logoContainer = document.getElementById('logo-container');
-    if (logoContainer) logoContainer.innerHTML = `<img src="${logoUrl}" class="large-team-logo">`;
+    if (logoContainer) logoContainer.innerHTML = `<img src="${logoUrl}" class="large-team-logo" alt="${team.name} logo" decoding="async">`;
     const hero = document.getElementById('team-hero');
     if (hero) hero.style.backgroundColor = team.color;
     document.documentElement.style.setProperty('--team-color', team.color);
+    document.documentElement.style.setProperty('--countdown-team-color', team.color);
 
     // Main Identity Text
     const stadiumEl = document.getElementById('team-stadium');
@@ -1467,54 +1642,46 @@ document.addEventListener("DOMContentLoaded", async function() {
         titleEl.innerText = team.name;
         titleEl.style.color = "white";
     }
+    const identityEl = document.getElementById("team-identity");
+    const abbreviationEl = document.getElementById("team-abbreviation");
+    const conferenceEl = document.getElementById("team-conference");
+    const divisionEl = document.getElementById("team-division");
+    const heroRecordEl = document.getElementById("team-hero-record");
+    if (identityEl) identityEl.textContent = `${team.location} · ${team.stadium}`;
+    if (abbreviationEl) abbreviationEl.textContent = structure.abbr || "NFL";
+    if (conferenceEl) conferenceEl.textContent = structure.conference || "NFL";
+    if (divisionEl) divisionEl.textContent = `${structure.division || "League"} Division`;
+    if (heroRecordEl) heroRecordEl.textContent = "Record pending";
+    document.getElementById("team-founded").textContent = structure.founded || "--";
+    document.getElementById("team-trophies").textContent = history && typeof history.trophies === "number" ? history.trophies : "--";
     if (descEl) descEl.innerText = team.desc;
     if (contentEl) contentEl.style.borderTop = `8px solid ${team.color}`;
 
-    // Season record
-    const seasonContainer = document.getElementById("season-record");
-    if (seasonContainer) {
-        fetchTeamRecord(teamAbbr).then(data => {
-            if (!data || !data.team || !data.team.record) {
-                seasonContainer.innerHTML = `
-                    <div class="stadium-vibe-container">
-                        <div class="stadium-stats">
-                            <div>
-                                <span class="stat-label">Status</span>
-                                <span class="stat-value">Record unavailable</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
+    // Live record data still populates the hero and snapshot card.
+    fetchTeamRecord(teamAbbr).then(data => {
+        if (!data || !data.team || !data.team.record) return;
 
-            const recordSummary = data.team.record.items[0].summary;
-
-            seasonContainer.innerHTML = `
-                <div class="stadium-vibe-container">
-                    <div class="stadium-stats">
-                        <div>
-                            <span class="stat-label">Record</span>
-                            <span class="stat-value">${recordSummary}</span>
-                        </div>
-                        <div>
-                            <span class="stat-label">Source</span>
-                            <span class="stat-value">Live ESPN Data</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-    }
+        const recordSummary = data.team.record.items[0].summary;
+        const record = parseRecord(recordSummary);
+        document.getElementById("team-record").textContent = record.record;
+        if (heroRecordEl) heroRecordEl.textContent = `${record.record} record`;
+    });
 
     // Rivals
     const rivalsContainer = document.getElementById("rivals-container");
-    if (rivalsContainer && team.rivals && team.rivals.length > 0) {
+    const fallbackRivals = Object.keys(teamData)
+        .filter(id => id !== teamId && teamStructure[id]?.conference === structure.conference && teamStructure[id]?.division === structure.division)
+        .slice(0, 3)
+        .map(id => ({ name: teamData[id].name, id }));
+    const rivals = team.rivals && team.rivals.length > 0 ? team.rivals : fallbackRivals;
+    if (rivalsContainer && rivals.length > 0) {
         rivalsContainer.innerHTML = "";
-        team.rivals.forEach(rival => {
+        rivals.forEach(rival => {
             const rivalCard = document.createElement("div");
             rivalCard.classList.add("rival-card");
+            const rivalLogoId = logoIdMap[rival.id] || rival.id;
             rivalCard.innerHTML = `
+                <img src="https://a.espncdn.com/i/teamlogos/nfl/500/${rivalLogoId}.png" alt="${rival.name} logo" loading="lazy">
                 <h3>${rival.name}</h3>
                 <button class="back-btn small-btn"
                     onclick="window.location.href='Team-Details.html?id=${rival.id}'">
@@ -1534,9 +1701,16 @@ document.addEventListener("DOMContentLoaded", async function() {
                 return;
             }
 
-            const nextEvent = data.events.find(event =>
-                event.competitions[0].status.type.completed === false
-            );
+            const completedEvents = data.events.filter(event => {
+                const competition = event.competitions && event.competitions[0];
+                return competition && competition.status && competition.status.type && competition.status.type.completed === true;
+            }).sort((a, b) => new Date(b.date) - new Date(a.date));
+            renderPreviousGame(completedEvents[0], teamAbbr);
+
+            const nextEvent = data.events.find(event => {
+                const competition = event.competitions && event.competitions[0];
+                return competition && competition.status && competition.status.type && competition.status.type.completed === false;
+            });
 
             if (!nextEvent) {
                 nextGameContainer.innerHTML = `
@@ -1556,30 +1730,35 @@ document.addEventListener("DOMContentLoaded", async function() {
                 return;
             }
 
-            const competition = nextEvent.competitions[0];
-            const opponent = competition.competitors.find(c =>
-                c.team.abbreviation !== teamAbbr
-            );
-
-            const gameDate = nextEvent.date;
-            const formattedDate = new Date(gameDate).toLocaleString();
+            const game = normalizeTeamGame(nextEvent, teamAbbr);
+            const gameDate = game.kickoff;
+            const formattedDate = gameDate.toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short", timeZone: "America/New_York" });
 
             nextGameContainer.innerHTML = `
-                <div class="stadium-vibe-container">
+                <div class="team-next-game-link">
+                    <span class="team-next-game-topline">${game.week} <span>${game.status}</span></span>
+                    <span class="team-next-game-matchup">
+                        <span><img src="${game.awayLogo}" alt="${game.away} logo">${game.away}</span>
+                        <b>@</b>
+                        <span><img src="${game.homeLogo}" alt="${game.home} logo">${game.home}</span>
+                    </span>
                     <div class="stadium-stats">
                         <div>
-                            <span class="stat-label">Opponent</span>
-                            <span class="stat-value">${opponent.team.displayName}</span>
-                        </div>
-                        <div>
-                            <span class="stat-label">Date</span>
+                            <span class="stat-label">Kickoff</span>
                             <span class="stat-value">${formattedDate}</span>
                         </div>
+                        <div>
+                            <span class="stat-label">Venue</span>
+                            <span class="stat-value">${game.venue}</span>
+                        </div>
                     </div>
+                    <button type="button" class="team-next-game-hint">View game details <span aria-hidden="true">→</span></button>
                 </div>
             `;
 
-            startCountdown(gameDate);
+            const nextGameButton = nextGameContainer.querySelector(".team-next-game-hint");
+            if (nextGameButton) nextGameButton.addEventListener("click", () => openTeamGameModal(game));
+            startCountdown(game.kickoff);
         });
     }
 
@@ -2345,6 +2524,26 @@ function finishQuiz(total) {
     
     quizContent.appendChild(restartBtn);
 }
+
+document.getElementById("team-game-modal-close").addEventListener("click", closeTeamGameModal);
+document.getElementById("team-game-modal").addEventListener("click", function (event) {
+    if (event.target.id === "team-game-modal") closeTeamGameModal();
+});
+document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
+    closeTeamGameModal();
+    toggleMenu(false);
+});
+document.getElementById("side-menu").addEventListener("click", function (event) {
+    if (event.target === this) toggleMenu(false);
+});
+document.addEventListener("click", function (event) {
+    const menu = document.getElementById("side-menu");
+    const menuButton = document.querySelector(".menu-btn");
+    if (menu && menu.style.width && menu.style.width !== "0px" && !menu.contains(event.target) && !menuButton.contains(event.target)) {
+        toggleMenu(false);
+    }
+});
 </script>
 
 

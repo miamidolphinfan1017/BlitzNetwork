@@ -99,7 +99,7 @@
     .settings-category-button:hover {
       transform: translateY(-2px);
       border-color: var(--accent-red);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 14px rgba(204, 0, 0, 0.25);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 14px color-mix(in srgb, var(--accent-red) 25%, transparent);
     }
 
     .settings-category-label {
@@ -149,7 +149,7 @@
     }
 
     .settings-back-button:hover {
-      background: rgba(204, 0, 0, 0.35);
+      background: color-mix(in srgb, var(--accent-red) 35%, transparent);
       transform: translateY(-1px);
     }
 
@@ -194,12 +194,12 @@
     .settings-input:focus,
     .settings-select:focus {
       border-color: var(--accent-red);
-      box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.23);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-red) 23%, transparent);
     }
 
     .settings-button {
       border: 1px solid var(--accent-red);
-      background: linear-gradient(145deg, rgba(204, 0, 0, 0.95), rgba(147, 0, 0, 0.95));
+      background: linear-gradient(145deg, color-mix(in srgb, var(--accent-red) 95%, white 5%), color-mix(in srgb, var(--accent-red) 78%, black 22%));
       color: #fff;
       border-radius: 10px;
       padding: 10px 14px;
@@ -212,7 +212,7 @@
     .settings-button:hover {
       transform: translateY(-1px);
       filter: brightness(1.06);
-      box-shadow: 0 9px 20px rgba(204, 0, 0, 0.35);
+      box-shadow: 0 9px 20px color-mix(in srgb, var(--accent-red) 35%, transparent);
     }
 
     .settings-msg {

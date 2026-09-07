@@ -8,7 +8,7 @@
   <meta name="description" content="NFL Season Schedule Calendar">
   <meta name="keywords" content="NFL, Schedule, Calendar, Games">
   <meta name="author" content="Riley Cooperman">
-  <meta name="viewport" content="width=device-width, initial scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
@@ -76,24 +76,17 @@
         <div id="picker-month-grid" class="month-grid"></div>
     </section>
 
-    <section class="schedule-calendar">
-        <div class="calendar-weekdays">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
-        </div>
+    <section class="schedule-calendar" aria-live="polite">
         <div id="calendar-grid" class="calendar-grid"></div>
     </section>
 </main>
 
 <div id="schedule-modal" class="schedule-modal" aria-hidden="true">
     <div class="schedule-modal-card">
-        <button id="schedule-modal-close" class="schedule-modal-close" aria-label="Close details">x</button>
+        <button id="schedule-modal-close" class="schedule-modal-close" aria-label="Close details">&times;</button>
+        <p class="modal-eyebrow" id="modal-week">GAME DETAILS</p>
         <h3 id="modal-matchup">Away @ Home</h3>
+        <p class="modal-date-line" id="modal-date-line"></p>
         <div class="schedule-modal-logos">
             <div class="schedule-logo-group">
                 <img id="modal-away-logo" alt="Away team logo">
@@ -106,17 +99,22 @@
             </div>
         </div>
         <div class="schedule-modal-details">
-            <p><strong>Date:</strong> <span id="modal-date"></span></p>
-            <p><strong>Time / Status:</strong> <span id="modal-time"></span></p>
-            <p><strong>Score:</strong> <span id="modal-score"></span></p>
-            <p><strong>Venue:</strong> <span id="modal-venue"></span></p>
-            <p><strong>Records:</strong> <span id="modal-records"></span></p>
+            <p><strong>Status</strong><span id="modal-time"></span></p>
+            <p><strong>Score</strong><span id="modal-score"></span></p>
+            <p><strong>Venue</strong><span id="modal-venue"></span></p>
+            <p><strong>Location</strong><span id="modal-location"></span></p>
+            <p><strong>Game</strong><span id="modal-type"></span></p>
+            <p><strong>Broadcast</strong><span id="modal-broadcast"></span></p>
+            <p><strong>Records</strong><span id="modal-records"></span></p>
         </div>
+        <div class="schedule-modal-actions">
+            <a id="modal-tickets" class="schedule-ticket-link" href="#" target="_blank" rel="noopener" hidden>BUY TICKETS <span aria-hidden="true">↗</span></a>
         <a id="modal-highlights" class="small-btn schedule-highlights-link" href="#" target="_blank" rel="noopener" style="display:none;">Watch Highlights</a>
+        </div>
     </div>
 </div>
 
-<script>
+<script type="text/plain" id="legacy-schedule-script">
     function toggleMenu() {
         var menu = document.getElementById("side-menu");
         if (menu.style.width === "280px") {
@@ -477,6 +475,8 @@
     }
     window.addEventListener("DOMContentLoaded", loadLiveSchedule);
 </script>
+<script src="team-sites.js"></script>
+<script src="schedule.js"></script>
 
 </body>
 </html>

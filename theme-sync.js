@@ -36,4 +36,10 @@
 
   applyThemeMode();
   applyAccent();
+  window.addEventListener("storage", function (event) {
+    if (event.key === null || event.key.indexOf("user_settings.") === 0 || event.key === "settings_accent" || event.key === "theme") {
+      applyThemeMode();
+      applyAccent();
+    }
+  });
 })();
