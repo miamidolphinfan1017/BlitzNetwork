@@ -7,6 +7,16 @@ services:
     volumes:
       - ./:/usr/share/nginx/html:ro
       - ./nginx.base44.conf:/etc/nginx/nginx.conf:ro
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      - GOOGLE_CLIENT_ID
+      - APPLE_CLIENT_ID
+    command: >
+      sh -c "printf 'window.BLITZ_AUTH_CONFIG = { googleClientId: \"%s\", appleClientId: \"%s\" };'
+      \"$$GOOGLE_CLIENT_ID\" \"$$APPLE_CLIENT_ID\" > /tmp/auth-config.js
+      && exec nginx -g 'daemon off;'"
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost/index.html"]
       interval: 5s

@@ -1,34 +1,40 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-US">
 <head>
-<title>Login</title>
-  <link rel="icon" type="image/jpg" href="logo for website.jpg">
-<link rel="stylesheet" href="style.css">
+<title>Login — Blitz Network</title>
+<link rel="icon" type="image/jpg" href="logo for website.jpg">
 <meta charset="UTF-8">
 <meta name="description" content="American Football Information and Facts">
 <meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
 <meta name="author" content="Riley Cooperman">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="theme-sync.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+<script src="theme-sync.js"></script>
+<script src="auth.js"></script>
+<script src="auth-config.js"></script>
+<script>
+  // Inline CSS loader — preview proxies may rewrite Content-Type
+  (function () {
+    fetch('style.css').then(function (r) { return r.text(); }).then(function (css) {
+      var s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+    }).catch(function () {});
+  })();
+</script>
 </head>
-<body>
+<body class="auth-page">
 
 <header class="main-header">
     <div class="header-left">
         <div class="menu-btn" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
     </div>
-
-    
-
     <div class="header-right">
         <button id="themeToggle" onclick="toggleTheme()">Dark</button>
         <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
     </div>
-
 </header>
 
 <div id="side-menu" class="side-nav">
@@ -47,206 +53,178 @@
     <a href="Login.html" id="side-login-link" class="nav-active">Login</a>
 </div>
 
-  <div class="login-bg"></div>
+<div class="login-bg"></div>
 
 <main class="login-main">
-    <form class="login-box" id="loginForm">
-        <h1>Login</h1>
+    <form class="login-box" id="loginForm" autocomplete="on">
+        <div class="auth-header">
+            <h1>Welcome Back</h1>
+            <p>Sign in to your Blitz Network account</p>
+        </div>
 
-        <input type="text" id="username" placeholder="Username or Email" required>
-        <div style="position:relative;">
-            <input type="password" id="password" placeholder="Password" required minlength="6" style="padding-right:44px;">
-            <button type="button" id="toggle-login-pass" aria-label="Show password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--glass-text);cursor:pointer;display:flex;align-items:center;justify-content:center;width:28px;height:28px;">
-                <span id="login-eye-icon" aria-hidden="true"></span>
+        <div class="auth-error" id="login-error"></div>
+
+        <div class="auth-field">
+            <label for="username">Username or Email</label>
+            <div class="auth-input-wrap">
+                <span class="auth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                <input class="auth-input" type="text" id="username" placeholder="Username or Email" required autocomplete="username">
+            </div>
+        </div>
+
+        <div class="auth-field">
+            <label for="password">Password</label>
+            <div class="auth-input-wrap">
+                <span class="auth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <input class="auth-input" type="password" id="password" placeholder="Password" required minlength="6" autocomplete="current-password" style="padding-right:42px;">
+                <button type="button" class="auth-pass-toggle" id="toggle-login-pass" aria-label="Show password">
+                    <span id="login-eye-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="auth-options-row">
+            <label><input type="checkbox" id="remember"> Remember me</label>
+            <a href="#" id="forgot-password-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="auth-btn-primary">Log In</button>
+
+        <div class="auth-divider"><span>or continue with</span></div>
+
+        <div class="auth-social-grid">
+            <div id="google-btn-container"></div>
+            <button type="button" class="auth-social-btn" id="google-login-fallback" style="display:none">
+                <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-2.1 14-5.5l-6.5-5.5c-2 1.5-4.6 2.5-7.5 2.5-5.2 0-9.6-3.3-11.2-8l-6.6 5.1C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.1 4.1-3.8 5.5l6.5 5.5C41.5 35.7 44 30.3 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
+                Continue with Google
+            </button>
+            <button type="button" class="auth-social-btn" id="apple-login-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c.03 3.32 2.92 4.44 2.95 4.45-.02.07-.46 1.58-1.52 3.13-.91 1.34-1.86 2.67-3.36 2.7-1.47.03-1.94-.87-3.62-.87s-2.2.84-3.58.9c-1.44.06-2.54-1.44-3.46-2.78-1.88-2.72-3.32-7.69-1.39-11.05.96-1.67 2.69-2.72 4.55-2.75 1.42-.03 2.76.95 3.63.95.87 0 2.5-1.18 4.21-1.01.72.03 2.72.29 4.01 2.18-.1.06-2.39 1.4-2.42 4.15M14.6 5.42c.77-.93 1.29-2.22 1.15-3.51-1.11.04-2.45.74-3.24 1.67-.71.82-1.32 2.12-1.16 3.39 1.24.1 2.49-.62 3.25-1.55"/></svg>
+                Continue with Apple
             </button>
         </div>
 
-        <div id="login-error" style="display:none;color:#ff6b6b;margin:8px 0 0;font-weight:600;"></div>
-
-        <div class="remember-row">
-            <input type="checkbox" id="remember">
-            <label for="remember">Remember me</label>
+        <div class="auth-footer">
+            Don't have an account? <a href="Register.html">Register</a>
         </div>
-
-        <button type="submit">Log In</button>
-
-        <p class="register-text">
-            Don't have an account?
-            <a href="Register.html">Register</a>
-        </p>
-        <p class="register-text" style="margin-top:12px;">
-            <a href="#" id="forgot-password-link">Forgot password?</a>
-        </p>
     </form>
 </main>
 
-
-
-
-
-
-
-
-
-
 <script>
-    // HAMBURGER MENU SCRIPT
+    // ── Hamburger + Theme (shared inline, same as all pages) ──
     function toggleMenu() {
         var menu = document.getElementById("side-menu");
-        if (menu.style.width === "280px") {
-            menu.style.width = "0";
-        } else {
-            menu.style.width = "280px";
-        }
+        menu.style.width = menu.style.width === "280px" ? "0" : "280px";
     }
-
-
-// THEME TOGGLE SCRIPT
-    const root = document.documentElement;
-    const themeBtn = document.getElementById("themeToggle");
-
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("themeToggle");
     function applyTheme(theme) {
         root.classList.remove("light-mode", "dark-mode");
         root.classList.add(theme);
         localStorage.setItem("theme", theme);
-
-        if (themeBtn) {
-            themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
-        }
+        if (themeBtn) themeBtn.textContent = theme === "dark-mode" ? "Light" : "Dark";
     }
-
-    const savedTheme = localStorage.getItem("theme");
-    applyTheme(savedTheme === "dark-mode" ? "dark-mode" : "light-mode");
-
+    applyTheme(localStorage.getItem("theme") === "dark-mode" ? "dark-mode" : "light-mode");
     function toggleTheme() {
-        const nextTheme = root.classList.contains("dark-mode") ? "light-mode" : "dark-mode";
-        applyTheme(nextTheme);
+        applyTheme(root.classList.contains("dark-mode") ? "light-mode" : "dark-mode");
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // 1. Check if the user is logged in (using your existing logic)
-        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
-        const navBtn = document.getElementById("nav-login-btn");
-        const sideLink = document.getElementById("side-login-link");
+    // ── Redirect if already logged in ──
+    (function () {
+        var u = window.BlitzAuth && BlitzAuth.getUser();
+        if (u) window.location.href = 'Account.html';
+    })();
 
-        if (user) {
-            // 2. Update the Top Right Header Button
-            if (navBtn) {
-                navBtn.innerText = "ACCOUNT";
-                navBtn.href = "Account.html";
-            }
-
-            // 3. Update the Sidebar Link
-            if (sideLink) {
-                sideLink.innerText = "Account";
-                sideLink.href = "Account.html";
-            }
-        }
+    // ── Password toggle ──
+    var eyeSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var eyeSlashSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.88 4.07"/><path d="M1 1l22 22"/><path d="M9 9a3 3 0 0 0 4.24 4.24"/></svg>';
+    var eyeIcon = document.getElementById('login-eye-icon');
+    if (eyeIcon) eyeIcon.innerHTML = eyeSvg;
+    document.getElementById('toggle-login-pass').addEventListener('click', function () {
+        var pwd = document.getElementById('password');
+        var showing = pwd.type === 'text';
+        pwd.type = showing ? 'password' : 'text';
+        eyeIcon.innerHTML = showing ? eyeSvg : eyeSlashSvg;
     });
 
-    const loginForm = document.getElementById('loginForm');
-
-    // --- AUTO-HIGHLIGHT ACTIVE NAV LINK ---
-    const currentFile = window.location.pathname.split("/").pop();
-    const sideLinks = document.querySelectorAll('.side-nav a');
-
-    sideLinks.forEach(link => {
-        const linkFile = link.getAttribute('href');
-        if (linkFile === currentFile) {
-            link.classList.add('nav-active');
-        }
-    });
-
-    function getRegisteredUsers() {
-        try {
-            return JSON.parse(localStorage.getItem('registeredUsers') || '{}');
-        } catch {
-            return {};
-        }
-    }
-
-    const toggleLoginPass = document.getElementById('toggle-login-pass');
-    const loginEyeIcon = document.getElementById('login-eye-icon');
-    const eyeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>`;
-    const eyeSlashSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.88 4.07"/><path d="M1 1l22 22"/><path d="M9 9a3 3 0 0 0 4.24 4.24"/></svg>`;
-
-    if (loginEyeIcon) {
-        loginEyeIcon.innerHTML = eyeSvg;
-    }
-    if (toggleLoginPass) {
-        toggleLoginPass.addEventListener('click', () => {
-            const pwd = document.getElementById('password');
-            if (!pwd) return;
-            const showing = pwd.type === 'text';
-            pwd.type = showing ? 'password' : 'text';
-            if (loginEyeIcon) {
-                loginEyeIcon.innerHTML = showing ? eyeSvg : eyeSlashSvg;
-            }
-        });
-    }
-
-    const forgotLink = document.getElementById('forgot-password-link');
-    if (forgotLink) {
-        forgotLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert("Password reset emails require a backend server. If you want this to actually send emails, we’ll need Python/Node. For now, I can add a placeholder reset flow.");
-        });
-    }
-
-    loginForm.addEventListener('submit', function(e) {
+    // ── Forgot password ──
+    document.getElementById('forgot-password-link').addEventListener('click', function (e) {
         e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        const rememberMe = document.getElementById('remember').checked;
-        const errorBox = document.getElementById('login-error');
+        alert("Password reset requires a backend email service. For now, use Remember me to stay logged in, or register a new account.");
+    });
 
-        const users = getRegisteredUsers();
-        const lookupKey = users[username]
-            ? username
-            : Object.keys(users).find(k => (users[k].email || '').toLowerCase() === username.toLowerCase());
-
-        if (!lookupKey) {
-            if (errorBox) {
-                errorBox.style.display = "block";
-                errorBox.innerText = "No account found. Please register first.";
+    // ── Google Sign-In ──
+    function tryInitGoogle() {
+        var cfg = window.BLITZ_AUTH_CONFIG || {};
+        if (!cfg.googleClientId) {
+            var fb = document.getElementById('google-login-fallback');
+            var gc = document.getElementById('google-btn-container');
+            if (gc) gc.style.display = 'none';
+            if (fb) {
+                fb.style.display = 'flex';
+                fb.addEventListener('click', function () {
+                    alert('Google Sign-In needs a Google OAuth Client ID.\n\nTo enable it:\n1. Go to Google Cloud Console → APIs & Services → Credentials\n2. Create an OAuth 2.0 Client ID (Web application)\n3. Add this site\'s URL to Authorized JavaScript origins\n4. Provide the Client ID in your Base44 Secrets page');
+                });
             }
             return;
         }
-        if (users[lookupKey].password !== password) {
-            if (errorBox) {
-                errorBox.style.display = "block";
-                errorBox.innerText = "Incorrect password. Please try again.";
-            }
-            return;
-        }
-
-        if (errorBox) {
-            errorBox.style.display = "none";
-            errorBox.innerText = "";
-        }
-
-        const finalUsername = lookupKey;
-        if (rememberMe) {
-            localStorage.setItem('currentUser', finalUsername);
+        if (typeof google === 'undefined') {
+            var s = document.createElement('script');
+            s.src = 'https://accounts.google.com/gsi/client';
+            s.async = true; s.defer = true;
+            s.onload = function () { BlitzAuth.initGoogleSignIn('google-btn-container'); };
+            document.head.appendChild(s);
         } else {
-            sessionStorage.setItem('currentUser', finalUsername);
+            BlitzAuth.initGoogleSignIn('google-btn-container');
+        }
+    }
+    tryInitGoogle();
+
+    // ── Apple Sign-In ──
+    document.getElementById('apple-login-btn').addEventListener('click', function () {
+        var cfg = window.BLITZ_AUTH_CONFIG || {};
+        if (!cfg.appleClientId) {
+            alert('Apple Sign-In requires an Apple Developer account and backend configuration.\n\nTo enable it:\n1. Configure Sign in with Apple in Apple Developer Console\n2. Create a Service ID with a Return URL\n3. A backend is needed to verify Apple\'s identity token\n\nThis static site needs a backend service for Apple Sign-In.');
+            return;
+        }
+        // If configured, redirect to Apple auth
+        var redirectUri = encodeURIComponent(window.location.origin + '/auth/apple/callback');
+        var url = 'https://appleid.apple.com/auth/authorize?client_id=' + cfg.appleClientId +
+            '&redirect_uri=' + redirectUri + '&response_type=code id_token&scope=name email&response_mode=form_post';
+        window.location.href = url;
+    });
+
+    // ── Login form ──
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var username = document.getElementById('username').value.trim();
+        var password = document.getElementById('password').value;
+        var remember = document.getElementById('remember').checked;
+        var errorBox = document.getElementById('login-error');
+
+        var users = BlitzAuth.getRegisteredUsers();
+        var key = users[username] ? username :
+            Object.keys(users).find(function (k) {
+                return (users[k].email || '').toLowerCase() === username.toLowerCase();
+            });
+
+        if (!key) {
+            errorBox.textContent = "No account found. Please register first.";
+            errorBox.classList.add('show');
+            return;
+        }
+        if (users[key].password !== '' && users[key].password !== password) {
+            errorBox.textContent = "Incorrect password. Please try again.";
+            errorBox.classList.add('show');
+            return;
         }
 
-        // --- NEW: Redirect Logic ---
-        const destination = localStorage.getItem('redirectAfterLogin') || 'index.html';
-        localStorage.removeItem('redirectAfterLogin'); 
-        window.location.href = destination;
+        errorBox.classList.remove('show');
+        BlitzAuth.setUser(key, remember);
+        var dest = localStorage.getItem('redirectAfterLogin') || 'index.html';
+        localStorage.removeItem('redirectAfterLogin');
+        window.location.href = dest;
     });
 </script>
-
-
-</body> 
+</body>
 </html>
-
-
-
-
-
-
-
-
