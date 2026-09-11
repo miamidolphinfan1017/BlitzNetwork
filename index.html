@@ -3,7 +3,6 @@
 <head>
   <title>Blitz Network</title>
   <link rel="icon" type="image/jpg" href="logo for website.jpg">
-  <link rel="stylesheet" href="style.css">
   <meta charset="UTF-8">
   <meta name="description" content="American Football Information and Facts">
   <meta name="keywords" content="Football, American Football, NFL, Football Infoformation, Football Facts">
@@ -13,6 +12,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
   <script src="theme-sync.js"></script>
+  <script>
+    // Inline CSS loader — preview proxies rewrite Content-Type to text/plain,
+    // which breaks <link rel="stylesheet">. This fetches and injects the CSS.
+    (function () {
+      fetch('style.css')
+        .then(function (r) { return r.text(); })
+        .then(function (css) {
+          var style = document.createElement('style');
+          style.textContent = css;
+          document.head.appendChild(style);
+        })
+        .catch(function () {});
+    })();
+  </script>
 </head>
 <body>
 
