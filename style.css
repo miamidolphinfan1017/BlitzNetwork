@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
   background:
     linear-gradient(
@@ -1458,8 +1460,6 @@ html:not(.dark-mode) .selector-label {
 
 
 /* NFL WEBSITE.html */
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
 .nflwebsite-wrapper {
   background-color: var(--page-surface);
