@@ -176,7 +176,7 @@
         <button onclick="clearAllFeeds()" class="btn-danger">Wipe All Fan Feeds</button>
         <button onclick="clearAllLeaderboards()" class="btn-danger">Reset Global Scores</button>
         <button onclick="clearAllPolls()" class="btn-danger">Reset All Fan Polls</button>
-        <button onclick="clearGameLeaderboards()" class="btn-danger">Reset Games Leaderboards</button>
+        <button onclick="clearGameLeaderboards()" class="btn-danger">Reset Games Data</button>
     </div>
     <p id="admin-status-msg" style="margin-top: 15px; min-height: 20px;"></p>
     </div>
@@ -1283,10 +1283,10 @@
     }
 
     function clearGameLeaderboards() {
-        if (confirm("🚨 RESET GAMES: Clear all Games Hub scores and votes?")) {
+        if (confirm("🚨 RESET GAMES: Clear all saved Games Hub results, cached daily questions, old scores, and votes?")) {
             let count = 0;
             Object.keys(localStorage).forEach(key => {
-                if (key === "prediction_leaderboard" || key === "startsit_leaderboard" || key === "statline_leaderboard" || key === "logo_leaderboard" || key === "stadium_leaderboard" || key === "trivia_leaderboard" || key === "draft_leaderboard" || key === "fantasy_leaderboard" || key === "timeline_leaderboard" || key === "geo_leaderboard" || key === "games_global_leaderboard" || key === "games_arcade_profile" || key.startsWith("poll_") || key.startsWith("poll_voted_") || key === "bracket_picks") {
+                if (key === "prediction_leaderboard" || key === "startsit_leaderboard" || key === "statline_leaderboard" || key === "logo_leaderboard" || key === "stadium_leaderboard" || key === "trivia_leaderboard" || key === "draft_leaderboard" || key === "fantasy_leaderboard" || key === "timeline_leaderboard" || key === "geo_leaderboard" || key === "games_global_leaderboard" || key === "games_arcade_profile" || key.startsWith("games_history_v1:") || key.startsWith("games_daily_questions_v1:") || key.startsWith("poll_") || key.startsWith("poll_voted_") || key === "bracket_picks") {
                     localStorage.removeItem(key);
                     count++;
                 }
@@ -1294,15 +1294,13 @@
 
             const msg = document.getElementById('admin-status-msg');
             msg.style.color = "#2ecc71";
-            msg.innerText = `Success: ${count} game leaderboard items cleared.`;
+            msg.innerText = `Success: ${count} game data items cleared.`;
             setTimeout(() => location.reload(), 2000);
         }
     }
 </script>
 </body>
 </html>
-
-
 
 
 

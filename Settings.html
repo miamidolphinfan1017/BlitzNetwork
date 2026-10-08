@@ -4,6 +4,7 @@
   <title>Settings</title>
   <link rel="icon" type="image/jpg" href="logo for website.jpg">
   <link rel="stylesheet" href="style.css">
+  <script src="theme-sync.js"></script>
   <meta charset="UTF-8">
   <meta name="description" content="Website Settings">
   <meta name="keywords" content="Settings, Account, Appearance, Privacy">
@@ -646,7 +647,8 @@
   function settingsLoadAll() {
     return {
       username: settingsGetValue("user_settings.username", settingsDefaults.username),
-      theme: settingsGetValue("user_settings.theme", settingsDefaults.theme),
+      theme: localStorage.getItem("theme")
+        || settingsGetValue("user_settings.theme", settingsDefaults.theme),
       color_theme: settingsGetValue("user_settings.color_theme", settingsDefaults.color_theme),
       text_size: settingsGetValue("user_settings.text_size", settingsDefaults.text_size),
       notifications: settingsGetValue("user_settings.notifications", settingsDefaults.notifications),
@@ -992,5 +994,3 @@
 </script>
 </body>
 </html>
-
-

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Fantasy Football | Blitz Network</title>
+  <link rel="icon" type="image/jpg" href="logo for website.jpg">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fantasy.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="Fantasy football projections, rankings, recent performance, player comparisons, and lineup planning.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  <script src="theme-sync.js"></script>
+</head>
+<body class="fantasy-page">
+<header class="main-header">
+  <div class="header-left">
+    <button class="menu-btn" type="button" onclick="toggleMenu()" aria-label="Open navigation" aria-controls="side-menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="header-right">
+    <button id="themeToggle" type="button" onclick="toggleTheme()">Dark</button>
+    <a href="Login.html" class="nav-login-link" id="nav-login-btn">LOGIN</a>
+  </div>
+</header>
+
+<nav id="side-menu" class="side-nav" aria-label="Main navigation">
+  <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()" aria-label="Close navigation">&times;</a>
+  <a href="index.html">Home</a>
+  <a href="NFL Website.html">NFL Website</a>
+  <a href="NFL Teams.html">NFL Teams</a>
+  <a href="Stadiums.html">Stadiums</a>
+  <a href="Surveys.html">Surveys</a>
+  <a href="Quizzes.html">Quizzes</a>
+  <a href="Games.html">Games</a>
+  <a href="Schedule.html">Schedule</a>
+  <a href="Fantasy.html" class="nav-active" aria-current="page">Fantasy</a>
+  <a href="Leaderboard.html">Leaderboard</a>
+  <a href="Photos.html">Photos</a>
+  <a href="Settings.html">Settings</a>
+  <a href="Login.html" id="side-login-link">Login</a>
+</nav>
+
+<main class="fantasy-shell">
+  <section class="fantasy-hero">
+    <div>
+      <p class="fantasy-eyebrow">BLITZ NETWORK · FANTASY</p>
+      <h1>Fantasy Football</h1>
+      <p>Projections, player form, and matchup context to help you make the call.</p>
+    </div>
+    <div class="fantasy-hero-meta">
+      <span class="fantasy-live-indicator"><i aria-hidden="true"></i> Provider data</span>
+      <span id="fantasy-updated">Loading data…</span>
+    </div>
+  </section>
+
+  <div id="fantasy-error" class="fantasy-notice fantasy-notice-error" role="alert" hidden>
+    <div><strong>Fantasy data couldn't be loaded.</strong><span id="fantasy-error-message">Check your connection and try again.</span></div>
+    <button id="fantasy-retry" type="button" class="fantasy-button">Try again</button>
+  </div>
+  <div id="fantasy-notice" class="fantasy-notice" role="status" hidden></div>
+
+  <section class="fantasy-toolbar" aria-label="Fantasy filters">
+    <div class="fantasy-week-control">
+      <span class="fantasy-control-label">NFL WEEK</span>
+      <div>
+        <button id="fantasy-prev-week" type="button" class="fantasy-icon-button" aria-label="Previous week">←</button>
+        <label class="sr-only" for="fantasy-week">Select NFL week</label>
+        <select id="fantasy-week"></select>
+        <button id="fantasy-next-week" type="button" class="fantasy-icon-button" aria-label="Next week">→</button>
+      </div>
+    </div>
+    <label class="fantasy-control">
+      <span class="fantasy-control-label">SCORING</span>
+      <select id="fantasy-scoring">
+        <option value="ppr">PPR</option>
+        <option value="half_ppr">Half PPR</option>
+        <option value="std">Standard</option>
+      </select>
+    </label>
+    <label class="fantasy-search-control">
+      <span class="fantasy-control-label">FIND A PLAYER</span>
+      <input id="fantasy-search" type="search" placeholder="Name, team, or position" autocomplete="off">
+    </label>
+    <button id="fantasy-refresh" type="button" class="fantasy-button fantasy-refresh-button">↻ <span>Refresh</span></button>
+  </section>
+
+  <section class="fantasy-position-bar" aria-label="Filter players by position">
+    <span class="fantasy-control-label">POSITION</span>
+    <div id="fantasy-position-filters" class="fantasy-position-filters">
+      <button type="button" data-position="ALL" class="is-active" aria-pressed="true">All</button>
+      <button type="button" data-position="QB" aria-pressed="false">QB</button>
+      <button type="button" data-position="RB" aria-pressed="false">RB</button>
+      <button type="button" data-position="WR" aria-pressed="false">WR</button>
+      <button type="button" data-position="TE" aria-pressed="false">TE</button>
+      <button type="button" data-position="FLEX" aria-pressed="false">FLEX</button>
+      <button type="button" data-position="K" aria-pressed="false">K</button>
+      <button type="button" data-position="DST" aria-pressed="false">DST</button>
+    </div>
+  </section>
+
+  <section class="fantasy-summary-grid" aria-label="Weekly fantasy snapshot">
+    <article class="fantasy-summary-card">
+      <span class="fantasy-summary-label">TOP PROJECTION</span>
+      <strong id="fantasy-top-name">—</strong>
+      <span id="fantasy-top-detail">Weekly provider projection</span>
+    </article>
+    <article class="fantasy-summary-card">
+      <span class="fantasy-summary-label">PRODUCTION TREND</span>
+      <strong id="fantasy-trend-name">—</strong>
+      <span id="fantasy-trend-detail">Based on recent completed games</span>
+    </article>
+    <article class="fantasy-summary-card">
+      <span class="fantasy-summary-label">MATCHUP DATA</span>
+      <strong id="fantasy-matchup-summary">Loading…</strong>
+      <span>Schedule and kickoff from ESPN</span>
+    </article>
+    <article class="fantasy-summary-card">
+      <span class="fantasy-summary-label">SCORING FORMAT</span>
+      <strong id="fantasy-scoring-summary">PPR</strong>
+      <span>Provider projections recalculate by format</span>
+    </article>
+  </section>
+
+  <section class="fantasy-section" aria-labelledby="fantasy-projections-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">THIS WEEK</p><h2 id="fantasy-projections-title">Top projections</h2></div>
+      <span class="fantasy-section-note">Sleeper weekly projections · points reflect selected scoring</span>
+    </div>
+    <div id="fantasy-projection-cards" class="fantasy-projection-grid" aria-live="polite">
+      <p class="fantasy-loading">Loading player projections…</p>
+    </div>
+  </section>
+
+  <section class="fantasy-section" aria-labelledby="fantasy-rankings-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">PLAYER POOL</p><h2 id="fantasy-rankings-title">Weekly rankings</h2></div>
+      <label class="fantasy-sort-control"><span>Sort by</span>
+        <select id="fantasy-sort">
+          <option value="projection">Fantasy rank</option>
+          <option value="season">Season average</option>
+          <option value="last3">Last 3 games</option>
+          <option value="position">Position</option>
+          <option value="team">Team</option>
+          <option value="name">Player name</option>
+        </select>
+      </label>
+    </div>
+    <p id="fantasy-result-count" class="fantasy-table-caption" aria-live="polite"></p>
+    <div id="fantasy-rankings" class="fantasy-rankings" aria-live="polite">
+      <p class="fantasy-loading">Building player rankings…</p>
+    </div>
+  </section>
+
+  <div class="fantasy-analysis-grid">
+    <section class="fantasy-section fantasy-analysis-card" aria-labelledby="fantasy-matchups-title">
+      <div class="fantasy-section-heading">
+        <div><p class="fantasy-eyebrow">SCHEDULE CONTEXT</p><h2 id="fantasy-matchups-title">Matchup slate</h2></div>
+      </div>
+      <p class="fantasy-explainer">See each player’s actual opponent, home/away status, and kickoff. A ranked defense-vs-position source is not available here, so no difficulty grades are fabricated.</p>
+      <div id="fantasy-matchups" class="fantasy-matchup-list"><p class="fantasy-loading">Loading NFL schedule…</p></div>
+    </section>
+
+    <section class="fantasy-section fantasy-analysis-card" aria-labelledby="fantasy-compare-title">
+      <div class="fantasy-section-heading">
+        <div><p class="fantasy-eyebrow">LINEUP DECISION</p><h2 id="fantasy-compare-title">Who should I start?</h2></div>
+      </div>
+      <p class="fantasy-explainer">Compare provider projections and real recent scoring. The edge is a data comparison, not a guaranteed outcome.</p>
+      <div class="fantasy-compare-selects">
+        <label><span>PLAYER A</span><select id="fantasy-compare-a"><option value="">Choose a player</option></select></label>
+        <span class="fantasy-versus">VS</span>
+        <label><span>PLAYER B</span><select id="fantasy-compare-b"><option value="">Choose a player</option></select></label>
+      </div>
+      <div id="fantasy-comparison" class="fantasy-comparison" aria-live="polite"><p>Select two players to compare.</p></div>
+    </section>
+  </div>
+
+  <section class="fantasy-section" aria-labelledby="fantasy-trends-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">ACTUAL RESULTS</p><h2 id="fantasy-trends-title">Production trends</h2></div>
+    </div>
+    <p class="fantasy-explainer">Up and down lists compare each player’s last 3 completed-game average with their current-season average in the selected scoring format. Trends need at least 4 games.</p>
+    <div class="fantasy-trend-board">
+      <div><h3>Trending up</h3><div id="fantasy-trending-up" class="fantasy-trend-list"><p class="fantasy-loading">Loading recent results…</p></div></div>
+      <div><h3>Trending down</h3><div id="fantasy-trending-down" class="fantasy-trend-list"><p class="fantasy-loading">Loading recent results…</p></div></div>
+    </div>
+    <div class="fantasy-waiver-note">
+      <strong>Waiver availability is league-specific.</strong>
+      <span>This site has no connection to your fantasy league’s rosters or ownership data, so it cannot verify who is available to claim. Use the real production trends above to research players, then save names to your local shortlist.</span>
+    </div>
+  </section>
+
+  <section class="fantasy-section" aria-labelledby="fantasy-lineup-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">SAVED ON THIS DEVICE</p><h2 id="fantasy-lineup-title">My lineup</h2></div>
+      <strong id="fantasy-lineup-total" class="fantasy-lineup-total">Projected starters: —</strong>
+    </div>
+    <p class="fantasy-explainer">Build a local lineup from this week’s player pool. Your selections stay in this browser and are not connected to a fantasy league.</p>
+    <div id="fantasy-lineup" class="fantasy-lineup-grid"></div>
+  </section>
+
+  <section class="fantasy-section fantasy-data-notes" aria-labelledby="fantasy-data-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">DATA NOTES</p><h2 id="fantasy-data-title">What these numbers mean</h2></div>
+    </div>
+    <div class="fantasy-data-note-grid">
+      <p><strong>Projections</strong><span>Weekly projections are supplied by Sleeper for the selected scoring format; Blitz does not generate them.</span></p>
+      <p><strong>Recent and season averages</strong><span>Recent averages use completed games before the selected week. Season average is Sleeper’s latest season-to-date result.</span></p>
+      <p><strong>Opponent and kickoff</strong><span>Scheduled matchup, venue side, and game time come from ESPN. Bye-week players show no scheduled game.</span></p>
+      <p><strong>Unavailable metrics</strong><span>Defense-vs-position ranks, projection floor/ceiling, ownership, and league waiver status are omitted when the feeds do not provide them.</span></p>
+    </div>
+    <p id="fantasy-data-attribution" class="fantasy-attribution">Data: <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a> projections, player directory, and weekly stats; <a href="https://www.espn.com/nfl/schedule" target="_blank" rel="noopener">ESPN NFL schedule</a>. Provider availability may vary.</p>
+  </section>
+</main>
+
+<dialog id="fantasy-player-dialog" class="fantasy-player-dialog" aria-labelledby="fantasy-dialog-name">
+  <div class="fantasy-dialog-head">
+    <div><p id="fantasy-dialog-meta" class="fantasy-eyebrow"></p><h2 id="fantasy-dialog-name"></h2></div>
+    <button id="fantasy-dialog-close" type="button" class="fantasy-icon-button" aria-label="Close player details">×</button>
+  </div>
+  <div id="fantasy-dialog-content"></div>
+</dialog>
+
+<script src="fantasy-data.js"></script>
+<script src="fantasy.js"></script>
+</body>
+</html>

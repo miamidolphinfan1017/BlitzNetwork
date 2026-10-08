@@ -27,7 +27,7 @@
   }
 
   function syncTheme() {
-    const mode = readJson("user_settings.theme", localStorage.getItem("theme") || "light-mode");
+    const mode = localStorage.getItem("theme") || readJson("user_settings.theme", "light-mode");
     root.classList.toggle("dark-mode", mode === "dark-mode");
     root.classList.toggle("light-mode", mode !== "dark-mode");
 
@@ -328,7 +328,9 @@
   async function loadSchedule() {
     try {
       const season = new Date().getFullYear();
-      const response = await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${season}0901-${season + 1}0220`);
+      // ESPN's scoreboard endpoint accepts a season year, but rejects the date-range
+      // form here with HTTP 400. A season query returns the complete published slate.
+      const response = await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit=1000&dates=${season}`);
       if (!response.ok) throw new Error("Schedule unavailable");
       const payload = await response.json();
       games = (payload.events || []).map(normalizeEvent).filter(game => game.dateKey);

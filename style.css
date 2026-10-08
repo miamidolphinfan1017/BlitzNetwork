@@ -47,25 +47,27 @@ html.dark-mode .leaderboard-page {
 
 :root{
     /* BACKGROUND OVERLAY */
-        --bg-overlay: rgba(255,255,255,0.55);
+        --bg-overlay: rgba(255,255,255,0.64);
     /* DEFAULT TEXT */
         --text-main: #000;
     /* THEME ACCENTS */
         
     /* PAGE SURFACES */
-        --page-surface: rgba(255,255,255,0.7);
+        --page-surface: rgba(248,249,251,0.88);
         --page-surface-text: #111;
-        --muted-text: #444;
+        --muted-text: #4b5563;
     /* DARK CARD AREAS */
-        --dark-card-bg: rgba(255,255,255,0.8);
+        --dark-card-bg: rgba(255,255,255,0.93);
         --dark-card-text: #111;
     /* LIGHT CARD AREAS */
-        --light-card-bg: rgba(255,255,255,0.88);
+        --light-card-bg: rgba(255,255,255,0.95);
         --light-card-text: #222;
     /* GENERIC CARDS */
-        --card-bg: rgba(255,255,255,0.88);
+        --card-bg: rgba(255,255,255,0.95);
         --card-text: #222;
-        --card-border: rgba(0,0,0,0.12);
+        --card-border: rgba(21,29,39,0.17);
+        --section-surface: rgba(245,247,250,0.88);
+        --elevated-surface: rgba(255,255,255,0.98);
     /* NAV */
         --nav-bg: #f2f2f2;
         --nav-text: #111;
@@ -75,33 +77,35 @@ html.dark-mode .leaderboard-page {
     /* INPUTS */
         --input-bg: #fff;
         --input-text: #111;
-        --input-border: #ccc;
+        --input-border: #b8c0ca;
     /* GLASS */
-        --glass-bg: rgba(255,255,255,0.65);
+        --glass-bg: rgba(250,251,253,0.92);
         --glass-text: #111;
     /* LOGIN OVERLAY */
-    --login-overlay: rgba(255,255,255,0.45);
+    --login-overlay: rgba(255,255,255,0.68);
     --scroll-track: rgba(255,255,255,0.72);
 }
 
 html.dark-mode{
-    --bg-overlay: rgba(0,0,0,0.80);
+    --bg-overlay: rgba(8,11,16,0.84);
 
     --text-main: #fff;
 
-    --page-surface: rgba(0,0,0,0.55);
+    --page-surface: rgba(18,22,28,0.86);
     --page-surface-text: #fff;
-    --muted-text: #bbb;
+    --muted-text: #c1c8d1;
 
-    --dark-card-bg: rgba(20,20,20,0.85);
+    --dark-card-bg: rgba(27,32,39,0.96);
     --dark-card-text: #fff;
 
-    --light-card-bg: rgba(20,20,20,0.85);
+    --light-card-bg: rgba(31,36,44,0.96);
     --light-card-text: #fff;
 
-    --card-bg: rgba(20,20,20,0.85);
+    --card-bg: rgba(29,34,42,0.96);
     --card-text: #fff;
-    --card-border: rgba(255,255,255,0.15);
+    --card-border: rgba(255,255,255,0.19);
+    --section-surface: rgba(22,27,34,0.94);
+    --elevated-surface: rgba(37,43,52,0.98);
 
     --nav-bg: #111;
     --nav-text: #fff;
@@ -109,14 +113,14 @@ html.dark-mode{
     --side-text: #fff;
     --side-border: #222;
 
-    --input-bg: #222;
+    --input-bg: #171b22;
     --input-text: #fff;
-    --input-border: #444;
+    --input-border: #596270;
 
-    --glass-bg: rgba(20,20,20,0.85);
+    --glass-bg: rgba(26,31,39,0.95);
     --glass-text: #fff;
 
-    --login-overlay: rgba(0,0,0,0.55);
+    --login-overlay: rgba(7,10,15,0.76);
     --scroll-track: rgba(8,8,8,0.72);
 }
 
@@ -132,15 +136,17 @@ html.dark-mode
 .legacy-grid,
 .rival-card,
 .stadium-vibe-container{
-background: rgba(255,255,255,0.08);
+background: var(--card-bg);
+color: var(--card-text);
+border-color: var(--card-border);
 }
 
 html.dark-mode
 .category-card,
 .survey-card{
-background:#1e1e1e;
-color:white;
-border-color:#333;
+background:var(--card-bg);
+color:var(--card-text);
+border-color:var(--card-border);
 }
 
 body,
@@ -154,17 +160,18 @@ transition: background 0.4s ease, color 0.4s ease;
 
 /* LOGIN / QUIZ / LEADERBOARD THEME FIX */
 html.dark-mode .login-box{
-background: rgba(20,20,20,0.85);
-color:white;
+background: var(--glass-bg);
+color: var(--glass-text);
 }
 
 html.dark-mode .login-box h1{
-color:white;
+color:var(--glass-text);
 }
 
 html.dark-mode .login-box input{
-background:#222;
-color:white;
+background:var(--input-bg);
+color:var(--input-text);
+border-color:var(--input-border);
 }
 
 
@@ -204,22 +211,52 @@ font-size: 30px;
 
 /* HEADER BAR */
 .main-header {
-    background-color: var(--nav-bg);
-    height: 70px;
+    background-color: color-mix(in srgb, var(--nav-bg) 90%, transparent);
+    backdrop-filter: blur(12px);
+    height: 72px;
     display: flex;
-    justify-content: space-between; /* This pushes items to the left and right */
+    justify-content: space-between;
     align-items: center;
-    padding: 0 25px;
+    padding: 0 22px 0 18px;
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 2px solid var(--accent-red);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent-red) 26%, var(--card-border));
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 .header-left {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 16px;
+}
+
+.nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--nav-text);
+    text-decoration: none;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--accent-red);
+    color: #fff;
+    font-size: .68rem;
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--accent-red) 30%, transparent);
+}
+
+.brand-text {
+    font-size: .78rem;
+    letter-spacing: .18em;
 }
 
 /* MENU BUTTON (HAMBURGER) */
@@ -348,7 +385,7 @@ font-size: 30px;
     transition: 0.3s;
 }
 
-.team-card:hover {
+body .team-card:hover {
     background-color: var(--team-color);
     opacity: 0.9; 
     transform: scale(1.08);
@@ -482,7 +519,7 @@ font-size: 30px;
 
 /* Keep the dark mode card rich without changing your look */
 html.dark-mode .details-card {
-    background: rgba(20,20,20,0.9);
+    background: var(--card-bg);
     border-color: var(--card-border);
 }
 
@@ -3192,7 +3229,7 @@ html.dark-mode .team-card {
     border-color: #333;
 }
 
-html.dark-mode .team-card:hover {
+html.dark-mode body .team-card:hover {
     background-color: #1b1b1b;
     color: #fff;
     border-color: var(--team-color);
@@ -4740,6 +4777,85 @@ html.dark-mode .calendar-day.empty {
 body { padding-top: 70px; }
 .main-header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
 
+/* Homepage dashboard: intentionally varied layouts instead of a wall of matching cards. */
+.home-page { background: transparent; }
+.home-page::before { content:""; position:fixed; inset:0; z-index:-1; background: radial-gradient(circle at 82% 9%, color-mix(in srgb, var(--accent-red) 17%, transparent), transparent 26%), radial-gradient(circle at 8% 70%, color-mix(in srgb, var(--accent-red) 10%, transparent), transparent 23%), linear-gradient(var(--bg-overlay), var(--bg-overlay)), url("https://cdn.prod.website-files.com/68128b54b74e9cd5b80095c9/681e6066e13b77e50d698dbd_637fc6150119df45a37cce23_cover1.jpeg") center / cover no-repeat; }
+.home-wrapper { width:min(1220px, 100%); min-height:auto; margin:0 auto; padding:clamp(28px,5vw,72px) clamp(18px,4vw,42px) 82px; display:block; background:transparent; color:var(--page-surface-text); text-align:left; }
+.home-hero { min-height:400px; display:grid; grid-template-columns:minmax(0,1.22fr) minmax(230px,.78fr); align-items:center; gap:32px; padding:clamp(30px,4.5vw,62px); overflow:hidden; position:relative; border:1px solid color-mix(in srgb, var(--accent-red) 29%, var(--card-border)); border-radius:28px; background:linear-gradient(120deg, color-mix(in srgb, var(--card-bg) 96%, transparent), color-mix(in srgb, var(--card-bg) 70%, transparent)); box-shadow:0 26px 60px rgba(0,0,0,.16); }
+.home-hero::after { content:""; position:absolute; width:360px; height:360px; right:-140px; top:-210px; border:1px solid color-mix(in srgb, var(--accent-red) 38%, transparent); border-radius:50%; box-shadow:0 0 0 32px color-mix(in srgb, var(--accent-red) 5%, transparent),0 0 0 64px color-mix(in srgb, var(--accent-red) 4%, transparent); pointer-events:none; }
+.home-eyebrow { margin:0 0 10px; color:var(--accent-red); font-size:.72rem; font-weight:850; letter-spacing:.15em; }
+.footballforfun { margin:0; color:var(--page-surface-text); font-family:"Fugaz One", system-ui; font-size:clamp(2.9rem,7vw,5.7rem); line-height:.96; text-transform:uppercase; letter-spacing:-.035em; text-shadow:none; }
+.homepagesummary { width:auto; max-width:660px; margin:18px 0 24px; color:var(--muted-text); text-align:left; font-size:clamp(1.04rem,1.9vw,1.25rem); line-height:1.62; text-shadow:none; }
+.hero-actions { display:flex; flex-wrap:wrap; gap:12px; }
+.home-button { display:inline-flex; align-items:center; justify-content:center; gap:12px; min-height:46px; padding:12px 18px; border:1px solid var(--card-border); border-radius:12px; text-decoration:none; font-weight:800; font-size:.92rem; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.home-button:hover { transform:translateY(-2px); }
+.home-button.primary { background:var(--accent-red); border-color:var(--accent-red); color:#fff; box-shadow:0 10px 24px color-mix(in srgb, var(--accent-red) 28%, transparent); }
+.home-button.primary span { transition:transform .2s ease; }
+.home-button.primary:hover span { transform:translateX(3px); }
+.home-button.secondary { color:var(--card-text); background:color-mix(in srgb, var(--card-bg) 65%, transparent); }
+.home-button.secondary:hover { border-color:var(--accent-red); color:var(--accent-red); }
+.hero-mark { justify-self:end; width:min(100%,250px); aspect-ratio:1; display:grid; place-items:center; position:relative; color:var(--accent-red); border:1px solid color-mix(in srgb, var(--accent-red) 45%, transparent); border-radius:50%; transform:rotate(-8deg); }
+.hero-mark::before,.hero-mark::after { content:""; position:absolute; inset:14px; border:1px solid color-mix(in srgb, var(--accent-red) 32%, transparent); border-radius:50%; }
+.hero-mark::after { inset:31px; border-style:dashed; }
+.hero-mark span { font-family:"Fugaz One",system-ui; font-size:4.5rem; letter-spacing:-.12em; }
+.hero-mark i { position:absolute; width:178px; border-top:2px solid var(--accent-red); transform:rotate(-32deg); }
+.hero-mark b { position:absolute; bottom:-23px; font-size:.58rem; letter-spacing:.12em; color:var(--muted-text); transform:rotate(8deg); white-space:nowrap; }
+.home-personal { margin:26px 0 0; padding:20px 22px; display:flex; justify-content:space-between; align-items:center; gap:18px; border-left:3px solid var(--accent-red); background:color-mix(in srgb, var(--card-bg) 84%, transparent); box-shadow:0 13px 30px rgba(0,0,0,.1); border-radius:18px; }.personal-profile { display:flex; align-items:center; gap:13px; }.personal-profile h2 { margin:0 0 4px; font-size:1.32rem; }.personal-profile p:not(.home-eyebrow) { margin:0; color:var(--muted-text); font-size:.92rem; }.personal-profile img { width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--accent-red); }.personal-actions { display:flex; align-items:center; gap:14px; }.favorite-team { display:flex; align-items:center; gap:9px; color:var(--card-text); text-decoration:none; padding-right:12px; border-right:1px solid var(--card-border); }.favorite-team img { width:33px; height:33px; object-fit:contain; }.favorite-team small { display:block; color:var(--muted-text); font-size:.6rem; letter-spacing:.08em; }.favorite-team strong { font-size:.85rem; }.favorite-team em { color:var(--accent-red); font-style:normal; }.personal-account-link { color:var(--card-text); text-decoration:none; font-weight:800; font-size:.86rem; }.personal-account-link:hover { color:var(--accent-red); }
+.home-dashboard,.home-features { margin-top:clamp(56px,8vw,96px); }.section-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:20px; }.section-heading h2,.home-footer-cta h2 { margin:0; font-size:clamp(1.7rem,3vw,2.4rem); letter-spacing:-.035em; }.section-heading > a { color:var(--accent-red); font-size:.9rem; font-weight:800; text-decoration:none; white-space:nowrap; }.section-heading > a:hover { text-decoration:underline; }.dashboard-grid { display:grid; grid-template-columns:1.25fr .75fr; gap:20px; }.next-games-panel,.challenge-panel { min-height:220px; border:1px solid var(--card-border); background:color-mix(in srgb, var(--card-bg) 91%, transparent); box-shadow:0 16px 35px rgba(0,0,0,.12); border-radius:22px; }.next-games-panel { padding:22px; }.panel-label { display:flex; align-items:center; gap:8px; font-size:.72rem; font-weight:850; letter-spacing:.1em; color:var(--muted-text); }.live-dot { width:8px; height:8px; background:var(--accent-red); border-radius:50%; box-shadow:0 0 0 4px color-mix(in srgb, var(--accent-red) 16%, transparent); }.home-games { display:grid; margin-top:14px; }.home-game { display:grid; grid-template-columns:100px 1fr auto; gap:12px; align-items:center; min-height:50px; padding:0 8px; border-top:1px solid var(--card-border); color:var(--card-text); text-decoration:none; font-size:.88rem; transition:background .2s ease,color .2s ease, transform .2s ease; }.home-game:hover { background:color-mix(in srgb, var(--accent-red) 7%, transparent); color:var(--accent-red); transform:translateX(2px); }.home-game span,.home-game em { color:var(--muted-text); font-size:.75rem; font-style:normal; }.home-game i { color:var(--accent-red); font-style:normal; margin-inline:3px; }.loading-copy { color:var(--muted-text); font-size:.9rem; }.loading-copy a { color:var(--accent-red); }.challenge-panel { position:relative; overflow:hidden; padding:25px; color:#fff; text-decoration:none; background:linear-gradient(135deg, color-mix(in srgb, var(--accent-red) 88%, #000 12%), color-mix(in srgb, var(--accent-red) 52%, #000 48%)); transition:transform .24s ease,box-shadow .24s ease; }.challenge-panel::after { content:"?"; position:absolute; right:-12px; bottom:-51px; color:rgba(255,255,255,.12); font-family:"Fugaz One",system-ui; font-size:14rem; }.challenge-panel:hover { transform:translateY(-4px); box-shadow:0 22px 35px color-mix(in srgb, var(--accent-red) 25%, transparent); }.challenge-panel .home-eyebrow,.challenge-panel p { color:rgba(255,255,255,.78); }.challenge-panel h3 { position:relative; max-width:270px; margin:13px 0 9px; font-size:1.55rem; line-height:1.1; }.challenge-panel p { position:relative; max-width:300px; line-height:1.5; font-size:.9rem; }.feature-icon { display:inline-grid; place-items:center; width:36px; height:36px; border:1px solid currentColor; border-radius:10px; font-size:1.2rem; }.panel-link { position:absolute; bottom:23px; left:25px; font-weight:800; font-size:.88rem; }
+.feature-mosaic { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:170px; gap:16px; }
+.feature-card { position:relative; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; padding:20px; border:1px solid var(--card-border); background:color-mix(in srgb, var(--card-bg) 88%, transparent); color:var(--card-text); text-decoration:none; transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease; border-radius:20px; }
+.feature-card:hover { transform:translateY(-4px); border-color:var(--accent-red); box-shadow:0 17px 30px rgba(0,0,0,.15); }
+.feature-card:hover .feature-icon { color:var(--accent-red); transform:translateY(-2px); }
+.feature-card .feature-icon { transition:transform .22s ease,color .22s ease; }
+.feature-card h3 { margin:0 0 4px; font-size:1.08rem; }
+.feature-card p:not(.home-eyebrow) { margin:0; color:var(--muted-text); font-size:.84rem; line-height:1.4; }
+.card-arrow { position:absolute; right:16px; top:16px; color:var(--accent-red); font-weight:900; }
+.feature-stadium { grid-column:span 2; grid-row:span 2; padding:27px; justify-content:flex-end; background:linear-gradient(0deg, color-mix(in srgb, var(--card-bg) 94%, transparent), color-mix(in srgb, var(--card-bg) 38%, transparent)), url("Stadiums/Chiefs.png") center/cover no-repeat; }
+.feature-stadium h3 { font-size:1.8rem; }
+.feature-stadium p:not(.home-eyebrow) { max-width:285px; }
+.feature-teams { grid-column:span 2; background:linear-gradient(110deg,color-mix(in srgb,var(--accent-red) 13%,transparent),transparent 58%),color-mix(in srgb,var(--card-bg) 88%,transparent); }
+.home-footer-cta { display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:clamp(56px,8vw,96px); padding:30px 0 0; border-top:1px solid var(--card-border); }
+.home-footer-cta p:not(.home-eyebrow) { margin:8px 0 0; color:var(--muted-text); max-width:560px; line-height:1.55; }
+html.home-motion-ready .home-reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease; } html.home-motion-ready .home-reveal.is-visible { opacity:1; transform:none; } html.home-motion-ready .home-hero.is-visible { transition-delay:.04s; }
+.home-page a:focus-visible { outline:3px solid var(--accent-red); outline-offset:3px; }
+@media (max-width:850px) { .home-hero{grid-template-columns:1fr;min-height:0}.hero-mark{display:none}.dashboard-grid{grid-template-columns:1fr}.feature-mosaic{grid-template-columns:repeat(2,1fr);grid-auto-rows:160px}.feature-stadium{grid-column:span 2;grid-row:span 1;min-height:250px}.feature-teams{grid-column:span 1}.home-personal{align-items:flex-start;flex-direction:column}.personal-actions{width:100%;justify-content:space-between} }
+@media (max-width:540px) { .home-wrapper{padding:18px 12px 46px}.home-hero{padding:27px 21px;border-radius:18px}.hero-actions .home-button{width:100%}.home-game{grid-template-columns:76px 1fr}.home-game em{display:none}.feature-mosaic{grid-template-columns:1fr;grid-auto-rows:auto}.feature-card,.feature-teams,.feature-stadium{grid-column:auto;grid-row:auto;min-height:150px}.feature-stadium{min-height:220px}.home-footer-cta{align-items:flex-start;flex-direction:column}.favorite-team{border-right:0;padding-right:0}.personal-actions{align-items:flex-start;flex-direction:column;gap:10px} }
+@media (prefers-reduced-motion:reduce) { .home-reveal,.home-reveal.is-visible,.feature-card,.challenge-panel,.home-button,.feature-card .feature-icon { transition:none !important; transform:none !important; } }
+
+/* Homepage render refinements: a quiet field-like canvas, never the inherited logo collage. */
+.home-page::before { background: radial-gradient(ellipse at 82% 11%, color-mix(in srgb, var(--accent-red) 13%, transparent), transparent 29%), radial-gradient(ellipse at 4% 87%, color-mix(in srgb, var(--accent-red) 8%, transparent), transparent 25%), repeating-linear-gradient(0deg, transparent 0 74px, color-mix(in srgb, var(--card-border) 38%, transparent) 75px 76px), var(--page-surface); }
+.home-personal[hidden] { display:none; }
+.challenge-panel { min-height:248px; }.challenge-panel .panel-link { position:relative; inset:auto; display:inline-block; margin-top:24px; }
+
+/* Homepage finish: keep the background intentional and make the new hero metadata earn its space. */
+body.home-page { background: var(--page-surface); }
+.home-page::before { z-index:0; opacity:1; background: radial-gradient(ellipse at 88% 8%, color-mix(in srgb, var(--accent-red) 15%, transparent), transparent 31%), radial-gradient(ellipse at 7% 90%, color-mix(in srgb, var(--accent-red) 7%, transparent), transparent 27%), repeating-linear-gradient(0deg, transparent 0 78px, color-mix(in srgb, var(--card-border) 28%, transparent) 79px 80px), var(--page-surface); }
+.home-page .home-wrapper { position:relative; z-index:1; }
+.hero-copy { position:relative; z-index:1; }
+.hero-mark { z-index:1; }
+.hero-meta { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 25px; }
+.hero-meta span { padding:7px 10px; border:1px solid color-mix(in srgb, var(--accent-red) 28%, var(--card-border)); border-radius:999px; background:color-mix(in srgb, var(--card-bg) 78%, transparent); color:var(--muted-text); font-size:.71rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+.home-hero { isolation:isolate; }
+.home-hero::before { content:""; position:absolute; inset:auto -12% -68% auto; z-index:0; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent-red) 11%, transparent), transparent 67%); pointer-events:none; }
+.section-heading { padding-bottom:2px; border-bottom:1px solid color-mix(in srgb, var(--card-border) 72%, transparent); }
+.feature-card::before { content:""; position:absolute; inset:0; opacity:0; background:linear-gradient(135deg, color-mix(in srgb, var(--accent-red) 12%, transparent), transparent 45%); transition:opacity .22s ease; pointer-events:none; }
+.feature-card:hover::before { opacity:1; }
+.feature-card > * { position:relative; z-index:1; }
+.next-games-panel { position:relative; overflow:hidden; }
+.next-games-panel::after { content:""; position:absolute; width:130px; height:130px; right:-55px; top:-62px; border:1px solid color-mix(in srgb, var(--accent-red) 26%, transparent); border-radius:50%; box-shadow:0 0 0 18px color-mix(in srgb, var(--accent-red) 4%, transparent); pointer-events:none; }
+.home-games { position:relative; z-index:1; }
+@media (max-width:540px) { .hero-meta { margin-bottom:20px; }.hero-meta span { padding:6px 8px; font-size:.64rem; }.home-personal { border-radius:14px; }.section-heading { align-items:flex-start; }.section-heading > a { padding-top:4px; } }
+
+/* Homepage game-day module and personal destination. */
+.your-blitz { margin-top:clamp(52px,7vw,82px); }
+.home-guest,.home-personal { border:1px solid var(--card-border); border-left:3px solid var(--accent-red); border-radius:14px; background:color-mix(in srgb, var(--card-bg) 91%, transparent); box-shadow:none; }
+.home-guest { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:24px; }.home-guest h3 { margin:0 0 7px; font-size:1.3rem; }.home-guest p:not(.home-eyebrow) { margin:0; max-width:650px; color:var(--muted-text); line-height:1.55; }
+.home-personal { margin:0; }.home-personal h3 { margin:0 0 4px; font-size:1.3rem; }
+.favorite-empty { color:var(--accent-red); font-size:.86rem; font-weight:800; text-decoration:none; }.favorite-empty:hover { text-decoration:underline; }
+#favorite-next { display:block; max-width:310px; margin-top:4px; color:var(--muted-text); font-size:.67rem; font-weight:600; line-height:1.35; }
+.featured-game { display:block; margin-top:14px; color:var(--card-text); text-decoration:none; }.featured-game:hover .featured-team strong { color:var(--accent-red); }.featured-game-meta { margin-bottom:10px; color:var(--muted-text); font-size:.67rem; font-weight:850; letter-spacing:.1em; }.featured-matchup { display:grid; grid-template-columns:1fr 32px 1fr; align-items:center; gap:12px; }.featured-team { display:flex; align-items:center; gap:10px; min-width:0; }.featured-team:last-child { justify-content:flex-end; text-align:right; }.featured-team:last-child img { order:2; }.featured-team img { width:44px; height:44px; object-fit:contain; filter:drop-shadow(0 3px 6px rgba(0,0,0,.18)); }.featured-team strong { font-size:1.05rem; transition:color .2s ease; }.featured-at { text-align:center; color:var(--accent-red); font-weight:900; }.featured-game-details { display:flex; flex-wrap:wrap; gap:7px 16px; margin-top:13px; padding-top:11px; border-top:1px solid var(--card-border); color:var(--muted-text); font-size:.77rem; }.game-countdown { display:inline-block; margin-top:12px; color:var(--accent-red); font-size:.81rem; font-weight:900; letter-spacing:.035em; }
+@media (max-width:650px) { .home-guest { align-items:flex-start; flex-direction:column; }.home-guest .home-button { width:100%; }.featured-matchup { gap:7px; }.featured-team img { width:38px; height:38px; }.featured-team strong { font-size:.92rem; }.featured-game-details { font-size:.7rem; } }
+
 /* Schedule refresh: the page keeps the shared theme variables, but uses a denser
    date-driven presentation for scanning a full NFL week. */
 .schedule-page {
@@ -5022,6 +5138,25 @@ button, input, select, textarea { max-width: 100%; font: inherit; }
 
 @media (max-width: 700px) {
   .bestphotos-container { grid-template-columns: 1fr !important; }
+}
+
+/* Give legacy pages the same quiet, theme-aware backdrop as the newer hubs. */
+body:not(.home-page):not(.stadiums-page):not(.photos-page):not(.schedule-page):not(.stadium-detail-page):not(.games-page):not(.fantasy-page) {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+body:not(.home-page):not(.stadiums-page):not(.photos-page):not(.schedule-page):not(.stadium-detail-page):not(.games-page):not(.fantasy-page)::before {
+  position: fixed;
+  z-index: -1;
+  inset: -8px;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+    url("https://cdn.prod.website-files.com/68128b54b74e9cd5b80095c9/681e6066e13b77e50d698dbd_637fc6150119df45a37cce23_cover1.jpeg") center / cover no-repeat;
+  filter: blur(7px);
+  transform: scale(1.02);
 }
 
 /* Login comfort pass: keep the panel compact, but give the form room to breathe. */
@@ -5744,11 +5879,637 @@ body.menu-open { overflow: hidden; }
   outline: none;
 }
 
+/* Homepage: broadcast-first redesign. These rules are deliberately scoped to avoid changing other pages. */
+.home-page .home-wrapper { max-width:1320px; padding-top:28px; }
+.home-page .home-hero { min-height:480px; grid-template-columns:minmax(0,.9fr) minmax(370px,1.1fr); padding:0; border-radius:12px; background:linear-gradient(90deg, var(--card-bg) 0 51%, transparent 51%), url("WeekPhotos/jameson williams week 6 photo.jpg") right center/58% 100% no-repeat; border-color:color-mix(in srgb,var(--accent-red) 32%,var(--card-border)); box-shadow:0 20px 45px rgba(0,0,0,.2); }
+.home-page .home-hero::after { display:none; }.home-page .home-hero::before { display:none; }
+.home-page .hero-copy { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:clamp(32px,5vw,70px); background:linear-gradient(90deg,var(--card-bg) 82%,color-mix(in srgb,var(--card-bg) 65%,transparent)); }
+.home-page .footballforfun { font-size:clamp(3.4rem,7vw,6.9rem); line-height:.82; letter-spacing:-.065em; }
+.home-page .homepagesummary { max-width:470px; margin:22px 0; font-size:1.08rem; }
+.home-page .hero-meta { margin:0 0 27px; }.home-page .hero-meta span { border-radius:2px; background:transparent; }
+.hero-broadcast { align-self:end; justify-self:end; width:min(100%,475px); margin:0 28px 28px 0; padding:19px 20px 17px; color:#fff; background:rgba(8,10,12,.9); border-top:3px solid var(--accent-red); box-shadow:0 18px 36px rgba(0,0,0,.32); backdrop-filter:blur(5px); }
+.broadcast-top { display:flex; align-items:center; gap:8px; margin-bottom:13px; color:rgba(255,255,255,.7); font-size:.68rem; font-weight:900; letter-spacing:.1em; }.broadcast-top #hero-week { margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px; }
+.hero-matchup { display:grid; grid-template-columns:1fr 24px 1fr; align-items:center; gap:8px; }.hero-team { display:flex; align-items:center; gap:9px; min-width:0; }.hero-team:last-child { justify-content:flex-end; text-align:right; }.hero-team:last-child img { order:2; }.hero-team img { width:44px; height:44px; object-fit:contain; }.hero-team strong { font-size:1.2rem; }.hero-matchup > span { color:var(--accent-red); font-size:.65rem; font-weight:900; text-align:center; }.hero-game-details { margin:14px 0 7px; color:rgba(255,255,255,.7); font-size:.78rem; }.hero-countdown { font-family:ui-monospace,Consolas,monospace; color:#fff; font-size:.86rem; font-weight:800; }.broadcast-link { display:flex; justify-content:space-between; margin-top:15px; padding-top:11px; border-top:1px solid rgba(255,255,255,.18); color:#fff; text-decoration:none; font-size:.78rem; font-weight:800; }.broadcast-link span { color:var(--accent-red); }
+.home-page .game-day-section { margin-top:60px; padding:26px 0 0; border-top:4px solid var(--accent-red); }.game-day-heading { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:18px; }.game-day-heading h2 { margin:0; font-size:clamp(2rem,4vw,3.15rem); letter-spacing:-.055em; }.game-day-heading a { color:var(--accent-red); text-decoration:none; font-weight:800; font-size:.9rem; white-space:nowrap; }.home-page .home-games { margin:0; }.home-page .featured-game { display:grid; grid-template-columns:.72fr 1.5fr .9fr; align-items:center; gap:28px; min-height:160px; margin:0; padding:25px 28px; border:1px solid var(--card-border); border-radius:0; background:var(--card-bg); box-shadow:none; }.home-page .featured-game-meta { margin:0; color:var(--accent-red); font-size:.7rem; }.home-page .featured-matchup { grid-template-columns:1fr 32px 1fr; gap:16px; }.home-page .featured-team img { width:66px; height:66px; }.home-page .featured-team strong { font-size:1.5rem; }.home-page .featured-at { font-size:.78rem; }.home-page .featured-game-details { align-self:stretch; justify-content:center; flex-direction:column; gap:8px; margin:0; padding:0 0 0 22px; border-top:0; border-left:1px solid var(--card-border); font-size:.82rem; }.home-page .game-countdown { justify-self:end; margin:0; padding:10px 12px; color:var(--accent-red); background:color-mix(in srgb,var(--accent-red) 7%,transparent); font-family:ui-monospace,Consolas,monospace; font-size:.8rem; }
+.stadium-feature { min-height:410px; display:flex; align-items:end; margin-top:66px; overflow:hidden; position:relative; border:1px solid var(--card-border); background:linear-gradient(90deg,rgba(0,0,0,.86),rgba(0,0,0,.28)),url("Stadiums/Chiefs.png") center/cover no-repeat; }.stadium-feature::after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,rgba(0,0,0,.25),transparent 55%); transition:background .3s ease; }.stadium-feature:hover::after { background:linear-gradient(0deg,rgba(0,0,0,.15),transparent 60%); }.stadium-feature-content { position:relative; z-index:1; max-width:600px; padding:clamp(30px,5vw,58px); color:#fff; }.stadium-feature-content .home-eyebrow { color:color-mix(in srgb,var(--accent-red) 72%,white); }.stadium-feature h2 { margin:0; font-size:clamp(2.2rem,5vw,4.5rem); line-height:.96; letter-spacing:-.06em; }.stadium-feature p:not(.home-eyebrow) { max-width:430px; margin:18px 0; color:rgba(255,255,255,.78); line-height:1.55; }.stadium-feature-meta { display:flex; flex-wrap:wrap; gap:13px; margin-bottom:22px; font-size:.74rem; font-weight:800; }.stadium-feature-meta span::before { content:"/"; margin-right:13px; color:var(--accent-red); }.stadium-feature-meta span:first-child::before { display:none; }.text-action { display:inline-flex; align-items:center; gap:12px; color:inherit; text-decoration:none; font-weight:800; }.text-action span,.text-action i { color:var(--accent-red); font-style:normal; transition:transform .2s ease; }.stadium-feature:hover .text-action span,.teams-feature:hover .text-action i,.photos-feature:hover .text-action i { transform:translateX(4px); }
+.home-media { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; margin-top:66px; }.teams-feature,.photos-feature { min-height:350px; display:flex; align-items:end; position:relative; overflow:hidden; padding:32px; color:#fff; text-decoration:none; border:1px solid var(--card-border); background-position:center; background-size:cover; transition:transform .25s ease; }.teams-feature { background-image:linear-gradient(0deg,rgba(0,0,0,.88),rgba(0,0,0,.15)),url("WeekPhotos/george kittle week 10 photo.jpg"); }.photos-feature { background-image:linear-gradient(0deg,rgba(0,0,0,.88),rgba(0,0,0,.15)),url("WeekPhotos/amon-ra st brown week 3 photo.jpg"); }.teams-feature:hover,.photos-feature:hover { transform:translateY(-4px); }.teams-feature > div,.photos-feature > div { max-width:390px; }.teams-feature h2,.photos-feature h2 { margin:0; font-size:clamp(1.8rem,3.2vw,3rem); line-height:1; }.teams-feature p:not(.home-eyebrow),.photos-feature p:not(.home-eyebrow) { color:rgba(255,255,255,.76); line-height:1.5; }.teams-feature .text-action,.photos-feature .text-action { margin-top:8px; }
+.play-blitz { margin-top:66px; }.play-grid { display:grid; grid-template-columns:1.3fr .85fr .85fr; gap:14px; }.play-grid > a { min-height:215px; padding:23px; text-decoration:none; color:var(--card-text); border:1px solid var(--card-border); transition:transform .22s ease,border-color .22s ease; }.play-grid > a:hover { transform:translateY(-3px); border-color:var(--accent-red); }.play-trivia { display:flex; align-items:end; justify-content:space-between; color:#fff !important; background:var(--accent-red); }.play-number { align-self:flex-start; font-family:ui-monospace,Consolas,monospace; font-size:.76rem; opacity:.72; }.play-trivia .home-eyebrow { color:rgba(255,255,255,.75); }.play-trivia h3 { max-width:290px; margin:8px 0 18px; font-size:1.7rem; line-height:1.05; }.play-trivia div > span { font-weight:800; font-size:.86rem; }.play-games { display:flex; flex-direction:column; background:linear-gradient(0deg,color-mix(in srgb,var(--card-bg) 90%,transparent),transparent),url("WeekPhotos/chase brown week 9 photo.jpg") center/cover; }.play-games .feature-icon { margin-bottom:auto; color:#fff; }.play-games h3,.play-games p { color:#fff; }.play-games p { margin:6px 0; color:rgba(255,255,255,.76); }.play-games > span:last-child,.play-surveys > span:last-child { margin-top:auto; color:var(--accent-red); font-size:.82rem; font-weight:800; }.play-surveys { display:flex; flex-direction:column; background:color-mix(in srgb,var(--card-bg) 93%,transparent); }.play-surveys .feature-icon { color:var(--accent-red); }.play-surveys h3 { margin:15px 0 6px; }.play-surveys p { margin:0; color:var(--muted-text); line-height:1.45; }
+.quick-hits { display:flex; align-items:center; gap:30px; margin-top:56px; padding:19px 0; border-block:1px solid var(--card-border); }.quick-hits .home-eyebrow { margin:0; white-space:nowrap; }.quick-hits > div { display:flex; flex:1; justify-content:space-between; gap:8px; }.quick-hits a { color:var(--card-text); text-decoration:none; font-size:.84rem; font-weight:800; }.quick-hits a:hover,.quick-hits a span { color:var(--accent-red); }.quick-hits a span { margin-left:5px; }
+@media (max-width:900px) { .home-page .home-hero { grid-template-columns:1fr; min-height:0; background-position:center; }.home-page .hero-copy { padding:42px 34px; background:linear-gradient(90deg,var(--card-bg) 90%,color-mix(in srgb,var(--card-bg) 62%,transparent)); }.hero-broadcast { justify-self:stretch; width:auto; margin:0; }.home-page .featured-game { grid-template-columns:1fr; gap:16px; }.home-page .featured-game-details { padding:13px 0 0; border-left:0; border-top:1px solid var(--card-border); }.home-page .game-countdown { justify-self:start; }.play-grid { grid-template-columns:1fr 1fr; }.play-trivia { grid-column:span 2; } }
+@media (max-width:600px) { .home-page .home-wrapper { padding-inline:12px; }.home-page .hero-copy { padding:34px 22px; }.home-page .footballforfun { font-size:3.7rem; }.hero-broadcast { padding:17px; }.broadcast-top #hero-week { max-width:105px; }.home-page .game-day-section,.stadium-feature,.home-media,.play-blitz { margin-top:44px; }.game-day-heading { align-items:flex-start; flex-direction:column; gap:8px; }.game-day-heading h2 { font-size:2.2rem; }.home-page .featured-game { padding:20px; }.home-page .featured-team img { width:52px; height:52px; }.home-page .featured-team strong { font-size:1.18rem; }.stadium-feature { min-height:360px; }.stadium-feature-content { padding:26px 22px; }.home-media,.play-grid { grid-template-columns:1fr; }.teams-feature,.photos-feature { min-height:285px; padding:24px; }.play-trivia { grid-column:auto; }.play-grid > a { min-height:180px; }.quick-hits { align-items:flex-start; flex-direction:column; gap:13px; }.quick-hits > div { width:100%; flex-wrap:wrap; justify-content:flex-start; gap:12px 22px; }.quick-hits a { min-width:80px; } }
 
+/* Homepage finishing pass: a compact, shared spacing and surface system. */
+.home-page { --home-space:52px; --home-gap:16px; --home-pad:24px; --home-radius:12px; }
+.home-page .home-wrapper { width:min(1280px,100%); padding:24px clamp(18px,3vw,36px) 56px; }
+.home-page .home-hero,.hero-broadcast,.stadium-feature,.teams-feature,.photos-feature,.play-grid > a,.home-personal,.home-guest { border-radius:var(--home-radius); }
+.home-page .home-hero { min-height:440px; }.home-page .hero-copy { padding:clamp(30px,4vw,56px); }.home-page .homepagesummary { margin:17px 0 19px; line-height:1.55; }.home-page .hero-meta { margin-bottom:20px; }.home-page .home-button { min-height:42px; padding:9px 14px; border-radius:7px; }.home-page .hero-actions { gap:9px; }
+.home-page .game-day-section,.home-page .stadium-feature,.home-page .home-media,.home-page .play-blitz,.home-page .quick-hits,.home-page .your-blitz { margin-top:var(--home-space); }
+.home-page .game-day-section { padding-top:18px; border-top-width:3px; }.game-day-heading { margin-bottom:14px; }.game-day-heading h2,.home-page .section-heading h2 { line-height:1.08; }.home-page .featured-game { min-height:142px; gap:20px; padding:20px var(--home-pad); border-radius:var(--home-radius); }.home-page .featured-game-meta { line-height:1.3; }.home-page .featured-team img { width:58px; height:58px; }.home-page .featured-team strong { font-size:1.3rem; }.home-page .featured-game-details { padding-left:18px; }.home-page .game-countdown { padding:8px 10px; font-size:.75rem; white-space:nowrap; }
+.home-page .stadium-feature { min-height:380px; }.home-page .stadium-feature-content { padding:clamp(28px,4vw,48px); }.home-page .stadium-feature h2 { line-height:1; }.home-page .stadium-feature p:not(.home-eyebrow) { margin:14px 0; }.home-page .stadium-feature-meta { margin-bottom:17px; gap:10px; }
+.home-page .home-media { gap:var(--home-gap); }.home-page .teams-feature,.home-page .photos-feature { min-height:315px; padding:var(--home-pad); }.home-page .teams-feature p:not(.home-eyebrow),.home-page .photos-feature p:not(.home-eyebrow) { margin:11px 0; }.home-page .play-grid { gap:var(--home-gap); }.home-page .play-grid > a { min-height:190px; padding:var(--home-pad); }.home-page .play-trivia h3 { margin:6px 0 14px; }.home-page .quick-hits { margin-top:44px; padding:16px 0; }.home-page .your-blitz { margin-top:44px; }.home-page .home-guest { padding:var(--home-pad); }.home-page .home-personal { padding:18px var(--home-pad); }.home-page .home-footer-cta { margin-top:44px; padding-top:24px; }
+.home-page .teams-feature,.home-page .photos-feature,.home-page .stadium-feature,.home-page .play-games { background-size:cover; background-repeat:no-repeat; overflow:hidden; }.home-page .teams-feature { background-position:center 36%; }.home-page .photos-feature { background-position:center 42%; }.home-page .stadium-feature { background-position:center 50%; }.home-page .play-games { background-position:center 40%; }
+.home-page .home-eyebrow { margin-bottom:7px; font-size:.68rem; }.home-page .section-heading { margin-bottom:15px; padding-bottom:0; border-bottom:0; }.home-page .section-heading h2 { font-size:clamp(1.7rem,3vw,2.5rem); }.home-page .quick-hits { border-color:var(--card-border); }.home-page .quick-hits a { padding:5px 0; }
+@media (max-width:900px) { .home-page { --home-space:42px; }.home-page .home-wrapper { padding-top:18px; }.home-page .home-hero { min-height:auto; }.home-page .featured-game { gap:14px; }.home-page .featured-game-details { padding:12px 0 0; }.home-page .stadium-feature { min-height:350px; } }
+@media (max-width:600px) { .home-page { --home-space:36px; --home-gap:12px; --home-pad:19px; }.home-page .home-wrapper { padding:16px 12px 42px; }.home-page .home-hero { border-radius:10px; }.home-page .hero-copy { padding:28px 20px; }.home-page .homepagesummary { font-size:1rem; }.home-page .hero-meta { gap:6px; }.home-page .hero-meta span { padding:5px 7px; font-size:.61rem; }.home-page .featured-game { padding:var(--home-pad); }.home-page .featured-matchup { gap:9px; }.home-page .featured-team img { width:48px; height:48px; }.home-page .featured-team strong { font-size:1.08rem; }.home-page .game-countdown { max-width:100%; overflow:hidden; text-overflow:ellipsis; }.home-page .stadium-feature { min-height:330px; }.home-page .stadium-feature-content { padding:var(--home-pad); }.home-page .stadium-feature-meta { font-size:.68rem; }.home-page .teams-feature,.home-page .photos-feature { min-height:255px; padding:var(--home-pad); }.home-page .play-grid > a { min-height:170px; }.home-page .home-guest { padding:var(--home-pad); }.home-page .home-footer-cta { margin-top:36px; } }
 
+.home-page {
+    --home-space: 30px;
+    --home-radius: 18px;
+    --home-card-shadow: 0 14px 34px rgba(0, 0, 0, .12);
+}
 
+.home-page .home-wrapper {
+    width: min(1320px, 100%);
+    min-height: 0;
+    margin: 0 auto;
+    padding: 28px clamp(16px, 3vw, 36px) 56px;
+    display: block;
+    background: transparent;
+    text-align: left;
+}
 
+.home-page .home-wrapper > section { width: 100%; box-sizing: border-box; }
+.home-page .home-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 440px;
+    background-image: linear-gradient(90deg, var(--card-bg) 0 42%, color-mix(in srgb, var(--card-bg) 72%, transparent) 58%, transparent 83%), url("WeekPhotos/jameson williams week 6 photo.jpg");
+    background-size: cover, 58% 100%;
+}
 
+.home-page .hero-copy {
+    max-width: 760px;
+    padding: clamp(30px, 5vw, 64px);
+    background: linear-gradient(90deg, var(--card-bg) 76%, color-mix(in srgb, var(--card-bg) 70%, transparent));
+}
 
+.home-page .footballforfun {
+    max-width: 100%;
+    margin: 0;
+    font-size: clamp(2.8rem, 6.2vw, 5.9rem);
+    line-height: 1;
+    letter-spacing: -.035em;
+    text-align: left;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-shadow: none;
+}
 
+.home-page .homepagesummary {
+    max-width: 490px;
+    margin: 18px 0 20px;
+    line-height: 1.6;
+    text-align: left;
+    text-shadow: none;
+}
 
+.home-page .game-day-section,
+.home-page .play-blitz,
+.home-page .quick-hits,
+.home-page .your-blitz,
+.home-page .home-footer-cta {
+    border: 1px solid var(--card-border);
+    border-radius: var(--home-radius);
+    background: color-mix(in srgb, var(--card-bg) 94%, transparent);
+    box-shadow: var(--home-card-shadow);
+}
+
+.home-page .game-day-section {
+    margin-top: var(--home-space);
+    padding: 25px;
+    border-top: 3px solid var(--accent-red);
+}
+
+.home-page .game-day-heading h2,
+.home-page .section-heading h2,
+.home-page .home-footer-cta h2 {
+    line-height: 1.12;
+    letter-spacing: -.025em;
+    overflow-wrap: anywhere;
+}
+
+.home-page .game-day-heading { flex-wrap: wrap; }
+.home-page .featured-game { border-radius: 12px; }
+
+.home-page .stadium-feature,
+.home-page .home-media,
+.home-page .play-blitz,
+.home-page .quick-hits,
+.home-page .your-blitz,
+.home-page .home-footer-cta { margin-top: var(--home-space); }
+
+.home-page .play-blitz { padding: 25px; }
+.home-page .quick-hits { padding: 20px 24px; }
+.home-page .your-blitz { padding: 25px; }
+.home-page .home-footer-cta { padding: 25px; }
+
+.home-page .stadium-feature,
+.home-page .teams-feature,
+.home-page .photos-feature,
+.home-page .play-grid > a { border-radius: var(--home-radius); }
+
+.next-game-widget[hidden],
+.next-game-panel[hidden],
+.next-game-launcher[hidden] { display: none; }
+.next-game-widget {
+    position: fixed;
+    z-index: 1200;
+    right: 24px;
+    bottom: 24px;
+    width: min(340px, calc(100vw - 24px));
+    overflow: visible;
+    color: var(--card-text);
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.next-game-launcher {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: min(270px, calc(100vw - 28px));
+    margin-left: auto;
+    min-height: 68px;
+    padding: 11px 14px;
+    color: var(--card-text);
+    text-align: left;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-bottom: 3px solid var(--accent-red);
+    border-radius: 17px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .22);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.next-game-launcher:hover,
+.next-game-launcher:focus-visible {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-red) 50%, var(--card-border));
+    box-shadow: 0 17px 36px rgba(0, 0, 0, .28);
+    outline: none;
+}
+
+.next-game-launcher-icon {
+    position: relative;
+    display: flex;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--accent-red);
+    background: color-mix(in srgb, var(--accent-red) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-red) 20%, var(--card-border));
+    border-radius: 13px;
+    transition: transform .2s ease, background-color .2s ease;
+}
+
+.next-game-launcher-icon::after {
+    position: absolute;
+    top: -5px;
+    left: 20px;
+    width: 2px;
+    height: 52px;
+    content: "";
+    background: var(--accent-red);
+    transform: rotate(28deg);
+}
+.next-game-launcher-icon img { width: 23px; height: 26px; object-fit: contain; }
+.next-game-launcher-icon img + img { margin-left: -3px; }
+
+.next-game-launcher:hover .next-game-launcher-icon,
+.next-game-launcher:focus-visible .next-game-launcher-icon {
+    transform: rotate(-8deg) scale(1.06);
+    background: color-mix(in srgb, var(--accent-red) 16%, transparent);
+}
+
+.next-game-launcher-copy { display: grid; gap: 3px; min-width: 0; }
+.next-game-launcher-copy strong { color: var(--accent-red); font-size: .64rem; letter-spacing: .13em; }
+.next-game-launcher-copy > span { overflow: hidden; color: var(--card-text); font-size: .82rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.next-game-launcher-arrow { margin-left: auto; color: var(--accent-red); font-size: 1.1rem; transition: transform .2s ease; }
+.next-game-launcher:hover .next-game-launcher-arrow,
+.next-game-launcher:focus-visible .next-game-launcher-arrow { transform: translate(2px, -2px); }
+
+.next-game-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 104px;
+    width: min(340px, calc(100vw - 24px));
+    overflow: hidden;
+    color: var(--card-text);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-top: 3px solid var(--accent-red);
+    border-radius: 15px;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .26);
+    backdrop-filter: blur(14px);
+    transform-origin: bottom right;
+    animation: nextGamePanelIn .2s ease both;
+}
+
+@keyframes nextGamePanelIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.next-game-widget.is-dragging .next-game-panel { animation: none; }
+.next-game-widget.is-dragging { cursor: grabbing; }
+.next-game-drag {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 7px 10px 7px 14px;
+    color: var(--muted-text);
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .1em;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.next-game-drag:focus-visible { outline: 2px solid var(--accent-red); outline-offset: -3px; }
+.widget-grip { color: var(--accent-red); font-size: 1rem; letter-spacing: 0; }
+.next-game-drag button {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+    place-items: center;
+    color: var(--card-text);
+    background: color-mix(in srgb, var(--card-text) 8%, transparent);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: color .18s ease, background-color .18s ease, transform .18s ease;
+}
+
+.next-game-drag button:hover,
+.next-game-drag button:focus-visible {
+    color: #fff;
+    background: var(--accent-red);
+    transform: rotate(90deg);
+    outline: none;
+}
+
+.next-game-widget-body {
+    display: grid;
+    gap: 7px;
+    padding: 2px 16px 16px;
+    color: var(--card-text);
+    text-decoration: none;
+}
+
+.next-game-matchup-visual {
+    position: relative;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 96px;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 10px 30px !important;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--accent-red) 8%, var(--card-bg)), var(--card-bg));
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+}
+.next-game-matchup-visual::after {
+    position: absolute;
+    top: -12%;
+    left: calc(50% - 1px);
+    width: 3px;
+    height: 124%;
+    content: "";
+    background: var(--accent-red);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent-red) 50%, transparent);
+    transform: rotate(28deg);
+}
+.next-game-matchup-visual img { position: relative; z-index: 1; width: 68px; height: 68px; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .18)); }
+.next-game-matchup-visual .next-game-away-logo { margin-right: auto; }
+.next-game-matchup-visual .next-game-home-logo { margin-left: auto; }
+.next-game-widget-body > strong { font-size: 1.08rem; line-height: 1.3; }
+.next-game-widget-body > span { color: var(--muted-text); font-size: .78rem; line-height: 1.4; }
+.next-game-widget-body time { color: var(--card-text); font-family: ui-monospace, Consolas, monospace; font-size: .76rem; font-weight: 800; }
+.next-game-widget-body small { padding-top: 9px; color: var(--accent-red); border-top: 1px solid var(--card-border); font-weight: 800; }
+.next-game-widget-body:hover small { text-decoration: underline; }
+
+.home-page .play-trivia {
+    color: var(--card-text) !important;
+    background: color-mix(in srgb, var(--card-bg) 95%, transparent);
+}
+.home-page .play-trivia .home-eyebrow { color: var(--accent-red); }
+.home-page .play-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.home-page .play-grid > a {
+    position: relative;
+    isolation: isolate;
+    min-width: 0;
+    min-height: 238px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    padding: 22px;
+    color: var(--card-text);
+    text-align: left;
+    background: color-mix(in srgb, var(--card-bg) 95%, transparent);
+    border: 1px solid var(--card-border);
+    border-radius: var(--home-radius);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .07);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background-color .22s ease;
+}
+.home-page .play-grid > a::before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    width: 125px;
+    height: 125px;
+    content: "";
+    background: radial-gradient(circle at top right, color-mix(in srgb, var(--accent-red) 11%, transparent), transparent 72%);
+    border-radius: 0 var(--home-radius) 0 100%;
+    pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease;
+}
+.home-page .play-grid > a:hover,
+.home-page .play-grid > a:focus-visible {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent-red) 55%, var(--card-border));
+    box-shadow: 0 16px 30px rgba(0, 0, 0, .13);
+    background: var(--card-bg);
+}
+.home-page .play-grid > a:hover::before,
+.home-page .play-grid > a:focus-visible::before { transform: scale(1.12); }
+.home-page .play-card-top { display: flex; align-items: center; gap: 12px; }
+.home-page .play-card-top .home-eyebrow { margin: 0; color: var(--muted-text); font-size: .66rem; }
+.home-page .play-card-top .feature-icon {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    color: var(--accent-red);
+    background: color-mix(in srgb, var(--accent-red) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-red) 20%, var(--card-border));
+    border-radius: 12px;
+    font-size: 1.08rem;
+    font-weight: 850;
+}
+.home-page .play-card-top .feature-icon svg { width: 22px; height: 22px; overflow: visible; }
+.home-page .play-grid > a:hover .play-card-top .feature-icon,
+.home-page .play-grid > a:focus-visible .play-card-top .feature-icon {
+    color: #fff;
+    background: var(--accent-red);
+    border-color: var(--accent-red);
+    transform: translateY(-2px) rotate(-4deg);
+}
+.home-page .play-card-top .feature-icon { transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease; }
+.home-page .play-card-content { display: grid; gap: 8px; }
+.home-page .play-card-content strong { font-size: 1.23rem; line-height: 1.18; }
+.home-page .play-card-content > span { color: var(--muted-text); font-size: .88rem; line-height: 1.5; }
+.home-page .play-card-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 13px;
+    color: var(--card-text);
+    border-top: 1px solid var(--card-border);
+    font-size: .84rem;
+    font-weight: 850;
+}
+.home-page .play-trivia .play-card-link { color: var(--accent-red); }
+.home-page .play-card-link i {
+    color: var(--accent-red);
+    font-size: 1.05rem;
+    font-style: normal;
+    transition: transform .2s ease;
+}
+.home-page .play-grid > a:hover .play-card-link i,
+.home-page .play-grid > a:focus-visible .play-card-link i { transform: translateX(4px); }
+
+.home-page .quick-hits {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    overflow: hidden;
+    padding: 21px 24px 24px;
+    border: 1px solid color-mix(in srgb, var(--accent-red) 25%, var(--card-border));
+    border-top: 3px solid var(--accent-red);
+    background: linear-gradient(120deg, color-mix(in srgb, var(--accent-red) 5%, var(--card-bg)), var(--card-bg) 58%);
+}
+.home-page .quick-hits .home-eyebrow { color: var(--accent-red); letter-spacing: .13em; }
+.home-page .quick-hits > div {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+.home-page .quick-hits a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+    padding: 12px 13px;
+    color: var(--card-text);
+    background: color-mix(in srgb, var(--card-bg) 90%, transparent);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    font-size: .83rem;
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.home-page .quick-hits a span { flex: 0 0 auto; color: var(--accent-red); transition: transform .2s ease; }
+.home-page .quick-hits a:hover,
+.home-page .quick-hits a:focus-visible {
+    color: var(--card-text);
+    background: var(--card-bg);
+    border-color: color-mix(in srgb, var(--accent-red) 48%, var(--card-border));
+    box-shadow: 0 7px 15px rgba(0, 0, 0, .09);
+    transform: translateY(-2px);
+}
+.home-page .quick-hits a:hover span,
+.home-page .quick-hits a:focus-visible span { transform: translate(2px, -2px); }
+
+.home-page .home-button,
+.home-page .teams-feature,
+.home-page .photos-feature,
+.home-page .text-action,
+.home-page .quick-hits a {
+    transition-duration: .2s;
+}
+.home-page .home-button:hover,
+.home-page .home-button:focus-visible { transform: translateY(-2px); }
+.home-page .home-button:active { transform: translateY(0); }
+.home-page .home-reveal { scroll-margin-top: 88px; }
+
+@media (max-width: 760px) {
+    .home-page .game-day-section,
+    .home-page .play-blitz,
+    .home-page .your-blitz { padding: 20px; }
+    .home-page .featured-game { grid-template-columns: 1fr; gap: 14px; }
+    .home-page .featured-game-details { padding: 12px 0 0; border-left: 0; border-top: 1px solid var(--card-border); }
+    .home-page .game-countdown { justify-self: start; white-space: normal; }
+    .home-page .home-media { grid-template-columns: 1fr; }
+    .home-page .play-grid { grid-template-columns: 1fr; }
+    .home-page .play-grid > a { min-height: 205px; }
+    .home-page .quick-hits { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .home-page .quick-hits > div { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+}
+
+@media (max-width: 600px) {
+    .home-page .home-wrapper { padding: 16px 12px 42px; }
+    .home-page .home-hero { min-height: 400px; background-size: cover, auto 100%; background-position: center, 64% center; }
+    .home-page .hero-copy { padding: 28px 20px; }
+    .home-page .footballforfun { font-size: clamp(2.7rem, 11vw, 4rem); }
+    .home-page .game-day-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+    .home-page .game-day-section,
+    .home-page .play-blitz,
+    .home-page .quick-hits,
+    .home-page .your-blitz { padding: 18px; }
+    .next-game-widget { right: 12px; bottom: 12px; width: min(320px, calc(100vw - 24px)); }
+    .next-game-panel { right: 12px; width: min(320px, calc(100vw - 24px)); }
+    .next-game-launcher { width: min(255px, calc(100vw - 24px)); min-height: 62px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-page .home-button,
+    .home-page .play-grid > a,
+    .home-page .play-card-top .feature-icon,
+    .home-page .play-card-link i,
+    .home-page .teams-feature,
+    .home-page .photos-feature,
+    .home-page .text-action,
+    .home-page .quick-hits a,
+    .next-game-widget,
+    .next-game-launcher,
+    .next-game-launcher-icon,
+    .next-game-launcher-arrow,
+    .next-game-panel,
+    .next-game-drag button {
+        transition: none !important;
+        animation: none !important;
+    }
+    .home-page .home-button:hover,
+    .home-page .home-button:focus-visible,
+    .home-page .play-grid > a:hover,
+    .home-page .play-grid > a:focus-visible,
+    .home-page .play-grid > a:hover::before,
+    .home-page .play-grid > a:focus-visible::before,
+    .home-page .play-grid > a:hover .play-card-top .feature-icon,
+    .home-page .play-grid > a:focus-visible .play-card-top .feature-icon,
+    .home-page .play-grid > a:hover .play-card-link i,
+    .home-page .play-grid > a:focus-visible .play-card-link i,
+    .home-page .teams-feature:hover,
+    .home-page .photos-feature:hover { transform: none; }
+}
+:root {
+    --success-text: #176b3a;
+}
+
+html.dark-mode {
+    --success-text: #82d9a5;
+}
+
+#quiz-status {
+    color: var(--card-text) !important;
+}
+
+#survey-result {
+    color: var(--success-text) !important;
+}
+
+html body input::placeholder,
+html body textarea::placeholder {
+    color: var(--muted-text) !important;
+    opacity: 1;
+}
+
+.survey-btn:disabled {
+    background: var(--section-surface) !important;
+    color: var(--muted-text) !important;
+    border-color: var(--card-border) !important;
+    opacity: 1 !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}
+
+.team-card:hover {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14), 0 0 0 1px var(--card-border);
+}
+
+html.dark-mode .team-card:hover {
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42), 0 0 0 1px var(--card-border);
+}
+
+.settings-page-root {
+    background: var(--card-bg) !important;
+    color: var(--card-text) !important;
+    border: 1px solid var(--card-border) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+}
+
+.settings-page-root .settings-main-menu .settings-category-button {
+    background: var(--section-surface) !important;
+    color: var(--card-text) !important;
+    border-color: var(--card-border) !important;
+}
+
+.settings-page-root .settings-section-panel {
+    color: var(--card-text) !important;
+}
+
+.settings-page-root .settings-section-panel .settings-back-button,
+.settings-page-root .settings-section-panel .settings-toggle {
+    background: var(--section-surface) !important;
+    color: var(--card-text) !important;
+    border-color: var(--card-border) !important;
+}
+
+.settings-page-root .settings-section-panel .settings-input,
+.settings-page-root .settings-section-panel input,
+.settings-page-root .settings-section-panel select,
+.settings-page-root .settings-section-panel textarea {
+    background: var(--input-bg) !important;
+    color: var(--input-text) !important;
+    border-color: var(--input-border) !important;
+}
+
+.settings-page-root .settings-section-panel .settings-button {
+    background: var(--section-surface) !important;
+    color: var(--card-text) !important;
+    border-color: var(--accent-red) !important;
+}
+
+html.dark-mode .settings-page-root {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+}
+
+html.dark-mode .depth-pos-label,
+html.dark-mode .depth-col-label {
+    color: var(--card-text);
+}
+
+html.dark-mode .details-container .team-stat strong,
+html.dark-mode .details-container .stat-value,
+html.dark-mode .details-container #countdown-timer strong {
+    color: color-mix(in srgb, var(--team-color, var(--accent-red)) 45%, white);
+}
+
+html.dark-mode .details-container .stat-label,
+html.dark-mode .details-container .muted {
+    color: var(--muted-text);
+}
+
+html.light-mode .schedule-page .schedule-hero h1 {
+    color: var(--card-text);
+}
+
+body:has(.login-bg)::before {
+    display: none;
+}
