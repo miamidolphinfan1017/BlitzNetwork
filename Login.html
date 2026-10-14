@@ -228,9 +228,12 @@
         const finalUsername = lookupKey;
         if (rememberMe) {
             localStorage.setItem('currentUser', finalUsername);
+            sessionStorage.removeItem('currentUser');
         } else {
+            localStorage.removeItem('currentUser');
             sessionStorage.setItem('currentUser', finalUsername);
         }
+        if (window.BlitzAuth) window.BlitzAuth.changed();
 
         // --- NEW: Redirect Logic ---
         const destination = localStorage.getItem('redirectAfterLogin') || 'index.html';
@@ -242,7 +245,6 @@
 
 </body> 
 </html>
-
 
 
 

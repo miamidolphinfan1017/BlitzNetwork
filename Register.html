@@ -184,6 +184,14 @@
         const rememberMe = document.getElementById('reg-remember').checked;
         const errorBox = document.getElementById('register-error');
 
+        if (!/^[A-Za-z0-9_.-]{3,24}$/.test(username)) {
+            if (errorBox) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "Use 3–24 characters: letters, numbers, periods, underscores, or hyphens.";
+            }
+            return;
+        }
+
         if (password !== confirm) {
             if (errorBox) {
                 errorBox.style.display = "block";
@@ -193,7 +201,8 @@
         }
 
         const users = getRegisteredUsers();
-        if (users[username]) {
+        const existingUsername = Object.keys(users).find(name => name.toLowerCase() === username.toLowerCase());
+        if (existingUsername) {
             if (errorBox) {
                 errorBox.style.display = "block";
                 errorBox.innerText = "That username is already taken.";
@@ -214,9 +223,12 @@
 
         if (rememberMe) {
             localStorage.setItem('currentUser', username);
+            sessionStorage.removeItem('currentUser');
         } else {
+            localStorage.removeItem('currentUser');
             sessionStorage.setItem('currentUser', username);
         }
+        if (window.BlitzAuth) window.BlitzAuth.changed();
 
         if (errorBox) {
             errorBox.style.display = "none";
@@ -231,8 +243,6 @@
 
 </body>
 </html>
-
-
 
 
 

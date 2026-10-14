@@ -56,6 +56,17 @@
     </div>
   </section>
 
+  <nav class="fantasy-section-nav" aria-label="Fantasy page sections">
+    <a href="#fantasy-overview" aria-current="location">Overview</a>
+    <a href="#fantasy-player-pool">Player pool</a>
+    <a href="#fantasy-projections">Projections</a>
+    <a href="#fantasy-matchup-section">Matchups</a>
+    <a href="#fantasy-start-decision">Start / sit</a>
+    <a href="#fantasy-trends">Trends</a>
+    <a href="#fantasy-lineup-section">My lineup</a>
+    <a href="#fantasy-data-notes">Data notes</a>
+  </nav>
+
   <div id="fantasy-error" class="fantasy-notice fantasy-notice-error" role="alert" hidden>
     <div><strong>Fantasy data couldn't be loaded.</strong><span id="fantasy-error-message">Check your connection and try again.</span></div>
     <button id="fantasy-retry" type="button" class="fantasy-button">Try again</button>
@@ -80,51 +91,67 @@
         <option value="std">Standard</option>
       </select>
     </label>
-    <label class="fantasy-search-control">
-      <span class="fantasy-control-label">FIND A PLAYER</span>
-      <input id="fantasy-search" type="search" placeholder="Name, team, or position" autocomplete="off">
-    </label>
     <button id="fantasy-refresh" type="button" class="fantasy-button fantasy-refresh-button">↻ <span>Refresh</span></button>
   </section>
 
-  <section class="fantasy-position-bar" aria-label="Filter players by position">
-    <span class="fantasy-control-label">POSITION</span>
-    <div id="fantasy-position-filters" class="fantasy-position-filters">
-      <button type="button" data-position="ALL" class="is-active" aria-pressed="true">All</button>
-      <button type="button" data-position="QB" aria-pressed="false">QB</button>
-      <button type="button" data-position="RB" aria-pressed="false">RB</button>
-      <button type="button" data-position="WR" aria-pressed="false">WR</button>
-      <button type="button" data-position="TE" aria-pressed="false">TE</button>
-      <button type="button" data-position="FLEX" aria-pressed="false">FLEX</button>
-      <button type="button" data-position="K" aria-pressed="false">K</button>
-      <button type="button" data-position="DST" aria-pressed="false">DST</button>
+  <section id="fantasy-overview" class="fantasy-overview" aria-labelledby="fantasy-overview-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">WEEK AT A GLANCE</p><h2 id="fantasy-overview-title">Weekly snapshot</h2></div>
+    </div>
+    <div class="fantasy-summary-grid" aria-label="Weekly fantasy snapshot">
+      <article class="fantasy-summary-card">
+        <span class="fantasy-summary-label">TOP PROJECTION</span>
+        <strong id="fantasy-top-name">—</strong>
+        <span id="fantasy-top-detail">Weekly provider projection</span>
+      </article>
+      <article class="fantasy-summary-card">
+        <span class="fantasy-summary-label">PRODUCTION TREND</span>
+        <strong id="fantasy-trend-name">—</strong>
+        <span id="fantasy-trend-detail">Based on recent completed games</span>
+      </article>
+      <article class="fantasy-summary-card">
+        <span class="fantasy-summary-label">MATCHUP DATA</span>
+        <strong id="fantasy-matchup-summary">Loading…</strong>
+        <span>Schedule and kickoff from ESPN</span>
+      </article>
+      <article class="fantasy-summary-card">
+        <span class="fantasy-summary-label">SCORING FORMAT</span>
+        <strong id="fantasy-scoring-summary">PPR</strong>
+        <span>Provider projections recalculate by format</span>
+      </article>
     </div>
   </section>
 
-  <section class="fantasy-summary-grid" aria-label="Weekly fantasy snapshot">
-    <article class="fantasy-summary-card">
-      <span class="fantasy-summary-label">TOP PROJECTION</span>
-      <strong id="fantasy-top-name">—</strong>
-      <span id="fantasy-top-detail">Weekly provider projection</span>
-    </article>
-    <article class="fantasy-summary-card">
-      <span class="fantasy-summary-label">PRODUCTION TREND</span>
-      <strong id="fantasy-trend-name">—</strong>
-      <span id="fantasy-trend-detail">Based on recent completed games</span>
-    </article>
-    <article class="fantasy-summary-card">
-      <span class="fantasy-summary-label">MATCHUP DATA</span>
-      <strong id="fantasy-matchup-summary">Loading…</strong>
-      <span>Schedule and kickoff from ESPN</span>
-    </article>
-    <article class="fantasy-summary-card">
-      <span class="fantasy-summary-label">SCORING FORMAT</span>
-      <strong id="fantasy-scoring-summary">PPR</strong>
-      <span>Provider projections recalculate by format</span>
-    </article>
+  <section id="fantasy-player-pool" class="fantasy-section fantasy-pool-section" aria-labelledby="fantasy-rankings-title">
+    <div class="fantasy-section-heading">
+      <div><p class="fantasy-eyebrow">PLAYER POOL</p><h2 id="fantasy-rankings-title">Weekly rankings</h2></div>
+      <div class="fantasy-pool-controls">
+        <label class="fantasy-search-control">
+          <span class="fantasy-control-label">FIND A PLAYER</span>
+          <input id="fantasy-search" type="search" placeholder="Name, team, or position" autocomplete="off">
+        </label>
+      </div>
+    </div>
+    <section class="fantasy-position-bar" aria-label="Filter players by position">
+      <span class="fantasy-control-label">POSITION</span>
+      <div id="fantasy-position-filters" class="fantasy-position-filters">
+        <button type="button" data-position="ALL" class="is-active" aria-pressed="true">All</button>
+        <button type="button" data-position="QB" aria-pressed="false">QB</button>
+        <button type="button" data-position="RB" aria-pressed="false">RB</button>
+        <button type="button" data-position="WR" aria-pressed="false">WR</button>
+        <button type="button" data-position="TE" aria-pressed="false">TE</button>
+        <button type="button" data-position="FLEX" aria-pressed="false">FLEX</button>
+        <button type="button" data-position="K" aria-pressed="false">K</button>
+        <button type="button" data-position="DST" aria-pressed="false">DST</button>
+      </div>
+    </section>
+    <p id="fantasy-result-count" class="fantasy-table-caption" aria-live="polite"></p>
+    <div id="fantasy-rankings" class="fantasy-rankings" aria-live="polite">
+      <p class="fantasy-loading">Building player rankings…</p>
+    </div>
   </section>
 
-  <section class="fantasy-section" aria-labelledby="fantasy-projections-title">
+  <section id="fantasy-projections" class="fantasy-section" aria-labelledby="fantasy-projections-title">
     <div class="fantasy-section-heading">
       <div><p class="fantasy-eyebrow">THIS WEEK</p><h2 id="fantasy-projections-title">Top projections</h2></div>
       <span class="fantasy-section-note">Sleeper weekly projections · points reflect selected scoring</span>
@@ -134,28 +161,8 @@
     </div>
   </section>
 
-  <section class="fantasy-section" aria-labelledby="fantasy-rankings-title">
-    <div class="fantasy-section-heading">
-      <div><p class="fantasy-eyebrow">PLAYER POOL</p><h2 id="fantasy-rankings-title">Weekly rankings</h2></div>
-      <label class="fantasy-sort-control"><span>Sort by</span>
-        <select id="fantasy-sort">
-          <option value="projection">Fantasy rank</option>
-          <option value="season">Season average</option>
-          <option value="last3">Last 3 games</option>
-          <option value="position">Position</option>
-          <option value="team">Team</option>
-          <option value="name">Player name</option>
-        </select>
-      </label>
-    </div>
-    <p id="fantasy-result-count" class="fantasy-table-caption" aria-live="polite"></p>
-    <div id="fantasy-rankings" class="fantasy-rankings" aria-live="polite">
-      <p class="fantasy-loading">Building player rankings…</p>
-    </div>
-  </section>
-
   <div class="fantasy-analysis-grid">
-    <section class="fantasy-section fantasy-analysis-card" aria-labelledby="fantasy-matchups-title">
+    <section id="fantasy-matchup-section" class="fantasy-section fantasy-analysis-card" aria-labelledby="fantasy-matchups-title">
       <div class="fantasy-section-heading">
         <div><p class="fantasy-eyebrow">SCHEDULE CONTEXT</p><h2 id="fantasy-matchups-title">Matchup slate</h2></div>
       </div>
@@ -163,7 +170,7 @@
       <div id="fantasy-matchups" class="fantasy-matchup-list"><p class="fantasy-loading">Loading NFL schedule…</p></div>
     </section>
 
-    <section class="fantasy-section fantasy-analysis-card" aria-labelledby="fantasy-compare-title">
+    <section id="fantasy-start-decision" class="fantasy-section fantasy-analysis-card" aria-labelledby="fantasy-compare-title">
       <div class="fantasy-section-heading">
         <div><p class="fantasy-eyebrow">LINEUP DECISION</p><h2 id="fantasy-compare-title">Who should I start?</h2></div>
       </div>
@@ -177,7 +184,7 @@
     </section>
   </div>
 
-  <section class="fantasy-section" aria-labelledby="fantasy-trends-title">
+  <section id="fantasy-trends" class="fantasy-section" aria-labelledby="fantasy-trends-title">
     <div class="fantasy-section-heading">
       <div><p class="fantasy-eyebrow">ACTUAL RESULTS</p><h2 id="fantasy-trends-title">Production trends</h2></div>
     </div>
@@ -192,7 +199,7 @@
     </div>
   </section>
 
-  <section class="fantasy-section" aria-labelledby="fantasy-lineup-title">
+  <section id="fantasy-lineup-section" class="fantasy-section" aria-labelledby="fantasy-lineup-title">
     <div class="fantasy-section-heading">
       <div><p class="fantasy-eyebrow">SAVED ON THIS DEVICE</p><h2 id="fantasy-lineup-title">My lineup</h2></div>
       <strong id="fantasy-lineup-total" class="fantasy-lineup-total">Projected starters: —</strong>
@@ -201,7 +208,7 @@
     <div id="fantasy-lineup" class="fantasy-lineup-grid"></div>
   </section>
 
-  <section class="fantasy-section fantasy-data-notes" aria-labelledby="fantasy-data-title">
+  <section id="fantasy-data-notes" class="fantasy-section fantasy-data-notes" aria-labelledby="fantasy-data-title">
     <div class="fantasy-section-heading">
       <div><p class="fantasy-eyebrow">DATA NOTES</p><h2 id="fantasy-data-title">What these numbers mean</h2></div>
     </div>
@@ -213,10 +220,15 @@
     </div>
     <p id="fantasy-data-attribution" class="fantasy-attribution">Data: <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a> projections, player directory, and weekly stats; <a href="https://www.espn.com/nfl/schedule" target="_blank" rel="noopener">ESPN NFL schedule</a>. Provider availability may vary.</p>
   </section>
+
 </main>
 
 <dialog id="fantasy-player-dialog" class="fantasy-player-dialog" aria-labelledby="fantasy-dialog-name">
   <div class="fantasy-dialog-head">
+    <div class="fantasy-dialog-player-mark">
+      <img id="fantasy-dialog-headshot" alt="" hidden>
+      <span id="fantasy-dialog-team-badge" aria-hidden="true"></span>
+    </div>
     <div><p id="fantasy-dialog-meta" class="fantasy-eyebrow"></p><h2 id="fantasy-dialog-name"></h2></div>
     <button id="fantasy-dialog-close" type="button" class="fantasy-icon-button" aria-label="Close player details">×</button>
   </div>

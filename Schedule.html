@@ -50,8 +50,13 @@
 <main class="schedule-wrapper">
     <header class="schedule-hero">
         <h1>Season Schedule</h1>
-        <p class="muted">Live NFL schedule with clickable game details, month controls, and team filters.</p>
+        <p class="muted">Browse the full NFL schedule by date, matchup, and game status.</p>
     </header>
+
+    <div class="schedule-view-switcher" role="group" aria-label="Schedule display">
+        <button type="button" id="schedule-view-list" aria-pressed="true">Schedule View</button>
+        <button type="button" id="schedule-view-calendar" aria-pressed="false">Calendar View</button>
+    </div>
 
     <section class="schedule-controls">
         <div class="schedule-nav">
@@ -60,7 +65,7 @@
             <button id="next-month-btn" class="schedule-month-btn">Next</button>
         </div>
         <div class="schedule-actions">
-            <button id="today-btn" class="schedule-today-btn">Today</button>
+            <button id="today-btn" class="schedule-today-btn" type="button">Today</button>
             <select id="team-filter" class="schedule-select">
                 <option value="all">All Teams</option>
             </select>
@@ -76,12 +81,27 @@
         <div id="picker-month-grid" class="month-grid"></div>
     </section>
 
-    <section class="schedule-calendar" aria-live="polite">
+    <section id="schedule-list-view" class="schedule-calendar" aria-label="NFL schedule by date" aria-live="polite">
         <div id="calendar-grid" class="calendar-grid"></div>
+    </section>
+    <section id="full-calendar-view" class="full-calendar-view" aria-label="NFL calendar" hidden>
+        <div class="calendar-weekdays" aria-hidden="true">
+            <span title="Sunday">Sun</span><span title="Monday">Mon</span><span title="Tuesday">Tue</span><span title="Wednesday">Wed</span>
+            <span title="Thursday">Thu</span><span title="Friday">Fri</span><span title="Saturday">Sat</span>
+        </div>
+        <div id="month-calendar-grid" class="schedule-month-grid" role="grid" aria-label="Calendar dates"></div>
+        <section class="calendar-day-panel" aria-live="polite" aria-atomic="false">
+            <h2 id="calendar-selected-date">Select a date</h2>
+            <div id="calendar-day-games" class="calendar-day-games"></div>
+        </section>
     </section>
 </main>
 
-<div id="schedule-modal" class="schedule-modal" aria-hidden="true">
+<button id="schedule-back-to-top" class="schedule-back-to-top" type="button" aria-label="Back to top" title="Back to top" aria-hidden="true" tabindex="-1">
+    <span aria-hidden="true">↑</span>
+</button>
+
+<div id="schedule-modal" class="schedule-modal" role="dialog" aria-modal="true" aria-labelledby="modal-matchup" aria-hidden="true">
     <div class="schedule-modal-card">
         <button id="schedule-modal-close" class="schedule-modal-close" aria-label="Close details">&times;</button>
         <p class="modal-eyebrow" id="modal-week">GAME DETAILS</p>
@@ -107,7 +127,23 @@
             <p><strong>Broadcast</strong><span id="modal-broadcast"></span></p>
             <p><strong>Records</strong><span id="modal-records"></span></p>
         </div>
+        <section class="schedule-game-data" aria-label="Game statistics and scoring">
+            <div class="schedule-game-tabs" role="tablist" aria-label="Game detail sections">
+                <button type="button" role="tab" id="modal-tab-overview" aria-selected="true" aria-controls="modal-panel-overview" data-game-tab="overview">Overview</button>
+                <button type="button" role="tab" id="modal-tab-team-stats" aria-selected="false" aria-controls="modal-panel-team-stats" data-game-tab="team-stats">Team stats</button>
+                <button type="button" role="tab" id="modal-tab-player-stats" aria-selected="false" aria-controls="modal-panel-player-stats" data-game-tab="player-stats">Player stats</button>
+                <button type="button" role="tab" id="modal-tab-scoring" aria-selected="false" aria-controls="modal-panel-scoring" data-game-tab="scoring">Scoring</button>
+            </div>
+            <p id="modal-data-status" class="schedule-data-status" role="status"></p>
+            <div id="modal-panel-overview" class="schedule-game-tab-panel" role="tabpanel" aria-labelledby="modal-tab-overview">
+                <p class="schedule-data-note">Game-specific statistics and scoring plays appear when ESPN makes them available. Pregame records, venue, kickoff, and broadcast are shown above.</p>
+            </div>
+            <div id="modal-panel-team-stats" class="schedule-game-tab-panel" role="tabpanel" aria-labelledby="modal-tab-team-stats" hidden></div>
+            <div id="modal-panel-player-stats" class="schedule-game-tab-panel" role="tabpanel" aria-labelledby="modal-tab-player-stats" hidden></div>
+            <div id="modal-panel-scoring" class="schedule-game-tab-panel" role="tabpanel" aria-labelledby="modal-tab-scoring" hidden></div>
+        </section>
         <div class="schedule-modal-actions">
+            <a class="schedule-highlights-link" href="index.html">Home</a>
             <a id="modal-tickets" class="schedule-ticket-link" href="#" target="_blank" rel="noopener" hidden>BUY TICKETS <span aria-hidden="true">↗</span></a>
         <a id="modal-highlights" class="small-btn schedule-highlights-link" href="#" target="_blank" rel="noopener" style="display:none;">Watch Highlights</a>
         </div>
@@ -480,5 +516,3 @@
 
 </body>
 </html>
-
-

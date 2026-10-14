@@ -23,11 +23,12 @@
     "fantasy-scoring", "fantasy-search", "fantasy-refresh", "fantasy-position-filters",
     "fantasy-top-name", "fantasy-top-detail", "fantasy-trend-name", "fantasy-trend-detail",
     "fantasy-matchup-summary", "fantasy-scoring-summary", "fantasy-projection-cards",
-    "fantasy-sort", "fantasy-result-count", "fantasy-rankings", "fantasy-matchups",
+    "fantasy-result-count", "fantasy-rankings", "fantasy-matchups",
     "fantasy-compare-a", "fantasy-compare-b", "fantasy-comparison", "fantasy-lineup",
     "fantasy-trending-up", "fantasy-trending-down",
     "fantasy-lineup-total", "fantasy-player-dialog", "fantasy-dialog-meta",
-    "fantasy-dialog-name", "fantasy-dialog-content", "fantasy-dialog-close"
+    "fantasy-dialog-name", "fantasy-dialog-content", "fantasy-dialog-close",
+    "fantasy-dialog-headshot", "fantasy-dialog-team-badge"
   ].forEach(id => { elements[id] = document.getElementById(id); });
 
   const app = {
@@ -37,6 +38,7 @@
     scoring: "ppr",
     position: "ALL",
     sort: "projection",
+    sortDirection: "desc",
     search: "",
     players: [],
     directory: [],
@@ -110,6 +112,13 @@
     return value === null || value === undefined ? "—" : `${value.toFixed(1)}`;
   }
 
+  function formatHeight(value) {
+    if (value === null || value === undefined || value === "") return "";
+    const inches = finiteNumber(value);
+    if (inches === null || inches < 24 || inches > 100) return String(value);
+    return `${Math.floor(inches / 12)}'${inches % 12}"`;
+  }
+
   function formatAverage(value) {
     return value === null || value === undefined ? "—" : value.toFixed(1);
   }
@@ -171,7 +180,8 @@
       .sort((left, right) => right.week - left.week);
     return weeks.slice(0, limit).map(item => ({
       week: item.week,
-      points: pointsFor(item.stats)
+      points: pointsFor(item.stats),
+      stats: item.stats
     })).filter(item => item.points !== null);
   }
 
@@ -206,8 +216,22 @@
         id,
         name: player.full_name,
         position,
+        seasonStats: stats,
         eligiblePositions: eligiblePositions.length ? eligiblePositions : [position],
         team: player.team || "FA",
+        number: player.number || "",
+        age: finiteNumber(player.age),
+        height: player.height || "",
+        weight: finiteNumber(player.weight),
+        college: player.college || "",
+        yearsExp: finiteNumber(player.years_exp),
+        depthChartPosition: player.depth_chart_position || "",
+        depthChartOrder: finiteNumber(player.depth_chart_order),
+        espnId: /^\d+$/.test(String(player.espn_id || "")) ? String(player.espn_id) : "",
+        status: player.status || "",
+        birthDate: player.birth_date || "",
+        rookieYear: finiteNumber(player.rookie_year),
+        highSchool: player.high_school || "",
         injury: player.injury_status && player.injury_status !== "Active" ? player.injury_status : "",
         projection: projection !== null && projection > 0 ? projection : null,
         seasonAverage,
@@ -241,6 +265,7 @@
   }
 
   function sortPlayers(players) {
+    const direction = app.sortDirection === "asc" ? 1 : -1;
     const compareNullable = (left, right, key, direction) => {
       const a = left[key];
       const b = right[key];
@@ -250,14 +275,53 @@
     };
     const sorted = [...players];
     sorted.sort((left, right) => {
-      if (app.sort === "season") return compareNullable(left, right, "seasonAverage", -1) || (left.rank || Infinity) - (right.rank || Infinity);
-      if (app.sort === "last3") return compareNullable(left, right, "last3Average", -1) || (left.rank || Infinity) - (right.rank || Infinity);
-      if (app.sort === "team") return left.team.localeCompare(right.team) || (left.rank || Infinity) - (right.rank || Infinity);
-      if (app.sort === "position") return positionOrder.indexOf(left.position) - positionOrder.indexOf(right.position) || (left.rank || Infinity) - (right.rank || Infinity);
-      if (app.sort === "name") return left.name.localeCompare(right.name);
-      return compareNullable(left, right, "projection", -1) || (left.rank || Infinity) - (right.rank || Infinity);
+      if (app.sort === "rank") return compareNullable(left, right, "rank", direction);
+      if (app.sort === "name") return left.name.localeCompare(right.name) * direction || (left.rank || Infinity) - (right.rank || Infinity);
+      if (app.sort === "position") return (positionOrder.indexOf(left.position) - positionOrder.indexOf(right.position)) * direction || (left.rank || Infinity) - (right.rank || Infinity);
+      if (app.sort === "opponent") {
+        const leftOpponent = left.matchup ? left.matchup.opponent : "";
+        const rightOpponent = right.matchup ? right.matchup.opponent : "";
+        if (!leftOpponent) return rightOpponent ? 1 : (left.rank || Infinity) - (right.rank || Infinity);
+        if (!rightOpponent) return -1;
+        return leftOpponent.localeCompare(rightOpponent) * direction || (left.rank || Infinity) - (right.rank || Infinity);
+      }
+      if (app.sort === "trend") return compareNullable(left, right, "trendDelta", direction) || (left.rank || Infinity) - (right.rank || Infinity);
+      if (app.sort === "season") return compareNullable(left, right, "seasonAverage", direction) || (left.rank || Infinity) - (right.rank || Infinity);
+      if (app.sort === "last3") return compareNullable(left, right, "last3Average", direction) || (left.rank || Infinity) - (right.rank || Infinity);
+      if (app.sort === "last5") return compareNullable(left, right, "last5Average", direction) || (left.rank || Infinity) - (right.rank || Infinity);
+      return compareNullable(left, right, "projection", direction) || (left.rank || Infinity) - (right.rank || Infinity);
     });
     return sorted;
+  }
+
+  const sortableColumns = [
+    { key: "rank", label: "Rank", direction: "asc", mobile: true },
+    { key: "name", label: "Player", direction: "asc", mobile: true },
+    { key: "position", label: "Pos", direction: "asc", mobile: true },
+    { key: "opponent", label: "Opponent / kickoff", direction: "asc", mobile: true },
+    { key: "projection", label: "Projected points", direction: "desc", mobile: true },
+    { key: "season", label: "Season avg", direction: "desc", mobile: true },
+    { key: "last3", label: "Last 3", direction: "desc", mobile: true },
+    { key: "last5", label: "Last 5", direction: "desc", mobile: true },
+    { key: "trend", label: "Trend", direction: "desc", mobile: true }
+  ];
+
+  function sortHeaderText(column) {
+    const active = app.sort === column.key;
+    const arrow = active ? (app.sortDirection === "asc" ? "↑" : "↓") : "↕";
+    return `${column.label} ${arrow}`;
+  }
+
+  function updateSort(key) {
+    const column = sortableColumns.find(item => item.key === key);
+    if (!column) return;
+    if (app.sort === key) app.sortDirection = app.sortDirection === "asc" ? "desc" : "asc";
+    else {
+      app.sort = key;
+      app.sortDirection = column.direction;
+    }
+    app.pageLimit = pageSize;
+    renderRankings();
   }
 
   function getVisiblePlayers() {
@@ -403,16 +467,29 @@
   function renderRankings() {
     const players = getVisiblePlayers();
     const visible = players.slice(0, app.pageLimit);
+    const activeColumn = sortableColumns.find(column => column.key === app.sort);
     elements["fantasy-result-count"].textContent = players.length
-      ? `Showing ${visible.length} of ${players.length} players · ranking uses provider weekly projection`
+      ? `Showing ${visible.length} of ${players.length} players · sorted by ${activeColumn ? activeColumn.label : "Fantasy points"} (${app.sortDirection === "desc" ? "descending" : "ascending"}); rank is based on provider weekly projection`
       : "No players match these filters.";
     elements["fantasy-rankings"].replaceChildren();
     if (!visible.length) return;
 
     const mobile = window.matchMedia("(max-width: 900px)").matches;
     if (mobile) {
+      const sortBar = textElement("div", "fantasy-mobile-sort-header");
+      sortBar.setAttribute("role", "group");
+      sortBar.setAttribute("aria-label", "Sort player rankings");
+      sortableColumns.filter(column => column.mobile).forEach(column => {
+        const button = textElement("button", "fantasy-sort-heading", sortHeaderText(column));
+        button.type = "button";
+        button.dataset.sortKey = column.key;
+        button.setAttribute("aria-pressed", String(app.sort === column.key));
+        button.setAttribute("aria-label", `${column.label}, ${app.sort === column.key ? `sorted ${app.sortDirection === "asc" ? "ascending" : "descending"}` : "not sorted"}`);
+        sortBar.appendChild(button);
+      });
       const cards = textElement("div", "fantasy-mobile-player-list");
       visible.forEach(player => appendPlayerCard(cards, player));
+      elements["fantasy-rankings"].appendChild(sortBar);
       elements["fantasy-rankings"].appendChild(cards);
     } else {
       const wrapper = textElement("div", "fantasy-table-wrap");
@@ -420,9 +497,15 @@
       table.className = "fantasy-player-table";
       const head = document.createElement("thead");
       const headerRow = document.createElement("tr");
-      ["Rank", "Player", "Pos", "Opponent / kickoff", "Projection", "Season avg", "Last 3", "Last 5", "Trend"].forEach(label => {
-        const cell = textElement("th", "", label);
+      sortableColumns.forEach(column => {
+        const cell = document.createElement("th");
         cell.scope = "col";
+        const button = textElement("button", "fantasy-sort-heading", sortHeaderText(column));
+        button.type = "button";
+        button.dataset.sortKey = column.key;
+        button.setAttribute("aria-label", `Sort by ${column.label}${app.sort === column.key ? `, currently ${app.sortDirection === "asc" ? "ascending" : "descending"}` : ""}`);
+        if (app.sort === column.key) cell.setAttribute("aria-sort", app.sortDirection === "asc" ? "ascending" : "descending");
+        cell.appendChild(button);
         headerRow.appendChild(cell);
       });
       head.appendChild(headerRow);
@@ -629,51 +712,123 @@
   function openPlayerDetails(player) {
     elements["fantasy-dialog-name"].textContent = player.name;
     elements["fantasy-dialog-meta"].textContent = `${player.position} · ${player.team}${player.injury ? ` · ${player.injury}` : ""}`;
+    elements["fantasy-dialog-team-badge"].textContent = player.team === "FA" ? player.position : player.team;
+    elements["fantasy-dialog-team-badge"].hidden = false;
+    elements["fantasy-dialog-headshot"].hidden = true;
+    elements["fantasy-dialog-headshot"].onload = () => {
+      elements["fantasy-dialog-headshot"].hidden = false;
+      elements["fantasy-dialog-team-badge"].hidden = true;
+    };
+    elements["fantasy-dialog-headshot"].onerror = () => {
+      elements["fantasy-dialog-headshot"].hidden = true;
+      elements["fantasy-dialog-team-badge"].hidden = false;
+    };
+    if (player.espnId) elements["fantasy-dialog-headshot"].src = `https://a.espncdn.com/i/headshots/nfl/players/full/${player.espnId}.png`;
+    else elements["fantasy-dialog-headshot"].removeAttribute("src");
     elements["fantasy-dialog-content"].replaceChildren();
     const overview = textElement("div", "fantasy-detail-overview");
+    const profile = textElement("section", "fantasy-detail-profile");
+    profile.appendChild(textElement("h3", "", "Player profile"));
+    const profileStats = textElement("div", "fantasy-detail-stats");
+    const profileFields = [
+      ["Jersey", player.number ? `#${player.number}` : ""],
+      ["Age", player.age !== null ? `${player.age}` : ""],
+      ["Height", formatHeight(player.height)],
+      ["Weight", player.weight !== null ? `${player.weight} lb` : ""],
+      ["College", player.college],
+      ["Experience", player.yearsExp !== null ? `${player.yearsExp} ${player.yearsExp === 1 ? "year" : "years"}` : ""],
+      ["Depth chart", [player.depthChartPosition, player.depthChartOrder].filter(Boolean).join(" · ")],
+      ["Rookie year", player.rookieYear ? `${player.rookieYear}` : ""],
+      ["High school", player.highSchool]
+    ].filter(([, value]) => value);
+    if (profileFields.length) {
+      profileFields.forEach(([label, value]) => appendDetailStat(profileStats, label, value));
+    } else {
+      profileStats.appendChild(textElement("p", "fantasy-detail-unavailable", "The player directory does not provide additional bio details for this player."));
+    }
+    profile.appendChild(profileStats);
+    elements["fantasy-dialog-content"].appendChild(profile);
+
     const stats = textElement("div", "fantasy-detail-stats");
     appendDetailStat(stats, "Provider projection", formatPoints(player.projection));
     appendDetailStat(stats, "Projection rank", player.rank ? `#${player.rank} overall · ${player.position} #${player.positionRank}` : "Unavailable");
+    appendDetailStat(stats, `${app.season || "Season"} games played`, player.seasonStats && finiteNumber(player.seasonStats.gp) !== null ? String(player.seasonStats.gp) : "Unavailable");
+    appendDetailStat(stats, `${app.season || "Season"} fantasy points`, player.seasonStats
+      ? formatPoints(finiteNumber(player.seasonStats[scoringPointsField[app.scoring]]))
+      : "Unavailable");
     appendDetailStat(stats, "Season average", formatAverage(player.seasonAverage));
     appendDetailStat(stats, "Last 3 completed games", formatAverage(player.last3Average));
     appendDetailStat(stats, "Last 5 completed games", formatAverage(player.last5Average));
     appendDetailStat(stats, "Opponent / kickoff", matchupText(player));
+    appendDetailStat(stats, "Injury status", player.injury || "No designation listed");
     appendDetailStat(stats, "Production trend", trendLabel(player));
-    appendDetailStat(stats, "Projection floor / ceiling", "Not supplied");
-    appendDetailStat(stats, "Opponent rank vs position", "Not supplied");
     overview.appendChild(stats);
     elements["fantasy-dialog-content"].appendChild(overview);
 
     const recent = textElement("section", "fantasy-detail-recent");
-    recent.appendChild(textElement("h3", "", "Recent fantasy points"));
-    const values = player.last5Games.map(game => `Week ${game.week}: ${game.points.toFixed(1)}`);
-    recent.appendChild(textElement("p", "", values.length ? values.join(" · ") : "No completed player games available for this view."));
+    recent.appendChild(textElement("h3", "", "Recent game log"));
+    if (player.last5Games.length) {
+      const statColumns = [
+        ["passing_completions", "pass_cmp", "Pass Cmp"],
+        ["passing_attempts", "pass_att", "Pass Att"],
+        ["passing_yards", "pass_yd", "Pass Yds"],
+        ["passing_touchdowns", "pass_td", "Pass TD"],
+        ["interceptions", "pass_int", "INT"],
+        ["rushing_attempts", "rush_att", "Rush Att"],
+        ["rushing_yards", "rush_yd", "Rush Yds"],
+        ["rushing_touchdowns", "rush_td", "Rush TD"],
+        ["targets", "rec_tgt", "Targets"],
+        ["receptions", "rec", "Rec"],
+        ["receiving_yards", "rec_yd", "Rec Yds"],
+        ["receiving_touchdowns", "rec_td", "Rec TD"],
+        ["fumbles_lost", "fum_lost", "Fum Lost"],
+        ["sacks", "sack", "Sacks"],
+        ["defensive_interceptions", "int", "Def INT"],
+        ["defensive_touchdowns", "def_td", "Def TD"],
+        ["points_allowed", "pts_allow", "Pts Allowed"],
+        ["yards_allowed", "yds_allow", "Yds Allowed"]
+      ];
+      const availableColumns = statColumns.filter(([, key]) =>
+        player.last5Games.some(game => finiteNumber(game.stats[key]) !== null));
+      const tableWrap = textElement("div", "fantasy-game-log-wrap");
+      const table = document.createElement("table");
+      table.className = "fantasy-game-log";
+      const head = document.createElement("thead");
+      const header = document.createElement("tr");
+      ["Week", `${app.scoring.toUpperCase()} pts`, ...availableColumns.map(([, , label]) => label)]
+        .forEach(label => header.appendChild(textElement("th", "", label)));
+      head.appendChild(header);
+      const body = document.createElement("tbody");
+      player.last5Games.forEach(game => {
+        const row = document.createElement("tr");
+        row.append(
+          textElement("th", "", `Week ${game.week}`),
+          textElement("td", "fantasy-number-cell", formatPoints(game.points))
+        );
+        availableColumns.forEach(([, key]) => {
+          const value = finiteNumber(game.stats[key]);
+          row.appendChild(textElement("td", "fantasy-number-cell", value === null ? "—" : String(value)));
+        });
+        body.appendChild(row);
+      });
+      table.append(head, body);
+      tableWrap.appendChild(table);
+      recent.appendChild(tableWrap);
+    } else {
+      recent.appendChild(textElement("p", "fantasy-detail-unavailable", "No completed player games are available for this view."));
+    }
     elements["fantasy-dialog-content"].appendChild(recent);
 
-    if (player.previousWeekStats) {
-      const usageRows = [
-        ["Targets", player.previousWeekStats.rec_tgt],
-        ["Carries", player.previousWeekStats.rush_att],
-        ["Receptions", player.previousWeekStats.rec],
-        ["Receiving yards", player.previousWeekStats.rec_yd],
-        ["Rushing yards", player.previousWeekStats.rush_yd],
-        ["Passing yards", player.previousWeekStats.pass_yd],
-        ["Passing touchdowns", player.previousWeekStats.pass_td],
-        ["Interceptions", player.previousWeekStats.pass_int],
-        ["Sacks", player.previousWeekStats.sack]
-      ].filter(([, value]) => finiteNumber(value) !== null);
-      if (usageRows.length) {
-        const usage = textElement("section", "fantasy-detail-recent");
-        usage.appendChild(textElement("h3", "", `Available stats · Week ${player.previousWeekNumber}`));
-        const list = document.createElement("dl");
-        list.className = "fantasy-usage-list";
-        usageRows.forEach(([label, value]) => {
-          list.append(textElement("dt", "", label), textElement("dd", "", String(value)));
-        });
-        usage.appendChild(list);
-        elements["fantasy-dialog-content"].appendChild(usage);
-      }
+    const sources = textElement("div", "fantasy-detail-sources");
+    sources.appendChild(textElement("span", "", "Data: Sleeper player and fantasy statistics; ESPN schedule and player profile."));
+    if (player.espnId) {
+      const profileLink = textElement("a", "", "View ESPN profile ↗");
+      profileLink.href = `https://www.espn.com/nfl/player/_/id/${player.espnId}`;
+      profileLink.target = "_blank";
+      profileLink.rel = "noopener";
+      sources.appendChild(profileLink);
     }
+    elements["fantasy-dialog-content"].appendChild(sources);
 
     const actions = textElement("div", "fantasy-dialog-actions");
     const watch = textElement("button", "fantasy-button", app.watched.has(player.id) ? "Remove saved player" : "Save player");
@@ -734,6 +889,7 @@
 
   function renderAll() {
     app.players = buildPlayerRows();
+    updateSupportedPositionFilters();
     renderSummary();
     renderRankings();
     renderMatchups();
@@ -747,6 +903,20 @@
     if (app.errors.seasonStats) messages.push("Season averages are unavailable from Sleeper.");
     if (app.errors.weeklyStats) messages.push("Recent game averages and production trends are unavailable from Sleeper.");
     setNotice(messages.join(" "), messages.length > 0);
+  }
+
+  function updateSupportedPositionFilters() {
+    const supported = new Set(app.players.flatMap(player => player.eligiblePositions));
+    elements["fantasy-position-filters"].querySelectorAll("button[data-position]").forEach(button => {
+      const position = button.dataset.position;
+      const available = position === "ALL" ||
+        (position === "FLEX" ? ["RB", "WR", "TE"].some(item => supported.has(item)) : supported.has(position));
+      button.hidden = !available;
+      if (!available && app.position === position) app.position = "ALL";
+      const active = app.position === position;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
   }
 
   function populateWeekSelector() {
@@ -823,6 +993,7 @@
       elements["fantasy-error"].hidden = false;
       app.projections = {};
       app.players = buildPlayerRows();
+      updateSupportedPositionFilters();
       renderSummary();
       renderRankings();
     }
@@ -898,11 +1069,6 @@
     app.pageLimit = pageSize;
     renderRankings();
   });
-  elements["fantasy-sort"].addEventListener("change", () => {
-    app.sort = elements["fantasy-sort"].value;
-    app.pageLimit = pageSize;
-    renderRankings();
-  });
   elements["fantasy-refresh"].addEventListener("click", async () => {
     FantasyData.clearCache();
     await initialize(true);
@@ -911,6 +1077,11 @@
   elements["fantasy-compare-a"].addEventListener("change", renderComparison);
   elements["fantasy-compare-b"].addEventListener("change", renderComparison);
   elements["fantasy-rankings"].addEventListener("click", event => {
+    const sortButton = event.target.closest("button[data-sort-key]");
+    if (sortButton) {
+      updateSort(sortButton.dataset.sortKey);
+      return;
+    }
     const button = event.target.closest("button[data-player-id]");
     if (!button) return;
     const player = app.playersById.get(button.dataset.playerId);
@@ -983,6 +1154,26 @@
     document.documentElement.classList.toggle("light-mode", !document.documentElement.classList.contains("dark-mode"));
     const themeToggle = document.getElementById("themeToggle");
     if (themeToggle) themeToggle.textContent = document.documentElement.classList.contains("dark-mode") ? "Light" : "Dark";
+
+    const sectionLinks = [...document.querySelectorAll(".fantasy-section-nav a[href^='#']")];
+    const sections = sectionLinks
+      .map(link => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+      .filter(Boolean);
+    if ("IntersectionObserver" in window && sections.length) {
+      const activeLinks = new Map(sectionLinks.map(link => [link.hash.slice(1), link]));
+      const observer = new IntersectionObserver(entries => {
+        const activeSection = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+        if (!activeSection) return;
+        activeLinks.forEach(link => {
+          const active = link.hash === `#${activeSection.target.id}`;
+          if (active) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      }, { rootMargin: "-130px 0px -62% 0px", threshold: [0, 0.15, 0.4, 0.7] });
+      sections.forEach(section => observer.observe(section));
+    }
   }
 
   initializeNavigationAndTheme();

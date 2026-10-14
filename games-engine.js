@@ -99,64 +99,114 @@
   }
 
   function battleQuestion(data, random, position) {
-    const usable = data.players.filter(player => !position || position === "ALL" || player.position === position)
-      .flatMap(player => GamesData.usableStats(player).map(stat => ({ player, stat, value: Number(player.stats[stat.key]) })));
-    if (!usable.length) return null;
-    const chosen = choose(usable, random);
-    const candidates = usable.filter(item =>
-      item.stat.key === chosen.stat.key &&
-      item.player.position === chosen.player.position &&
-      item.player.player_id !== chosen.player.player_id &&
-      item.value !== chosen.value
+    const groups = groupGameComparisons(data.gamePlayerStats, position);
+    const usable = [...groups.values()].filter(items =>
+      items.length > 1 && items.some(item => items.some(other => other.playerId !== item.playerId && other.value !== item.value))
     );
+    if (!usable.length) return null;
+    const group = choose(usable, random);
+    const first = choose(group, random);
+    const candidates = group.filter(item => item.playerId !== first.playerId && item.value !== first.value);
     if (!candidates.length) return null;
-    const other = choose(candidates, random);
-    const winner = chosen.value > other.value ? chosen.player : other.player;
+    const second = choose(candidates, random);
+    const winner = first.value > second.value ? first : second;
     return {
-      key: `battle:${chosen.stat.key}:${[chosen.player.player_id, other.player.player_id].sort().join(":")}`,
+      key: `battle:${first.gameId}:${first.statKey}:${[first.playerId, second.playerId].sort().join(":")}`,
       type: "choice",
-      prompt: `Who has recorded more ${chosen.stat.label} in the ${data.season} regular season so far?`,
-      clues: [{ label: "SEASON", value: String(data.season) }, { label: "POSITION", value: chosen.player.position }],
-      comparison: [
-        { name: chosen.player.full_name, team: chosen.player.team, position: chosen.player.position },
-        { name: other.player.full_name, team: other.player.team, position: other.player.position }
-      ],
-      choices: shuffle([chosen.player, other.player], random).map(player => ({ label: player.full_name, value: player.player_id })),
-      correct: winner.player_id,
-      explanation: `${winner.full_name} has the higher ${chosen.stat.label} total in the ${data.season} regular season to date.`
+      prompt: `Who recorded more ${first.statLabel} in this completed game?`,
+      clues: [{ label: "MATCHUP", value: first.gameLabel }, { label: "GAME DATE", value: formatGameDate(first.gameDate) }],
+      comparison: [first, second].map(item => comparisonCard(item)),
+      choices: shuffle([first, second], random).map(item => ({ label: item.name, value: item.playerId })),
+      correct: winner.playerId,
+      explanation: `${first.name} recorded ${formatComparisonValue(first)} ${formatComparisonLabel(first)}; ${second.name} recorded ${formatComparisonValue(second)} ${formatComparisonLabel(second)}. ${winner.name} had more.`
     };
   }
 
   function higherQuestion(data, random, position) {
-    const eligible = data.players.filter(player =>
-      (!position || position === "ALL" || player.position === position) &&
-      Number.isFinite(Number(player.stats.pts_ppr)) && Number(player.stats.pts_ppr) > 0
+    const groups = groupGameComparisons(data.gamePlayerStats, position, "pts_ppr");
+    const usable = [...groups.values()].filter(items =>
+      items.length > 1 && items.some(item => items.some(other => other.playerId !== item.playerId && other.value !== item.value))
     );
-    if (eligible.length < 2) return null;
-    const first = choose(eligible, random);
-    const secondPool = eligible.filter(player =>
-      player.player_id !== first.player_id &&
-      Number(player.stats.pts_ppr).toFixed(1) !== Number(first.stats.pts_ppr).toFixed(1)
-    );
-    if (!secondPool.length) return null;
-    const second = choose(secondPool, random);
-    const firstValue = Number(first.stats.pts_ppr);
-    const secondValue = Number(second.stats.pts_ppr);
-    const answer = secondValue > firstValue ? "Higher" : "Lower";
+    if (!usable.length) return null;
+    const group = choose(usable, random);
+    const first = choose(group, random);
+    const candidates = group.filter(item => item.playerId !== first.playerId && item.value !== first.value);
+    if (!candidates.length) return null;
+    const second = choose(candidates, random);
+    const answer = second.value > first.value ? "Higher" : "Lower";
     return {
-      key: `higher:${first.player_id}:${second.player_id}`,
+      key: `higher:${first.gameId}:${first.playerId}:${second.playerId}`,
       type: "choice",
-      prompt: `Compared with ${first.full_name}, did ${second.full_name} score higher or lower in PPR fantasy points this season?`,
+      prompt: `Compared with ${first.name}, did ${second.name} score higher or lower in PPR fantasy points in this game?`,
       clues: [
-        { label: "REFERENCE PLAYER", value: `${first.full_name} · ${first.team} ${first.position}` },
-        { label: "REFERENCE POINTS", value: firstValue.toFixed(1) },
-        { label: "CHALLENGE PLAYER", value: `${second.full_name} · ${second.team} ${second.position}` },
-        { label: "SEASON", value: String(data.season) }
+        { label: "MATCHUP", value: first.gameLabel },
+        { label: "GAME DATE", value: formatGameDate(first.gameDate) },
+        { label: "SCORING", value: "PPR · 1 point per reception" }
       ],
+      comparison: [first, second].map(item => comparisonCard(item)),
       choices: shuffle(["Higher", "Lower"], random).map(value => ({ label: value, value })),
       correct: answer,
-      explanation: `${second.full_name} has ${secondValue.toFixed(1)} PPR points; ${first.full_name} has ${firstValue.toFixed(1)}.`
+      explanation: `${second.name} scored ${second.value.toFixed(1)} PPR points; ${first.name} scored ${first.value.toFixed(1)}. Calculated from ESPN game stats: 1 point per reception, 0.1 per yard, 4 per passing touchdown, 6 per rushing or receiving touchdown, and -2 per interception or lost fumble.`
     };
+  }
+
+  function groupGameComparisons(comparisons, position, statKey) {
+    const groups = new Map();
+    (comparisons || []).filter(item =>
+      (!statKey || item.statKey === statKey) &&
+      (!position || position === "ALL" || item.position === position)
+    ).forEach(item => {
+      const key = `${item.gameId}|${item.statKey}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(item);
+    });
+    return groups;
+  }
+
+  function comparisonCard(item) {
+    return {
+      playerId: item.playerId,
+      name: item.name,
+      team: item.team,
+      position: item.position,
+      value: item.value,
+      statLabel: item.statLabel,
+      displayStatLabel: formatComparisonLabel(item),
+      context: item.gameLabel
+    };
+  }
+
+  function formatComparisonValue(item) {
+    return item.statKey === "pts_ppr"
+      ? Number(item.value).toFixed(1)
+      : Number(item.value).toLocaleString();
+  }
+
+  function formatComparisonLabel(item) {
+    if (Number(item.value) !== 1) return item.statLabel;
+    return ({
+      "passing yards": "passing yard",
+      "passing touchdowns": "passing touchdown",
+      "interceptions thrown": "interception thrown",
+      "rushing yards": "rushing yard",
+      "rushing touchdowns": "rushing touchdown",
+      "receptions": "reception",
+      "receiving yards": "receiving yard",
+      "receiving touchdowns": "receiving touchdown",
+      "targets": "target",
+      "total tackles": "total tackle",
+      "sacks": "sack",
+      "field goals made": "field goal made",
+      "kicking points": "kicking point",
+      "PPR fantasy points": "PPR fantasy point"
+    })[item.statLabel] || item.statLabel;
+  }
+
+  function formatGameDate(date) {
+    const parsed = new Date(date);
+    return Number.isNaN(parsed.getTime())
+      ? "Date unavailable"
+      : parsed.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
   }
 
   function estimateQuestion(data, random, position) {
@@ -184,9 +234,7 @@
     if (!data.games.length) return null;
     const game = choose(data.games, random);
     const correct = game.winner;
-    const teams = data.teams.filter(team => team.abbr !== game.home.abbr && team.abbr !== game.away.abbr);
-    const options = sampleOptions(correct, teams, 4, random, team => team.name);
-    if (!options) return null;
+    if (!correct || !game.home || !game.away) return null;
     const date = game.date ? new Date(game.date).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" }) : "";
     return {
       key: `recap:${game.id}`,
@@ -197,8 +245,8 @@
         { label: "FINAL", value: `${game.away.score} – ${game.home.score}` },
         ...(game.week ? [{ label: "WEEK", value: String(game.week) }] : [])
       ],
-      choices: options,
-      correct: correct.name,
+      choices: shuffle([game.away, game.home], random).map(team => ({ label: team.name, value: team.abbr })),
+      correct: correct.abbr,
       explanation: `${correct.name} won ${game.winner.score}–${(correct.abbr === game.home.abbr ? game.away : game.home).score}.`
     };
   }

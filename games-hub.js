@@ -6,8 +6,8 @@
   const catalog = [
     { id: "team", title: "Roster Check", category: "Teams", icon: "T", description: "Match real active players to the NFL team that currently lists them.", time: "2–4 MIN", difficulty: "ALL LEVELS", quick: true },
     { id: "player", title: "Who’s That Player?", category: "Players", icon: "?", description: "Identify an active player from roster clues. Harder settings reveal less.", time: "2–4 MIN", difficulty: "4 DIFFICULTIES", quick: true },
-    { id: "battle", title: "Stat Showdown", category: "Stats", icon: "VS", description: "Compare same-position players using actual season-to-date stat totals.", time: "2–4 MIN", difficulty: "REAL SEASON TOTALS" },
-    { id: "higher", title: "Higher or Lower", category: "Stats", icon: "↑", description: "Compare two players’ real PPR fantasy totals from this regular season.", time: "2–4 MIN", difficulty: "REAL PPR TOTALS", quick: true },
+    { id: "battle", title: "Stat Showdown", category: "Stats", icon: "VS", description: "Compare players using real statistics from the same completed NFL game.", time: "2–4 MIN", difficulty: "GAME-BOX SCORE DATA" },
+    { id: "higher", title: "Higher or Lower", category: "Stats", icon: "↑", description: "Compare calculated PPR points from players’ real completed-game stats.", time: "2–4 MIN", difficulty: "GAME-LEVEL PPR", quick: true },
     { id: "estimate", title: "Guess the Stat", category: "Stats", icon: "#", description: "Estimate a player’s real season total. Points reward answers close to the mark.", time: "2–4 MIN", difficulty: "CLOSE COUNTS" },
     { id: "recap", title: "Game Day Recap", category: "Teams", icon: "W", description: "Recall the winner of a completed regular-season game from the ESPN results feed.", time: "2–4 MIN", difficulty: "COMPLETED GAMES" },
     { id: "speed", title: "60-Second Blitz", category: "Speed", icon: "60", description: "Answer a rapid mix of roster, player, stat, and completed-game questions.", time: "30–120 SEC", difficulty: "TIMED ROUND", quick: true },
@@ -298,8 +298,12 @@
       const name = document.createElement("strong");
       name.textContent = player.name;
       const team = document.createElement("span");
-      team.textContent = `${player.team} · ${player.position}`;
-      card.append(name, team);
+      team.textContent = `${player.team}${player.position ? ` · ${player.position}` : ""}`;
+      const stats = document.createElement("span");
+      stats.className = "games-comparison-value";
+      stats.hidden = true;
+      stats.setAttribute("aria-label", "Player game statistics");
+      card.append(name, team, stats);
       comparison.appendChild(card);
     });
 
@@ -378,6 +382,21 @@
       : `Correct answer: ${currentQuestion.choices.find(choice => String(choice.value) === String(currentQuestion.correct))?.label || currentQuestion.correct}`;
     setText("games-feedback-answer", answer);
     setText("games-feedback-explanation", currentQuestion.explanation);
+    const winningComparisonIndex = currentQuestion.key.startsWith("higher:")
+      ? (currentQuestion.correct === "Higher" ? 1 : 0)
+      : currentQuestion.comparison?.findIndex(player => String(player.playerId) === String(currentQuestion.correct));
+    byId("games-stat-compare").querySelectorAll(".games-comparison-value").forEach((value, index) => {
+      const player = currentQuestion.comparison && currentQuestion.comparison[index];
+      if (!player || !Number.isFinite(Number(player.value))) return;
+      const statLabel = Number(player.value) === 1 && player.displayStatLabel
+        ? player.displayStatLabel
+        : player.statLabel;
+      value.textContent = `${statLabel}: ${player.statLabel === "PPR fantasy points"
+        ? Number(player.value).toFixed(1)
+        : Number(player.value).toLocaleString()}`;
+      value.hidden = false;
+      value.closest("div").classList.toggle("is-comparison-winner", index === winningComparisonIndex);
+    });
     byId("games-next").textContent = session.mode === "speed" ? "Next question →" :
       (session.index + 1 >= session.count ? "See results →" : "Next question →");
     byId("games-next").hidden = session.mode === "speed";
@@ -480,7 +499,7 @@
       loadHistory();
       getDailyQuestions();
       setText("games-season", `${data.season} NFL`);
-      setText("games-data-updated", `Sleeper season stats · ${data.games.length ? "ESPN completed-game results" : "Game results unavailable"}`);
+      setText("games-data-updated", `Sleeper season stats · ${data.gamePlayerStats.length ? "ESPN player game stats" : data.games.length ? "ESPN game results" : "Game results unavailable"}`);
       setText("games-daily-date", formatDate(today));
       byId("games-daily-play").disabled = false;
       renderCategories();
@@ -491,6 +510,8 @@
       byId("games-browser").hidden = false;
       if (data.gamesError) {
         showNotice(`${data.gamesError} Other available challenges remain playable.`);
+      } else if (data.gamePlayerStatsError) {
+        showNotice(`${data.gamePlayerStatsError} Roster and other available challenges remain playable.`);
       } else hideNotice();
     } catch (error) {
       byId("games-loading").hidden = true;

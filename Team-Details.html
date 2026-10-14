@@ -1848,6 +1848,26 @@ function loadNewTrivia() {
 
 const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'><circle cx='40' cy='40' r='40' fill='%23cfcfcf'/><circle cx='40' cy='30' r='14' fill='%23ffffff'/><path d='M16 70c4-14 18-22 24-22s20 8 24 22' fill='%23ffffff'/></svg>";
 
+function createPostElement(post) {
+    const container = document.createElement("div");
+    container.className = "post-item";
+    const author = post.username && window.BlitzProfile ? post.username : "";
+    const liveProfile = author ? window.BlitzProfile.read(author) : null;
+    const avatar = liveProfile
+        ? window.BlitzProfile.avatarSource({ ...liveProfile, displayName: liveProfile.displayName || author })
+        : post.avatar || DEFAULT_AVATAR;
+    const image = document.createElement("img");
+    image.src = avatar;
+    image.alt = "";
+    image.style.cssText = "width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.15);";
+    const identity = document.createElement("strong");
+    identity.textContent = `${liveProfile?.displayName || post.name || "Guest"}: `;
+    const body = document.createElement("span");
+    body.textContent = post.text || "";
+    container.append(image, identity, body);
+    return container;
+}
+
 function submitPost() {
     const rawUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
     const input = document.getElementById('post-input');
@@ -1856,25 +1876,23 @@ function submitPost() {
     let displayName = "Guest";
     let avatar = "";
     if (rawUser) {
-        const profile = JSON.parse(localStorage.getItem(`profile_${rawUser}`) || '{}');
+        const profile = window.BlitzProfile ? window.BlitzProfile.read(rawUser) : JSON.parse(localStorage.getItem(`profile_${rawUser}`) || '{}');
         displayName = profile.displayName || rawUser;
-        avatar = profile.avatar || "";
+        avatar = window.BlitzProfile
+            ? window.BlitzProfile.avatarSource({ ...profile, displayName })
+            : profile.avatar || "";
     }
     if (!avatar) avatar = DEFAULT_AVATAR;
     const postContainer = document.getElementById('posts-container');
     const storageKey = `posts_${teamId}`;
     const existingPosts = JSON.parse(localStorage.getItem(storageKey) || "[]");
     const postText = input.value.trim();
-    const postObj = { name: displayName, avatar: avatar, text: postText, time: Date.now() };
+    const postObj = { name: displayName, username: rawUser || "", avatar: avatar, text: postText, time: Date.now() };
     existingPosts.unshift(postObj); // newest first
     localStorage.setItem(storageKey, JSON.stringify(existingPosts));
 
     if (postContainer) {
-        const newPost = document.createElement('div');
-        newPost.className = 'post-item';
-        const avatarHtml = avatar ? `<img src="${avatar}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.15);">` : "";        
-        newPost.innerHTML = `${avatarHtml}<strong>${displayName}:</strong> ${postText}`;
-        postContainer.prepend(newPost);
+        postContainer.prepend(createPostElement(postObj));
     }
     input.value = "";
 }
@@ -1887,14 +1905,18 @@ function loadPosts() {
     if (postContainer) {
         postContainer.innerHTML = '';
         savedPosts.forEach(post => {
-            const div = document.createElement('div');
-            div.className = 'post-item';
-            const avatarHtml = (post.avatar || DEFAULT_AVATAR) ? `<img src="${post.avatar || DEFAULT_AVATAR}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.15);">` : "";
-            div.innerHTML = `${avatarHtml}<strong>${post.name}:</strong> ${post.text}`;
-            postContainer.appendChild(div);
+            postContainer.appendChild(createPostElement(post));
         });
     }
 }
+
+window.addEventListener("storage", event => {
+    const currentUser = window.BlitzProfile && window.BlitzProfile.getCurrentUser();
+    if (currentUser && event.key === `profile_${currentUser}`) loadPosts();
+});
+document.addEventListener("blitz-profile-changed", event => {
+    if (event.detail.username === (window.BlitzProfile && window.BlitzProfile.getCurrentUser())) loadPosts();
+});
 
 // --- ADVANCED ROSTER (ESPN ROSTER ONLY) ---
 const POSITION_ORDER = {
@@ -2551,8 +2573,6 @@ document.addEventListener("click", function (event) {
 
 </body>
 </html>
-
-
 
 
 

@@ -168,25 +168,24 @@ git push="Surveys.html">
         applyTheme(nextTheme);
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
-        const navBtn = document.getElementById("nav-login-btn");
-        const sideLink = document.getElementById("side-login-link");
+    function updateHomeAccount() {
+        const user = window.BlitzAuth ? window.BlitzAuth.getUser() : null;
+        const personal = document.getElementById('home-personal');
+        const guest = document.getElementById('home-guest');
+        personal.hidden = !user;
+        guest.hidden = Boolean(user);
         if (user) {
-            if (navBtn) { navBtn.textContent = "ACCOUNT"; navBtn.href = "Account.html"; }
-            if (sideLink) { sideLink.textContent = "Account"; sideLink.href = "Account.html"; }
-            let profile = {};
-            try { profile = JSON.parse(localStorage.getItem(`profile_${user}`) || '{}'); } catch(e) {}
+            const profile = window.BlitzProfile ? window.BlitzProfile.read(user) : {};
             const displayName = profile.displayName || user;
-            const personal = document.getElementById('home-personal');
-            personal.hidden = false;
-            document.getElementById('home-guest').hidden = true;
             document.getElementById('home-welcome').textContent = `Welcome back, ${displayName}.`;
             const best = localStorage.getItem(`BestScore_${user}`);
             document.getElementById('home-progress').textContent = best ? `Your current quiz best is ${best}. Ready to raise it?` : 'Pick a challenge and start building your quiz record.';
-            if (profile.avatar) { const avatar = document.getElementById('home-avatar'); avatar.src = profile.avatar; avatar.alt = `${displayName}'s profile`; avatar.hidden = false; }
-            const favoriteName = profile.favoriteTeam || localStorage.getItem(`favoriteTeam_${user}`);
-            const favoriteId = profile.favoriteTeamId || localStorage.getItem(`favoriteTeamId_${user}`);
+            const avatar = document.getElementById('home-avatar');
+            avatar.hidden = false;
+            avatar.src = window.BlitzProfile ? window.BlitzProfile.avatarSource({ ...profile, displayName }) : (profile.avatar || 'logo for website.jpg');
+            avatar.alt = `${displayName}'s profile picture`;
+            const favoriteName = profile.favoriteTeam;
+            const favoriteId = profile.favoriteTeamId;
             if (favoriteName && favoriteId) {
                 const favorite = document.getElementById('favorite-team-link');
                 favorite.href = `Team-Details.html?id=${encodeURIComponent(favoriteId)}`;
@@ -195,8 +194,23 @@ git push="Surveys.html">
                 homeFavoriteAbbreviation = abbrev || '';
                 if (abbrev) { document.getElementById('favorite-team-logo').src = `https://a.espncdn.com/i/teamlogos/nfl/500/${abbrev}.png`; document.getElementById('favorite-team-logo').alt = ''; }
                 favorite.hidden = false;
-            } else { document.getElementById('favorite-empty').hidden = false; }
+                document.getElementById('favorite-empty').hidden = true;
+            } else {
+                document.getElementById('favorite-team-link').hidden = true;
+                document.getElementById('favorite-empty').hidden = false;
+            }
         }
+    }
+
+    document.addEventListener("blitz-auth-changed", updateHomeAccount);
+    document.addEventListener("blitz-profile-changed", updateHomeAccount);
+    window.addEventListener("storage", event => {
+        const currentUser = window.BlitzProfile && window.BlitzProfile.getCurrentUser();
+        if (event.key === "currentUser" || event.key === "registeredUsers" || (currentUser && event.key === `profile_${currentUser}`)) updateHomeAccount();
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateHomeAccount();
         const reveals = document.querySelectorAll('.home-reveal');
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
             const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12 });

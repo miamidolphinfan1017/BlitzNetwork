@@ -337,19 +337,37 @@
                     medal = ""; 
                 }
 
-                const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'><circle cx='40' cy='40' r='40' fill='%23cfcfcf'/><circle cx='40' cy='30' r='14' fill='%23ffffff'/><path d='M16 70c4-14 18-22 24-22s20 8 24 22' fill='%23ffffff'/></svg>";
-                const liveProfile = JSON.parse(localStorage.getItem(`profile_${entry.name}`) || '{}');
-                const avatar = liveProfile.avatar || entry.avatar || DEFAULT_AVATAR;
+                const liveProfile = window.BlitzProfile ? window.BlitzProfile.read(entry.name) : {};
+                const avatar = window.BlitzProfile
+                    ? window.BlitzProfile.avatarSource({ ...liveProfile, displayName: liveProfile.displayName || entry.displayName || entry.name })
+                    : (liveProfile.avatar || entry.avatar || "logo for website.jpg");
                 const displayName = liveProfile.displayName || entry.displayName || entry.name || 'Guest';
-                const avatarHtml = avatar ? `<img src="${avatar}" alt="avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:10px;border:2px solid rgba(0,0,0,0.08);">` : '';
-                return `
-                    <tr>
-                        <td class="col-rank ${rankClass}">${medal}${rank}</td>
-                        <td class="col-user ${rankClass}" style="font-weight: 500;"><span style="display:inline-flex;align-items:center;">${avatarHtml}<span>${displayName}</span></span></td>
-                        <td class="col-score" style="font-weight: bold; color: #4CAF50;">${entry.score} / ${entry.total || 25}</td>
-                    </tr>
-                `;
-            }).join('');
+                const row = document.createElement("tr");
+                const rankCell = document.createElement("td");
+                rankCell.className = `col-rank ${rankClass}`;
+                rankCell.textContent = `${medal}${rank}`;
+                const userCell = document.createElement("td");
+                userCell.className = `col-user ${rankClass}`;
+                userCell.style.fontWeight = "500";
+                const identity = document.createElement("span");
+                identity.style.display = "inline-flex";
+                identity.style.alignItems = "center";
+                const image = document.createElement("img");
+                image.src = avatar;
+                image.alt = "";
+                image.style.cssText = "width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:10px;border:2px solid rgba(0,0,0,0.08);";
+                const display = document.createElement("span");
+                display.textContent = displayName;
+                identity.append(image, display);
+                userCell.appendChild(identity);
+                const scoreCell = document.createElement("td");
+                scoreCell.className = "col-score";
+                scoreCell.style.cssText = "font-weight:bold;color:#4CAF50;";
+                scoreCell.textContent = `${Number(entry.score) || 0} / ${Number(entry.total) || 25}`;
+                row.append(rankCell, userCell, scoreCell);
+                tableBody.appendChild(row);
+                return row;
+            });
 
       
         };
@@ -358,7 +376,6 @@
     </script>
 </body>
 </html>
-
 
 
 
